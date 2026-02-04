@@ -35,9 +35,9 @@ const HeroCarousel = () => {
           {images.map((img) => (
             <CarouselItem
               key={img.id}
-              className="pl-0 h-full relative  lg:min-h-full"
+              className="pl-0  relative h-[230px] sm:h-[400px] md:h-[510px] lg:h-screen"
             >
-              <div className="relative w-full h-full">
+              <div className="relative w-full h-[230px] sm:h-[400px] md:h-[510px] lg:h-screen">
                 <img
                   src={img.src || "/placeholder.svg"}
                   alt={img.alt}
