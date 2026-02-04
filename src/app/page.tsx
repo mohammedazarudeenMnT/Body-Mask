@@ -1,21 +1,13 @@
-import Navbar from "@/components/Navbar";
-import HeroCarousel from "@/components/HeroCarousel";
+import ModernHeroCarousel from "@/components/HeroCarousel";
+import Services from "@/components/Services";
+import GalleryTestimonials from "@/components/GalleryTestimonials";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-cream">
-      <Navbar />
-      <HeroCarousel />
-
-      {/* Spacer for scroll testing */}
-      <section
-        id="packages"
-        className="h-screen bg-white flex items-center justify-center"
-      >
-        <h2 className="text-4xl font-serif text-bronze">
-          Bridal Packages (Coming Soon)
-        </h2>
-      </section>
+      <ModernHeroCarousel />
+      <Services />
+      <GalleryTestimonials />
     </main>
   );
 }
