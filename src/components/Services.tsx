@@ -81,11 +81,11 @@ const Services = () => {
                   key={service.id}
                   className="flex flex-col items-center justify-start h-full pt-4"
                 >
-                  <p className="text-xs font-bold tracking-widest uppercase text-gray-500 mb-2">
+                  <p className="text-[#C5A367] text-xs md:text-sm font-bold tracking-[0.2em] uppercase mb-4 text-center">
                     CUSTOMER SATISFACTION
                   </p>
                   <h3 className="font-serif text-xl text-gray-800 mb-6">
-                    WHY CHOOSE US
+                    Why Choose Us
                   </h3>
 
                   <div className="relative w-full aspect-square max-w-[280px]">

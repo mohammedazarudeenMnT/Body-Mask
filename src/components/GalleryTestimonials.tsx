@@ -113,7 +113,7 @@ export default function GalleryTestimonials() {
               {/* Diamond Accent Left */}
               <div className="w-1.5 h-1.5 md:w-2 md:h-2 rotate-45 bg-[#C5A367]" />
               <h2
-                className="text-2xl md:text-5xl font-serif text-[#2B2622] text-center"
+                className="text-[#C5A367] text-xs md:text-sm font-bold tracking-[0.2em] uppercase mb-4 text-center"
                 style={{ letterSpacing: "0.05em" }}
               >
                 Gallery & Testimonials
@@ -121,6 +121,9 @@ export default function GalleryTestimonials() {
               {/* Diamond Accent Right */}
               <div className="w-1.5 h-1.5 md:w-2 md:h-2 rotate-45 bg-[#C5A367]" />
             </div>
+            <h3 className="text-3xl md:text-5xl font-serif text-[#2B2622] mt-4">
+              What Our Clients Say
+            </h3>
           </motion.div>
 
           {/* SPOTLIGHT GALLERY CAROUSEL */}
