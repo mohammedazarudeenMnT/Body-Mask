@@ -19,14 +19,14 @@ export default function About() {
       </div>
 
       <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center ">
           {/* Left Column: Images */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative"
+            className="relative order-last lg:order-first"
           >
             {/* Main Image Frame */}
             <div className="relative z-10 border border-[#C5A367]/30 p-4 bg-white/50 backdrop-blur-sm shadow-xl rounded-sm rotate-2 hover:rotate-0 transition-transform duration-700">
