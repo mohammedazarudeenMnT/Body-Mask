@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronRight, ChevronLeft, ArrowRight } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 // Types
@@ -188,10 +189,12 @@ export default function GalleryTestimonials() {
                         setActiveImageIndex(newIndex);
                       }}
                     >
-                      <img
+                      <Image
                         src={img.src}
                         alt={img.alt}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
                       />
                     </motion.div>
                   );
@@ -233,10 +236,12 @@ export default function GalleryTestimonials() {
                 {leftTestimonials.map((t) => (
                   <div key={t.id} className="flex gap-4 items-start group">
                     <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-full overflow-hidden border border-[#C5A367]/30 group-hover:border-[#C5A367] transition-colors">
-                      <img
+                      <Image
                         src={t.avatar}
                         alt={t.name}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="48px"
                       />
                     </div>
                     <div>
@@ -293,8 +298,8 @@ export default function GalleryTestimonials() {
                 </div>
 
                 <blockquote className="font-serif text-lg md:text-2xl text-[#2B2622] leading-relaxed italic mb-6">
-                  "The best salon in Madurai... treated to the finest care and
-                  attention"
+                  The best salon in Madurai... treated to the finest care and
+                  attention.
                 </blockquote>
 
                 <div className="flex gap-1.5 mb-2">

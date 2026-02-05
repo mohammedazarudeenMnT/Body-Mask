@@ -36,7 +36,9 @@ const Navbar = () => {
             alt="Body Mask Bridal Studio"
             fill
             className="object-contain object-left"
-            priority
+            loading="eager"
+            fetchPriority="high"
+            sizes="(max-width: 768px) 128px, 160px"
           />
         </Link>
 

@@ -22,16 +22,17 @@ const WhatsAppIcon = () => (
 
 const Footer = () => {
   return (
-    <footer className="relative  text-white w-full">
+    <footer className="relative text-white w-full">
       {/* Marble Background with Overlay */}
-      <div
-        className="absolute inset-0 z-0 "
-        style={{
-          backgroundImage: "url('/assets/footer/bg/footer-bg.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/footer/bg/footer-bg.png"
+          alt="Footer Background"
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+      </div>
 
       {/* Floating WhatsApp Button - Top Right */}
       <div className="absolute -top-12 right-8 md:right-16 lg:right-24 z-50">
@@ -68,7 +69,7 @@ const Footer = () => {
                   alt="Body Mask Bridal Studio"
                   fill
                   className="object-contain object-left"
-                  priority
+                  sizes="(max-width: 768px) 128px, 160px"
                 />
               </Link>
               <h2 className="text-[#C5A367] font-serif text-2xl tracking-wider">

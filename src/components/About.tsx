@@ -14,7 +14,7 @@ export default function About() {
           alt="Background Texture"
           fill
           className="object-cover opacity-40"
-          priority
+          sizes="100vw"
         />
       </div>
 
@@ -36,6 +36,7 @@ export default function About() {
                   alt="About Body Mask Studio"
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
             </div>

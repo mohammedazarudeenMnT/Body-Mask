@@ -94,6 +94,7 @@ const Services = () => {
                       alt="4.9/5.0 Star Rating"
                       fill
                       className="object-contain drop-shadow-2xl"
+                      sizes="(max-width: 768px) 100vw, 280px"
                     />
                   </div>
                 </div>
@@ -115,6 +116,7 @@ const Services = () => {
                       alt={service.title}
                       fill
                       className="object-contain opacity-80 group-hover:opacity-100 transition-opacity"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     />
                   </div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
@@ -11,10 +12,10 @@ import {
 
 // Using the same images as before
 const images = [
-  { id: 1, src: "/assets/nails-manicure.png", alt: "Nail Art & Care" },
-  { id: 2, src: "/assets/skuncare-and-facials.png", alt: "Radiant Skincare" },
-  { id: 3, src: "/assets/hair-care-styling.png", alt: "Expert Hair Styling" },
-  { id: 4, src: "/assets/body-mask.png", alt: "Holistic Body Masks" },
+  { id: 1, src: "/assets/skuncare-and-facials.png", alt: "Radiant Skincare" },
+  { id: 2, src: "/assets/hair-care-styling.png", alt: "Expert Hair Styling" },
+  { id: 3, src: "/assets/body-mask.png", alt: "Holistic Body Masks" },
+  { id: 4, src: "/assets/nails-manicure.png", alt: "Nail Art & Care" },
 ];
 
 const HeroCarousel = () => {
@@ -32,17 +33,19 @@ const HeroCarousel = () => {
         className="w-full  lg:h-screen"
       >
         <CarouselContent className="h-full ml-0">
-          {images.map((img) => (
+          {images.map((img, index) => (
             <CarouselItem
               key={img.id}
               className="pl-0  relative h-[230px] sm:h-[400px] md:h-[510px] lg:h-screen"
             >
               <div className="relative w-full h-[230px] sm:h-[400px] md:h-[510px] lg:h-screen">
-                <img
+                <Image
                   src={img.src || "/placeholder.svg"}
                   alt={img.alt}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  preload={index === 0}
                 />
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-black/10" />
