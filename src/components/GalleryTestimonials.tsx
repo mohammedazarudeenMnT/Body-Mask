@@ -303,7 +303,7 @@ export default function GalleryTestimonials() {
                   ))}
                 </div>
                 <p className="text-[10px] md:text-xs text-gray-400 font-medium tracking-wider uppercase">
-                  Based on Verified Reviews
+                  Based on 38 Verified Google Reviews
                 </p>
               </div>
 

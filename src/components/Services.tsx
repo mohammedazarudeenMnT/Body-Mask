@@ -8,23 +8,20 @@ import { cn } from "@/lib/utils";
 const servicesList = [
   {
     id: "hair",
-    title: "Hair Styling",
-    description:
-      "Modern cuts, coloring, and bridal styling specialized for you.",
+    title: "Hair Care",
+    description: "Professional styling and treatments for a fresh, new look.",
     image: "/assets/services/hair-styling.png",
   },
   {
     id: "skin",
-    title: "Advanced Skin Treatments",
-    description:
-      "Better secrets skin wonder insane ethmo past ease ne versorless.",
+    title: "Skin Care",
+    description: "Advanced facial treatments to rejuvenate your glow.",
     image: "/assets/services/skin-treatements.png",
   },
   {
     id: "nail",
-    title: "Nail Art",
-    description:
-      "Richness sense at tierdon low kr hassing okrosete poor abenag weather.",
+    title: "Nails",
+    description: "Premium Manicure and Anti-Tan Pedicure services.",
     image: "/assets/services/nail-art.png",
   },
   {
@@ -33,30 +30,27 @@ const servicesList = [
     type: "rating",
   },
   {
-    id: "manicure",
-    title: "Premium Manicure",
-    description: "Theinaurestoss at firts comm nuone secnre res ab srosstas.",
+    id: "makup",
+    title: "Makeup Services",
+    description: "Professional makeup for all occasions.",
     image: "/assets/services/premium-manicure.png",
   },
   {
     id: "pedicure",
     title: "Anti Tan Pedicure",
-    description:
-      "Ferfon vecsalos ntomo notis a docesto ansocers stoms me tintioseat.",
+    description: "Rejuvenate your feet with our anti-tan pedicure treatments.",
     image: "/assets/services/pedicure.png",
   },
   {
-    id: "facial",
-    title: "Profanceal Facial",
-    description:
-      "Koyote vvorist po inlais ksrhon teodit dsemcpus min vesiseos.",
-    image: "/assets/services/facial.png",
+    id: "removal",
+    title: "Hair Removal",
+    description: "Professional waxing services for smooth skin.",
+    image: "/assets/services/facial.png", // Placeholder reuse
   },
   {
     id: "bridal",
-    title: "Complete Bridal Makeup Packages",
-    description:
-      "Look radiant on your special day with our professional bridal makeup.",
+    title: "Bridal Services",
+    description: "Complete bridal makeup packages for your special day.",
     image: "/assets/services/bridal-makup.png",
   },
 ];
@@ -70,7 +64,7 @@ const Services = () => {
         */}
         <div className="text-center mb-16">
           <p className="text-xs font-bold tracking-[0.2em] text-gold-600 uppercase mb-3">
-            Exclusy Potedomfcn
+            SERVICES{" "}
           </p>
           <h2 className="text-5xl font-serif text-gray-900">
             Body Mask Bridal Studio
@@ -88,7 +82,7 @@ const Services = () => {
                   className="flex flex-col items-center justify-start h-full pt-4"
                 >
                   <p className="text-xs font-bold tracking-widest uppercase text-gray-500 mb-2">
-                    Sciences
+                    CUSTOMER SATISFACTION
                   </p>
                   <h3 className="font-serif text-xl text-gray-800 mb-6">
                     WHY CHOOSE US
