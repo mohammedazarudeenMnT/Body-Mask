@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Wifi, FlaskConical, Flower, Star, Quote } from "lucide-react";
 import { LuxuryBrandMarquee } from "@/components/ui/luxury-brand-marquee";
 import { EditorialTestimonial } from "@/components/ui/editorial-testimonial";
+import HeroBanner from "@/components/HeroBanner";
 
 /**
  * STRICT PIXEL-PERFECT "ABOUT US" PAGE
@@ -23,38 +24,12 @@ const fadeIn = {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#FDFBF7] selection:bg-[#D4AF37]/30 pb-24 font-sans">
+    <main className="min-h-screen bg-[#FDFBF7] selection:bg-[#D4AF37]/30 pb-24">
       {/* 1. HERO SECTION */}
-      <section className="relative h-[85vh] w-full overflow-hidden">
-        <Image
-          src="/assets/about/bridal-hero.jpg"
-          alt="Luxury Bridal Studio"
-          fill
-          className="object-cover object-top"
-          priority
-          sizes="100vw"
-        />
-        {/* Gradient Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
-
-        <div className="absolute inset-0 flex items-center px-6 md:px-16 lg:px-28 hidden">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1 }}
-            className="max-w-3xl"
-          >
-            <h1 className="text-6xl md:text-8xl font-serif text-[#FDFBF7] leading-[1.05] drop-shadow-2xl">
-              Our Story of <br />
-              <span className="italic text-[#E5C775] font-light">
-                Beauty &
-              </span>{" "}
-              <br />
-              Dedication.
-            </h1>
-          </motion.div>
-        </div>
-      </section>
+      <HeroBanner
+        imageSrc="/assets/about/bridal-hero.jpg"
+        imageAlt="Luxury Bridal Studio"
+      />
 
       {/* 2. FEATURED IN MARQUEE (New Magic MCP Section) */}
       <div className="relative z-10 -mt-10 mb-10">
@@ -263,7 +238,7 @@ export default function AboutPage() {
               {
                 title: "Trials & Prep",
                 desc: "Experience your look before the big day. We refine every detail to ensure absolute perfection.",
-                img: "/assets/about/service-2.jpg",
+                img: "/assets/about/trial-and-prep.png",
               },
               {
                 title: "The Big Day",
