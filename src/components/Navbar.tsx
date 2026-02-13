@@ -10,9 +10,10 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "HOME", href: "/" },
-    { name: "BRIDAL PACKAGES", href: "#packages" },
-    { name: "SERVICES", href: "#services" },
+    { name: "ABOUT", href: "/about" },
+    { name: "SERVICES", href: "/services" },
     { name: "GALLERY", href: "#gallery" },
+    { name: "CONTACT", href: "/contact" },
   ];
 
   return (
@@ -30,7 +31,7 @@ const Navbar = () => {
       {/* Container - Flex Layout for Responsiveness */}
       <div className="relative z-10 w-full h-auto md:h-24 max-w-[1920px] mx-auto flex items-center justify-between px-4 md:px-8 lg:px-12 py-4 md:py-0">
         {/* Logo Section */}
-        <Link href="/" className="relative h-16 w-32 md:w-40 flex-shrink-0">
+        <Link href="/" className="relative h-16 w-32 md:w-40 shrink-0">
           <Image
             src="/assets/logo.png"
             alt="Body Mask Bridal Studio"

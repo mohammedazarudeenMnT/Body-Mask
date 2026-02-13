@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Wifi, FlaskConical, Flower, Star, Quote } from "lucide-react";
+import { Wifi, FlaskConical, Flower, Star } from "lucide-react";
 import { LuxuryBrandMarquee } from "@/components/ui/luxury-brand-marquee";
 import { EditorialTestimonial } from "@/components/ui/editorial-testimonial";
 import HeroBanner from "@/components/HeroBanner";
@@ -24,7 +24,7 @@ const fadeIn = {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#FDFBF7] selection:bg-[#D4AF37]/30 pb-24">
+    <main className="min-h-screen bg-[#FDFBF7] selection:bg-[#D4AF37]/30 ">
       {/* 1. HERO SECTION */}
       <HeroBanner
         imageSrc="/assets/about/bridal-hero.jpg"
@@ -156,7 +156,7 @@ export default function AboutPage() {
             <div className="space-y-6">
               {/* Top Row Images */}
               <div className="grid grid-cols-2 gap-6">
-                <motion.div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-md">
+                <motion.div className="relative aspect-4/3 rounded-3xl overflow-hidden shadow-md">
                   <Image
                     src="/assets/about/service-1.jpg"
                     alt="Service 1"
@@ -165,7 +165,7 @@ export default function AboutPage() {
                     sizes="25vw"
                   />
                 </motion.div>
-                <motion.div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-md">
+                <motion.div className="relative aspect-4/3 rounded-3xl overflow-hidden shadow-md">
                   <Image
                     src="/assets/about/service-2.jpg"
                     alt="Service 2"
@@ -197,7 +197,7 @@ export default function AboutPage() {
                   ))}
                 </div>
 
-                <div className="bg-gradient-to-r from-[#D4AF37] to-[#B8860B] rounded-full py-4 px-12 shadow-2xl text-white">
+                <div className="bg-linear-to-r from-[#D4AF37] to-[#B8860B] rounded-full py-4 px-12 shadow-2xl text-white">
                   <span className="font-bold text-3xl tracking-wide">
                     4.99{" "}
                     <span className="text-sm font-normal opacity-90 uppercase ml-2 pl-3 border-l border-white/40">
@@ -216,31 +216,53 @@ export default function AboutPage() {
       {/* Editorial Testimonial Slider */}
       <EditorialTestimonial />
 
-      {/* Journey Section (Kept as it was useful) */}
-      <section className="py-24 px-6 md:px-16 lg:px-28">
-        <div className="max-w-[1600px] mx-auto space-y-16">
-          <div className="text-center space-y-4">
-            <span className="text-[#B8860B] font-serif text-xl tracking-widest uppercase">
-              The Journey
-            </span>
-            <h2 className="text-4xl md:text-5xl font-serif text-[#1C1C1C]">
-              Your Path to Radiance
-            </h2>
-          </div>
+      {/* Journey Section - Redesigned */}
+      <section className="relative py-24 px-6 md:px-16 lg:px-28 overflow-hidden bg-white">
+        {/* Decorative Background Elements */}
+        <div className="absolute top-0 left-0 w-96 h-96 bg-[#C5A367]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#D4A5A5]/5 rounded-full blur-3xl" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="relative z-10 max-w-[1600px] mx-auto space-y-16">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center space-y-4"
+          >
+            <div className="flex items-center justify-center gap-3 md:gap-6 mb-4">
+              <div className="w-1.5 h-1.5 md:w-2 md:h-2 rotate-45 bg-[#C5A367]" />
+              <span className="text-[#C5A367] text-xs md:text-sm font-bold tracking-[0.2em] uppercase">
+                The Journey
+              </span>
+              <div className="w-1.5 h-1.5 md:w-2 md:h-2 rotate-45 bg-[#C5A367]" />
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-[#1C1C1C]">
+              Your Path to <span className="italic text-[#C5A367]">Radiance</span>
+            </h2>
+            <p className="text-gray-600 font-light max-w-2xl mx-auto leading-relaxed">
+              Experience a personalized journey designed to make your special day unforgettable
+            </p>
+          </motion.div>
+
+          {/* Timeline Steps */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
             {[
               {
+                number: "01",
                 title: "Consultation",
                 desc: "We begin with a personalized session to understand your vision, skin type, and preferences.",
                 img: "/assets/about/service-1.jpg",
               },
               {
+                number: "02",
                 title: "Trials & Prep",
                 desc: "Experience your look before the big day. We refine every detail to ensure absolute perfection.",
                 img: "/assets/about/trial-and-prep.png",
               },
               {
+                number: "03",
                 title: "The Big Day",
                 desc: "Relax and let us work our magic. We ensure you step out looking and feeling like royalty.",
                 img: "/assets/about/studio-interior.jpg",
@@ -252,40 +274,65 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: idx * 0.2 }}
-                className="group space-y-6"
+                className="group relative"
               >
-                {/* Image Card */}
-                <div className="relative aspect-[3/4] rounded-3xl overflow-hidden shadow-lg border border-[#D4AF37]/10">
-                  <Image
-                    src={step.img}
-                    alt={step.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500" />
+                {/* Connecting Line (Desktop Only)
+                {idx < 2 && (
+                  <div className="hidden md:block absolute top-32 left-full w-full h-[2px] bg-linear-to-r from-[#C5A367] to-transparent -z-10" />
+                )} */}
 
-                  <div className="absolute top-6 left-6 w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center font-serif text-xl text-[#B8860B]">
-                    {idx + 1}
+                {/* Card */}
+                <div className="relative space-y-6">
+                  {/* Image Frame */}
+                  <div className="relative border border-[#C5A367]/30 p-3 bg-white shadow-xl rounded-sm hover:shadow-2xl transition-all duration-500">
+                    <div className="relative aspect-4/5 overflow-hidden rounded-sm">
+                      <Image
+                        src={step.img}
+                        alt={step.title}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
+                      
+                      {/* Step Number Badge */}
+                      <div className="absolute top-4 left-4 w-14 h-14 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                        <span className="font-serif text-2xl font-bold text-[#C5A367]">
+                          {step.number}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-3 px-2">
-                  <h3 className="text-3xl font-serif text-[#2C2C2C] group-hover:text-[#B8860B] transition-colors">
-                    {step.title}
-                  </h3>
-                  <p className="text-[#666] leading-relaxed font-light">
-                    {step.desc}
-                  </p>
+                  {/* Content */}
+                  <div className="space-y-3 px-2 text-center">
+                    <h3 className="text-2xl md:text-3xl font-serif text-[#1C1C1C] group-hover:text-[#C5A367] transition-colors duration-300">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed font-light text-sm md:text-base">
+                      {step.desc}
+                    </p>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
 
-          <div className="text-center pt-8">
-            <button className="px-10 py-4 bg-[#B8860B] hover:bg-[#D4AF37] text-white font-serif tracking-widest uppercase text-sm rounded-full transition-colors duration-300 shadow-xl">
-              Book Appointment
+          {/* CTA Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="text-center pt-8"
+          >
+            <button className="group relative px-10 py-4 bg-[#1a1a1a] text-white font-medium tracking-wide overflow-hidden rounded-sm shadow-xl">
+              <span className="relative z-10 flex items-center justify-center gap-2 uppercase text-xs tracking-widest font-bold">
+                Book Your Appointment
+              </span>
+              <div className="absolute inset-0 bg-[#C5A367] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
             </button>
-          </div>
+          </motion.div>
         </div>
       </section>
     </main>

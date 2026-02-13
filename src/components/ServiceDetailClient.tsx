@@ -4,7 +4,14 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, CheckCircle, ArrowRight, X, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Calendar,
+  CheckCircle,
+  ArrowRight,
+  X,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 interface ServiceData {
   title: string;
@@ -62,7 +69,7 @@ export default function ServiceDetailClient({
 
   const prevImage = () => {
     setCurrentImageIndex(
-      (prev) => (prev - 1 + service.gallery.length) % service.gallery.length
+      (prev) => (prev - 1 + service.gallery.length) % service.gallery.length,
     );
   };
 
@@ -218,7 +225,8 @@ export default function ServiceDetailClient({
               <div className="w-1.5 h-1.5 md:w-2 md:h-2 rotate-45 bg-[#C5A367]" />
             </div>
             <h2 className="font-serif text-3xl md:text-5xl text-[#2B2622]">
-              The Results of <span className="italic text-[#C5A367]">Artistry</span>
+              The Results of{" "}
+              <span className="italic text-[#C5A367]">Artistry</span>
             </h2>
             <p className="text-sm text-gray-600 mt-4 max-w-2xl mx-auto">
               Witness the transformations achieved through our dedicated care

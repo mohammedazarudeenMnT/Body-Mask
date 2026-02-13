@@ -56,7 +56,7 @@ export default function ServicesPage() {
     <main className="min-h-screen bg-cream">
       {/* Hero Banner Section */}
       <HeroBanner
-        imageSrc="/assets/services/banner/bridal-banner.jpg"
+        imageSrc="/assets/services/banner/modern_radiance_hero_banner.png"
         imageAlt="Body Mask Bridal Studio Services"
        
       />
