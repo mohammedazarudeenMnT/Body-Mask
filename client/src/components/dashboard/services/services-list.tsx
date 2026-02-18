@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Service } from "@/types/service";
 import { Button } from "@/components/ui/button";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import Link from "next/link";
 import { serviceApi } from "@/lib/service-api";
 import { cn } from "@/lib/utils";
@@ -29,6 +30,7 @@ interface ServicesListProps {
 export function ServicesList({ onMessage }: ServicesListProps) {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   useEffect(() => {
     fetchServices();
@@ -49,12 +51,10 @@ export function ServicesList({ onMessage }: ServicesListProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this service?"))
-      return;
-
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      const response = await serviceApi.deleteService(id);
+      const response = await serviceApi.deleteService(deleteTarget);
       if (response.success) {
         onMessage({ type: "success", text: "Service deleted successfully" });
         fetchServices();
@@ -62,6 +62,8 @@ export function ServicesList({ onMessage }: ServicesListProps) {
     } catch (error) {
       console.error("Error deleting service:", error);
       onMessage({ type: "error", text: "Failed to delete service" });
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -141,7 +143,7 @@ export function ServicesList({ onMessage }: ServicesListProps) {
                 variant="outline"
                 size="sm"
                 className="text-red-400 hover:text-red-600 hover:bg-red-50 border-gray-200 hover:border-red-200 rounded-xl transition-all h-10"
-                onClick={() => handleDelete(service._id)}
+                onClick={() => setDeleteTarget(service._id)}
               >
                 <Trash2 className="w-4 h-4" />
               </Button>
@@ -168,6 +170,16 @@ export function ServicesList({ onMessage }: ServicesListProps) {
           </div>
         )}
       </div>
+
+      <ConfirmationModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+        title="Delete Service"
+        description="Are you sure you want to delete this service? This action cannot be undone."
+        confirmText="Delete Service"
+        variant="danger"
+      />
     </div>
   );
 }

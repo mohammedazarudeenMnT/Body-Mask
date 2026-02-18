@@ -46,41 +46,30 @@ export default function DashboardLayout({
   // Base links for all authenticated users
   const baseSidebarLinks: SidebarLink[] = [
     {
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: <LayoutDashboard className="w-5 h-5" />,
-      isActive: pathname === "/dashboard",
-    },
-
-    {
       label: "Services",
       href: "/dashboard/services",
       icon: <Briefcase className="w-5 h-5" />,
       isActive: pathname.startsWith("/dashboard/services"),
     },
-    {
-      label: "Leads",
-      href: "/dashboard/leads",
-      icon: <Users className="w-5 h-5" />,
-      isActive: pathname.startsWith("/dashboard/leads"),
-    },
+
     {
       label: "Offers",
       href: "/dashboard/offers",
       icon: <Gift className="w-5 h-5" />,
       isActive: pathname.startsWith("/dashboard/offers"),
     },
-    {
-      label: "Gallery",
-      href: "/dashboard/gallery",
-      icon: <Images className="w-5 h-5" />,
-      isActive: pathname.startsWith("/dashboard/gallery"),
-    },
+
     {
       label: "Testimonials",
       href: "/dashboard/testimonials",
       icon: <Star className="w-5 h-5" />,
       isActive: pathname.startsWith("/dashboard/testimonials"),
+    },
+    {
+      label: "Leads",
+      href: "/dashboard/leads",
+      icon: <Users className="w-5 h-5" />,
+      isActive: pathname.startsWith("/dashboard/leads"),
     },
   ];
 

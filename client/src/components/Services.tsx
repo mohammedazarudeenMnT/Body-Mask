@@ -1,63 +1,74 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
+import { serviceApi } from "@/lib/service-api";
+import { Service } from "@/types/service";
+import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Defined exactly as per visual preference order
-const servicesList = [
+// Fallback list if API fails
+const fallbackServicesList = [
   {
-    id: "hair",
+    _id: "hair",
     title: "Hair Care",
     description: "Professional styling and treatments for a fresh, new look.",
     image: "/assets/services/hair-styling.png",
+    slug: "hair-care",
   },
   {
-    id: "skin",
+    _id: "skin",
     title: "Skin Care",
     description: "Advanced facial treatments to rejuvenate your glow.",
     image: "/assets/services/facial.png",
+    slug: "skin-care",
   },
   {
-    id: "nail",
+    _id: "nail",
     title: "Nails",
     description: "Premium Manicure and Anti-Tan Pedicure services.",
     image: "/assets/services/nail-art.png",
+    slug: "nails",
   },
   {
-    id: "makup",
+    _id: "makup",
     title: "Makeup Services",
     description: "Professional makeup for all occasions.",
     image: "/assets/services/makeup.png",
+    slug: "makeup-services",
   },
   {
-    id: "pedicure",
+    _id: "pedicure",
     title: "Anti Tan Pedicure",
     description: "Rejuvenate your feet with our anti-tan pedicure treatments.",
     image: "/assets/services/pedicure.png",
+    slug: "anti-tan-pedicure",
   },
   {
-    id: "removal",
+    _id: "removal",
     title: "Hair Removal",
     description: "Professional waxing services for smooth skin.",
-    image: "/assets/services/waxing.png", // Placeholder reuse
+    image: "/assets/services/waxing.png",
+    slug: "hair-removal",
   },
   {
-    id: "bridal",
+    _id: "bridal",
     title: "Bridal Services",
     description: "Complete bridal makeup packages for your special day.",
     image: "/assets/services/bridal-makup.png",
+    slug: "bridal-services",
   },
-];
+] as unknown as Service[];
 
 const Services = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [services, setServices] = useState<Service[]>([]);
 
   useGSAP(
     () => {
@@ -91,7 +102,7 @@ const Services = () => {
           ease: "power3.out",
           scrollTrigger: {
             trigger: card,
-            containerAnimation: amountToScroll > 0 ? undefined : undefined, // Placeholder if needed
+            containerAnimation: amountToScroll > 0 ? undefined : undefined,
             start: "left right",
             toggleActions: "play none none reverse",
           },
@@ -100,6 +111,25 @@ const Services = () => {
     },
     { scope: containerRef },
   );
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await serviceApi.getServices();
+        if (res.success && res.data) {
+          setServices(res.data);
+        } else {
+          setServices(fallbackServicesList);
+        }
+      } catch (error) {
+        console.error("Failed to fetch services", error);
+        setServices(fallbackServicesList);
+      }
+    };
+    fetchServices();
+  }, []);
+
+  const servicesList = services.length > 0 ? services : fallbackServicesList;
 
   return (
     <section
@@ -129,13 +159,14 @@ const Services = () => {
           className="flex flex-nowrap gap-8 px-6 md:px-16 pb-12 w-max items-stretch"
         >
           {servicesList.map((service, index) => (
-            <div
-              key={service.id}
-              className="service-card group shrink-0 w-[280px] md:w-[350px] lg:w-[450px] relative overflow-hidden rounded-2xl"
+            <Link
+              href={`/services/${service.slug || service._id}`}
+              key={service._id}
+              className="service-card group shrink-0 w-[280px] md:w-[350px] lg:w-[450px] relative overflow-hidden rounded-2xl block"
             >
               <div className="aspect-4/5 relative w-full overflow-hidden">
                 <Image
-                  src={service.image || ""}
+                  src={service.image || "/assets/services/default.png"}
                   alt={service.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -157,7 +188,7 @@ const Services = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

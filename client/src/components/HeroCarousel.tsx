@@ -44,41 +44,58 @@ const HeroCarousel = () => {
   const animateSlideContent = contextSafe((index: number) => {
     // Small delay to ensure Embla has transitioned
     setTimeout(() => {
-      const currentSlide = containerRef.current?.querySelectorAll(
+      // Guard: bail if component is unmounted or DOM isn't ready
+      if (!containerRef.current) return;
+
+      const slides = containerRef.current.querySelectorAll(
         '[data-slot="carousel-item"]',
-      )[index];
+      );
+      const currentSlide = slides[index];
       if (!currentSlide) return;
 
       const title = currentSlide.querySelector("h2");
       const subtitle = currentSlide.querySelector("p");
 
-      // Reset other slides
-      const allText = containerRef.current?.querySelectorAll("h2, p");
-      if (allText) {
+      // Reset other slides — only if elements actually exist
+      const allText = containerRef.current.querySelectorAll("h2, p");
+      if (allText && allText.length > 0) {
         gsap.set(allText, {
           opacity: 0,
           y: 30,
         });
       }
 
-      const tl = gsap.timeline();
-      tl.to(title, { opacity: 1, y: 0, duration: 1, ease: "power4.out" }).to(
-        subtitle,
-        { opacity: 1, y: 0, duration: 1, ease: "power4.out" },
-        "-=0.6",
-      );
+      // Only animate if both targets exist (prevents null errors)
+      if (title) {
+        const tl = gsap.timeline();
+        tl.to(title, { opacity: 1, y: 0, duration: 1, ease: "power4.out" });
+        if (subtitle) {
+          tl.to(
+            subtitle,
+            { opacity: 1, y: 0, duration: 1, ease: "power4.out" },
+            "-=0.6",
+          );
+        }
+      }
     }, 100);
   });
 
   useEffect(() => {
     if (!api) return;
 
-    api.on("select", () => {
+    const onSelect = () => {
       animateSlideContent(api.selectedScrollSnap());
-    });
+    };
+
+    api.on("select", onSelect);
 
     // Animate first slide on load
     animateSlideContent(0);
+
+    // Cleanup: remove listener when component unmounts or api changes
+    return () => {
+      api.off("select", onSelect);
+    };
   }, [api, banners]);
 
   if (loading) {
@@ -90,55 +107,7 @@ const HeroCarousel = () => {
   }
 
   // Fallback to static images if no banners are available
-  const displayBanners: Banner[] =
-    banners.length > 0
-      ? banners
-      : [
-          {
-            _id: "1",
-            imageUrl: "/assets/skuncare-and-facials.png",
-            title: "Radiant Skincare",
-            subtitle: "Bridal Elegance",
-            link: "",
-            isActive: true,
-            order: 0,
-            createdAt: "",
-            updatedAt: "",
-          },
-          {
-            _id: "2",
-            imageUrl: "/assets/hair-care-styling.png",
-            title: "Expert Hair Styling",
-            subtitle: "Luxe Treatment",
-            link: "",
-            isActive: true,
-            order: 1,
-            createdAt: "",
-            updatedAt: "",
-          },
-          {
-            _id: "3",
-            imageUrl: "/assets/body-mask.png",
-            title: "Holistic Body Masks",
-            subtitle: "Pure Relaxation",
-            link: "",
-            isActive: true,
-            order: 2,
-            createdAt: "",
-            updatedAt: "",
-          },
-          {
-            _id: "4",
-            imageUrl: "/assets/nails-manicure.png",
-            title: "Nail Art & Care",
-            subtitle: "Perfect Finish",
-            link: "",
-            isActive: true,
-            order: 3,
-            createdAt: "",
-            updatedAt: "",
-          },
-        ];
+  const displayBanners: Banner[] = banners.length > 0 ? banners : [];
 
   return (
     <section

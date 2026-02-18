@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
@@ -17,10 +17,27 @@ import {
   Loader2,
 } from "lucide-react";
 import { leadApi } from "@/lib/lead-api";
+import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
+}
+
+interface GeneralSettings {
+  companyName?: string;
+  companyAddress?: string;
+  companyEmail?: string;
+  companyPhone?: string;
+  workingHours?: string;
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    whatsapp?: string;
+  };
+  googleMapEmbed?: string;
 }
 
 export default function ContactForm() {
@@ -30,6 +47,7 @@ export default function ContactForm() {
   const mapHeaderRef = useRef<HTMLDivElement>(null);
   const mapContentRef = useRef<HTMLDivElement>(null);
 
+  const [settings, setSettings] = useState<GeneralSettings | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -93,6 +111,20 @@ export default function ContactForm() {
     },
     { scope: containerRef },
   );
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await axiosInstance.get("/api/settings/general");
+        if (res.data) {
+          setSettings(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch settings for contact form", error);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -177,11 +209,16 @@ export default function ContactForm() {
                       Visit Us
                     </h3>
                     <p className="text-sm text-gray-600 font-light leading-relaxed">
-                      Body Mask Boutique & Bridal Studio
+                      {settings?.companyName ||
+                        "Body Mask Boutique & Bridal Studio"}
                       <br />
-                      Prasanna Colony, Madurai
-                      <br />
-                      Tamil Nadu, India
+                      {settings?.companyAddress || (
+                        <>
+                          Prasanna Colony, Madurai
+                          <br />
+                          Tamil Nadu, India
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -197,18 +234,10 @@ export default function ContactForm() {
                     </h3>
                     <p className="text-sm text-gray-600 font-light">
                       <a
-                        href="tel:+919876543210"
+                        href={`tel:${(settings?.companyPhone || "+919876543210").replace(/\D/g, "")}`}
                         className="hover:text-[#C5A367] transition-colors"
                       >
-                        +91 98765 43210
-                      </a>
-                    </p>
-                    <p className="text-sm text-gray-600 font-light">
-                      <a
-                        href="tel:+919876543211"
-                        className="hover:text-[#C5A367] transition-colors"
-                      >
-                        +91 98765 43211
+                        {settings?.companyPhone || "+91 98765 43210"}
                       </a>
                     </p>
                   </div>
@@ -225,10 +254,10 @@ export default function ContactForm() {
                     </h3>
                     <p className="text-sm text-gray-600 font-light">
                       <a
-                        href="mailto:info@bodymaskstudio.com"
+                        href={`mailto:${settings?.companyEmail || "info@bodymaskstudio.com"}`}
                         className="hover:text-[#C5A367] transition-colors"
                       >
-                        info@bodymaskstudio.com
+                        {settings?.companyEmail || "info@bodymaskstudio.com"}
                       </a>
                     </p>
                   </div>
@@ -244,9 +273,13 @@ export default function ContactForm() {
                       Business Hours
                     </h3>
                     <p className="text-sm text-gray-600 font-light leading-relaxed">
-                      Monday - Saturday: 9:00 AM - 8:00 PM
-                      <br />
-                      Sunday: 10:00 AM - 6:00 PM
+                      {settings?.workingHours || (
+                        <>
+                          Monday - Saturday: 9:00 AM - 8:00 PM
+                          <br />
+                          Sunday: 10:00 AM - 6:00 PM
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -263,24 +296,47 @@ export default function ContactForm() {
                   </span>
                 </div>
                 <div className="flex gap-3">
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 flex items-center justify-center bg-[#C5A367]/10 hover:bg-[#C5A367] text-[#C5A367] hover:text-white rounded-full transition-all"
-                    aria-label="Instagram"
-                  >
-                    <Instagram className="w-5 h-5" />
-                  </a>
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 flex items-center justify-center bg-[#C5A367]/10 hover:bg-[#C5A367] text-[#C5A367] hover:text-white rounded-full transition-all"
-                    aria-label="Facebook"
-                  >
-                    <Facebook className="w-5 h-5" />
-                  </a>
+                  {settings?.socialMedia?.instagram && (
+                    <a
+                      href={settings.socialMedia.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 flex items-center justify-center bg-[#C5A367]/10 hover:bg-[#C5A367] text-[#C5A367] hover:text-white rounded-full transition-all"
+                      aria-label="Instagram"
+                    >
+                      <Instagram className="w-5 h-5" />
+                    </a>
+                  )}
+                  {settings?.socialMedia?.facebook && (
+                    <a
+                      href={settings.socialMedia.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 flex items-center justify-center bg-[#C5A367]/10 hover:bg-[#C5A367] text-[#C5A367] hover:text-white rounded-full transition-all"
+                      aria-label="Facebook"
+                    >
+                      <Facebook className="w-5 h-5" />
+                    </a>
+                  )}
+                  {!settings?.socialMedia?.instagram &&
+                    !settings?.socialMedia?.facebook && (
+                      <>
+                        <a
+                          href="#"
+                          className="w-10 h-10 flex items-center justify-center bg-[#C5A367]/10 hover:bg-[#C5A367] text-[#C5A367] hover:text-white rounded-full transition-all"
+                          aria-label="Instagram"
+                        >
+                          <Instagram className="w-5 h-5" />
+                        </a>
+                        <a
+                          href="#"
+                          className="w-10 h-10 flex items-center justify-center bg-[#C5A367]/10 hover:bg-[#C5A367] text-[#C5A367] hover:text-white rounded-full transition-all"
+                          aria-label="Facebook"
+                        >
+                          <Facebook className="w-5 h-5" />
+                        </a>
+                      </>
+                    )}
                 </div>
               </div>
             </div>
@@ -477,17 +533,30 @@ export default function ContactForm() {
             {/* Map Frame - Clean Design */}
             <div className="relative border border-[#C5A367]/20 p-1 bg-white shadow-2xl rounded-sm overflow-hidden">
               <div className="relative w-full h-[450px] md:h-[550px] overflow-hidden rounded-sm">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.0234567890123!2d78.1234567890123!3d9.9234567890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwNTUnMjQuNSJOIDc4wrAwNycyNC41IkU!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Body Mask Bridal Studio Location"
-                  className="rounded-sm"
-                />
+                {settings?.googleMapEmbed ? (
+                  <iframe
+                    srcDoc={`<html><body style="margin:0;padding:0;height:100%"><iframe src="${settings.googleMapEmbed}" width="100%" height="100%" style="border:0" allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe></body></html>`}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    title="Body Mask Bridal Studio Location"
+                    className="rounded-sm"
+                  />
+                ) : (
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.0234567890123!2d78.1234567890123!3d9.9234567890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwNTUnMjQuNSJOIDc4wrAwNycyNC41IkU!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Body Mask Bridal Studio Location"
+                    className="rounded-sm"
+                  />
+                )}
               </div>
             </div>
           </div>

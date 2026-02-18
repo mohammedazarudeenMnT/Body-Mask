@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { testimonialApi, Testimonial } from "@/lib/testimonial-api";
 import { serviceApi } from "@/lib/service-api";
 import { Service } from "@/types/service";
@@ -279,28 +280,17 @@ export default function TestimonialsAdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="mx-auto space-y-6">
         {/* Header */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-amber-50 rounded-xl">
-              <Star className="w-7 h-7 text-amber-500 fill-amber-500" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Testimonials</h1>
-              <p className="text-gray-500 text-sm">
-                Review, approve, and manage customer stories
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setModalTestimonial(null)}
-            className="flex items-center justify-center gap-2 bg-[#c5a367] hover:bg-[#b69357] text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-[#c5a367]/20"
-          >
-            <Plus className="w-5 h-5" />
-            Add Testimonial
-          </button>
-        </div>
+        <DashboardHeader
+          title="Testimonials"
+          description="Review, approve, and manage customer stories"
+          icon={Star}
+          variant="compact"
+          iconColor="text-amber-500"
+          actionLabel="Add Testimonial"
+          onAction={() => setModalTestimonial(null)}
+        />
 
         {/* List Content */}
         {loading ? (

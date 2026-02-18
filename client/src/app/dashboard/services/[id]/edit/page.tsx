@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react";
 import { CheckCircle2, AlertCircle, X, Edit3, Loader2 } from "lucide-react";
 import { ServiceForm } from "@/components/dashboard/services/service-form";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { cn } from "@/lib/utils";
 import { serviceApi } from "@/lib/service-api";
 import { Service } from "@/types/service";
@@ -64,28 +65,13 @@ export default function EditServicePage({ params }: EditPageProps) {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-8  mx-auto">
       {/* Header Section */}
-      <div className="bg-linear-to-r from-white via-white to-[#c5a367]/5 rounded-3xl shadow-sm border border-gray-100 p-10">
-        <div className="flex items-start gap-6">
-          <div className="p-4 bg-[#c5a367]/10 rounded-2xl shadow-inner">
-            <Edit3 className="w-10 h-10 text-[#c5a367]" />
-          </div>
-          <div className="space-y-2">
-            <h1 className="text-4xl font-serif text-gray-900">
-              Refine Your Vision
-            </h1>
-            <p className="text-gray-500 text-sm max-w-2xl leading-relaxed">
-              Editing{" "}
-              <span className="text-[#c5a367] font-bold">
-                "{service?.title}"
-              </span>
-              . Perfect the presentation and details of this exclusive studio
-              offering.
-            </p>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader
+        title="Refine Your Vision"
+        description={`Editing "${service?.title}". Perfect the presentation and details of this exclusive studio offering.`}
+        icon={Edit3}
+      />
 
       {/* Toast Message */}
       {message && (

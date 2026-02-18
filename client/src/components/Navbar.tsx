@@ -3,11 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useDynamicLogo } from "@/hooks/useDynamicLogo";
 
 const Navbar = () => {
+  const pathname = usePathname();
+  const logoUrl = useDynamicLogo();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,14 +23,14 @@ const Navbar = () => {
     { name: "OFFERS", href: "/offers" },
     { name: "GALLERY", href: "/gallery" },
     { name: "CONTACT", href: "/contact" },
+    { name: "DASHBOARD", href: "/dashboard/leads" },
   ];
 
-  const { contextSafe } = useGSAP({ scope: containerRef });
+  useGSAP({ scope: containerRef });
 
-  const toggleMenu = contextSafe(() => {
+  const toggleMenu = () => {
     if (!isMenuOpen) {
       setIsMenuOpen(true);
-      // Wait for React to render the menu before animating
     } else {
       gsap.to(menuRef.current, {
         height: 0,
@@ -36,7 +40,7 @@ const Navbar = () => {
         onComplete: () => setIsMenuOpen(false),
       });
     }
-  });
+  };
 
   useEffect(() => {
     if (isMenuOpen && menuRef.current) {
@@ -81,7 +85,7 @@ const Navbar = () => {
         {/* Logo Section */}
         <Link href="/" className="relative h-16 w-32 md:w-40 shrink-0">
           <Image
-            src="/assets/logo.png"
+            src={logoUrl}
             alt="Body Mask Bridal Studio"
             fill
             className="object-contain object-left"
@@ -94,25 +98,38 @@ const Navbar = () => {
         {/* Desktop Navigation Links - Hidden on Mobile */}
         <div className="hidden md:flex items-center justify-center flex-1">
           <ul className="flex gap-6 lg:gap-8">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <Link
-                  href={link.href}
-                  className="text-xs lg:text-sm font-sans font-medium tracking-[0.15em] text-gray-800 hover:text-gold-600 transition-colors duration-300 relative group"
-                >
-                  {link.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold-500 transition-all duration-300 group-hover:w-full"></span>
-                </Link>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className={`text-xs lg:text-sm font-sans font-medium tracking-[0.15em] transition-colors duration-300 relative group ${
+                      isActive
+                        ? "text-[#C5A367] font-bold"
+                        : "text-gray-800 hover:text-[#C5A367]"
+                    }`}
+                  >
+                    {link.name}
+                    <span
+                      className={`absolute -bottom-1 left-0 h-px bg-[#C5A367] transition-all duration-300 ${
+                        isActive ? "w-full" : "w-0 group-hover:w-full"
+                      }`}
+                    ></span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
         {/* Desktop CTA Button */}
         <div className="hidden md:flex items-center">
-          <button className="bg-gold-gradient text-white px-6 lg:px-8 py-2 lg:py-3 text-xs lg:text-sm font-bold tracking-[0.2em] uppercase hover:shadow-lg hover:scale-105 transition-all duration-300 border-none whitespace-nowrap">
-            Book Now
-          </button>
+          <Link href="/contact" className="relative h-16 w-32 md:w-40 shrink-0">
+            <button className="bg-gold-gradient text-white px-6 lg:px-8 py-2 lg:py-3 text-xs lg:text-sm font-bold tracking-[0.2em] uppercase hover:shadow-lg hover:scale-105 transition-all duration-300 border-none whitespace-nowrap">
+              Book Now
+            </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -132,24 +149,31 @@ const Navbar = () => {
           className="md:hidden bg-white border-t border-gray-100 overflow-hidden opacity-0"
         >
           <ul className="flex flex-col gap-4 px-4 py-4">
-            {navLinks.map((link) => (
-              <li key={link.name} className="mobile-link">
-                <Link
-                  href={link.href}
-                  className="text-sm font-sans font-medium tracking-[0.15em] text-gray-800 hover:text-gold-600 transition-colors duration-300 block py-1"
-                  onClick={() => {
-                    gsap.to(menuRef.current, {
-                      height: 0,
-                      opacity: 0,
-                      duration: 0.3,
-                      onComplete: () => setIsMenuOpen(false),
-                    });
-                  }}
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <li key={link.name} className="mobile-link">
+                  <Link
+                    href={link.href}
+                    className={`text-sm font-sans font-medium tracking-[0.15em] transition-colors duration-300 block py-1 ${
+                      isActive
+                        ? "text-[#C5A367] font-bold"
+                        : "text-gray-800 hover:text-[#C5A367]"
+                    }`}
+                    onClick={() => {
+                      gsap.to(menuRef.current, {
+                        height: 0,
+                        opacity: 0,
+                        duration: 0.3,
+                        onComplete: () => setIsMenuOpen(false),
+                      });
+                    }}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              );
+            })}
             <li className="pt-2 border-t border-gray-100 mobile-link">
               <button className="w-full bg-gold-gradient text-white px-6 py-2 text-sm font-bold tracking-[0.2em] uppercase hover:shadow-lg transition-all duration-300 border-none">
                 Book Now

@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Scissors, CheckCircle2, AlertCircle, X } from "lucide-react";
 import { ServicesList } from "@/components/dashboard/services/services-list";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { cn } from "@/lib/utils";
 
 export default function ServicesPage() {
+  const router = useRouter();
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -26,26 +29,13 @@ export default function ServicesPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header Section */}
-      <div className="bg-linear-to-r from-white via-white to-[#c5a367]/5 rounded-3xl shadow-sm border border-gray-100 p-10">
-        <div className="flex items-start justify-between">
-          <div className="flex items-start gap-6 flex-1">
-            <div className="p-4 bg-linear-to-br from-[#c5a367]/20 to-[#c5a367]/5 rounded-2xl shadow-inner">
-              <Scissors className="w-10 h-10 text-[#c5a367]" />
-            </div>
-            <div className="flex-1 space-y-2">
-              <h1 className="text-4xl font-serif text-gray-900">
-                Studio Services
-              </h1>
-              <p className="text-gray-500 text-sm max-w-2xl leading-relaxed">
-                Curate your luxury service menu. From dynamic bridal
-                transformations to precision styling, manage how your artistry
-                is presented to the world.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader
+        title="Studio Services"
+        description="Curate your luxury service menu. From dynamic bridal transformations to precision styling, manage how your artistry is presented to the world."
+        icon={Scissors}
+        actionLabel="New Service"
+        onAction={() => router.push("/dashboard/services/new")}
+      />
 
       {/* Toast Message */}
       {message && (

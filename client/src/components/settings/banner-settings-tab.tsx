@@ -14,6 +14,7 @@ import {
 import { bannerApi, Banner, CreateBannerData } from "@/lib/banner-api";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { cn } from "@/lib/utils";
 
 interface BannerSettingsTabProps {
@@ -24,6 +25,7 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [editingBanner, setEditingBanner] = useState<Partial<Banner> | null>(
     null,
   );
@@ -79,11 +81,10 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this banner?")) return;
-
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      const response = await bannerApi.deleteBanner(id);
+      const response = await bannerApi.deleteBanner(deleteTarget);
       if (response.success) {
         onMessage({ type: "success", text: "Banner deleted successfully" });
         fetchBanners();
@@ -91,6 +92,8 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
     } catch (error) {
       console.error("Error deleting banner:", error);
       onMessage({ type: "error", text: "Failed to delete banner" });
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -316,7 +319,7 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
                   size="icon"
                   variant="ghost"
                   className="bg-red-500/20 hover:bg-red-600 text-red-500 hover:text-white backdrop-blur-sm rounded-full"
-                  onClick={() => handleDelete(banner._id)}
+                  onClick={() => setDeleteTarget(banner._id)}
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -364,6 +367,16 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
           </div>
         )}
       </div>
+
+      <ConfirmationModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+        title="Delete Banner"
+        description="Are you sure you want to delete this banner? This action cannot be undone."
+        confirmText="Delete Banner"
+        variant="danger"
+      />
     </div>
   );
 }

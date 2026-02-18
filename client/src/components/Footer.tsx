@@ -1,10 +1,66 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Instagram, Twitter, Youtube, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { serviceApi } from "@/lib/service-api";
+import { Service } from "@/types/service";
+import { axiosInstance } from "@/lib/axios";
+import { useDynamicLogo } from "@/hooks/useDynamicLogo";
+
+interface GeneralSettings {
+  companyName?: string;
+  companyDescription?: string;
+  companyAddress?: string;
+  companyEmail?: string;
+  companyPhone?: string;
+  workingHours?: string;
+  socialMedia?: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    whatsapp?: string;
+  };
+  whatsappNumber?: string;
+  footerNote?: string;
+  companyLogo?: string;
+}
 
 const Footer = () => {
+  const logoUrl = useDynamicLogo();
+  const [services, setServices] = useState<Service[]>([]);
+  const [settings, setSettings] = useState<GeneralSettings | null>(null);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await serviceApi.getServices();
+        if (res.success && res.data) {
+          setServices(res.data.slice(0, 6));
+        }
+      } catch (error) {
+        console.error("Failed to fetch services for footer", error);
+      }
+    };
+    fetchServices();
+  }, []);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await axiosInstance.get("/api/settings/general");
+        if (res.data) {
+          setSettings(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch settings for footer", error);
+      }
+    };
+    fetchSettings();
+  }, []);
+
   return (
     <footer className="relative text-white w-full">
       {/* Marble Background with Overlay */}
@@ -33,7 +89,7 @@ const Footer = () => {
                 className="relative h-16 w-32 md:w-40 flex-shrink-0 block mb-3"
               >
                 <Image
-                  src="/assets/logo.png"
+                  src={logoUrl}
                   alt="Body Mask Bridal Studio"
                   fill
                   className="object-contain object-left"
@@ -41,7 +97,7 @@ const Footer = () => {
                 />
               </Link>
               <h2 className="text-[#C5A367] font-serif text-2xl tracking-wider">
-                BODY MASK
+                {settings?.companyName || "BODY MASK"}
               </h2>
               <p className="text-gray-400 text-xs tracking-[0.3em] uppercase">
                 Bridal Studio
@@ -56,29 +112,44 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3 text-gray-400 text-sm">
               <li>
-                <a href="#" className="hover:text-[#C5A367] transition-colors">
+                <Link
+                  href="/"
+                  className="hover:text-[#C5A367] transition-colors"
+                >
                   • Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#C5A367] transition-colors">
+                <Link
+                  href="/services"
+                  className="hover:text-[#C5A367] transition-colors"
+                >
                   • Services
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#C5A367] transition-colors">
+                <Link
+                  href="/gallery"
+                  className="hover:text-[#C5A367] transition-colors"
+                >
                   • Gallery
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#C5A367] transition-colors">
+                <Link
+                  href="/about"
+                  className="hover:text-[#C5A367] transition-colors"
+                >
                   • About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-[#C5A367] transition-colors">
+                <Link
+                  href="/contact"
+                  className="hover:text-[#C5A367] transition-colors"
+                >
                   • Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -92,18 +163,20 @@ const Footer = () => {
               <div>
                 <p className="text-[#C5A367] text-sm mb-1">Hours</p>
                 <p className="text-gray-300 text-sm font-semibold">
-                  Mon-Sat: 9:00 AM - 7:00 PM
+                  {settings?.workingHours || "Mon-Sat: 9:00 AM - 7:00 PM"}
                 </p>
-                <p className="text-gray-300 text-sm font-semibold">
-                  Sun: 10:00 AM - 5:00 PM
-                </p>
+                {!settings?.workingHours && (
+                  <p className="text-gray-300 text-sm font-semibold">
+                    Sun: 10:00 AM - 5:00 PM
+                  </p>
+                )}
               </div>
               <a
-                href="tel:08531865603"
+                href={`tel:${(settings?.companyPhone || "08531865603").replace(/\D/g, "")}`}
                 className="inline-flex items-center gap-2 bg-[#C5A367] text-black px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#D4A574] transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                Call: 085318 65603
+                Call: {settings?.companyPhone || "085318 65603"}
               </a>
             </div>
           </div>
@@ -117,10 +190,8 @@ const Footer = () => {
               OUR SERVICES
             </h3>
             <p className="text-gray-400 text-xs leading-relaxed">
-              We specialize in a wide range of services including Hair Care
-              (styling, cuts, treatments), Skin Care (advanced facials), Nails
-              (manicure, pedicure), Hair Removal (waxing), and complete Bridal
-              Makeup packages.
+              {settings?.companyDescription ||
+                "We specialize in a wide range of services including Hair Care (styling, cuts, treatments), Skin Care (advanced facials), Nails (manicure, pedicure), Hair Removal (waxing), and complete Bridal Makeup packages."}
             </p>
           </div>
 
@@ -130,12 +201,17 @@ const Footer = () => {
               SERVICE MENU
             </h3>
             <ul className="space-y-2 text-gray-400 text-xs">
-              <li>• Bridal Makeup Packages</li>
-              <li>• Hair Styling & Treatments</li>
-              <li>• Advanced Facials</li>
-              <li>• Premium Manicure & Pedicure</li>
-              <li>• Professional Waxing</li>
-              <li>• Kryolan Waterproof Makeup</li>
+              {services.length > 0 &&
+                services.map((service) => (
+                  <li key={service._id}>
+                    <Link
+                      href={`/services/${service.slug}`}
+                      className="hover:text-[#C5A367] transition-colors"
+                    >
+                      • {service.title}
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
 
@@ -145,11 +221,19 @@ const Footer = () => {
               LOCATION
             </h3>
             <div className="text-gray-400 text-xs space-y-2">
-              <p>Body Mask Bridal Studio</p>
-              <p>1st Floor, 29/2, Aruppukottai Main Rd,</p>
-              <p>near Little Diamonds School,</p>
-              <p>Villapuram, Tamil Nadu 625012</p>
-              <p className="pt-2 text-[#C5A367]">Phone: 085318 65603</p>
+              <p>{settings?.companyName || "Body Mask Bridal Studio"}</p>
+              {settings?.companyAddress ? (
+                <p>{settings.companyAddress}</p>
+              ) : (
+                <>
+                  <p>1st Floor, 29/2, Aruppukottai Main Rd,</p>
+                  <p>near Little Diamonds School,</p>
+                  <p>Villapuram, Tamil Nadu 625012</p>
+                </>
+              )}
+              <p className="pt-2 text-[#C5A367]">
+                Phone: {settings?.companyPhone || "085318 65603"}
+              </p>
             </div>
           </div>
         </div>
@@ -163,24 +247,57 @@ const Footer = () => {
 
           {/* Social Icons */}
           <div className="flex items-center gap-4">
-            <a
-              href="#"
-              className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
-            >
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a
-              href="#"
-              className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
-            >
-              <Twitter className="w-4 h-4" />
-            </a>
-            <a
-              href="#"
-              className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
-            >
-              <Youtube className="w-4 h-4" />
-            </a>
+            {settings?.socialMedia?.instagram ? (
+              <a
+                href={settings.socialMedia.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+            ) : (
+              <a
+                href="#"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+            )}
+            {settings?.socialMedia?.twitter ? (
+              <a
+                href={settings.socialMedia.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+              >
+                <Twitter className="w-4 h-4" />
+              </a>
+            ) : (
+              <a
+                href="#"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+              >
+                <Twitter className="w-4 h-4" />
+              </a>
+            )}
+            {settings?.socialMedia?.facebook ? (
+              <a
+                href={settings.socialMedia.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+              >
+                <Youtube className="w-4 h-4" />
+              </a>
+            ) : (
+              <a
+                href="#"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+              >
+                <Youtube className="w-4 h-4" />
+              </a>
+            )}
           </div>
         </div>
       </div>

@@ -5,7 +5,16 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
     dangerouslyAllowSVG: true,
-    domains: ["images.unsplash.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
   },
 };
 

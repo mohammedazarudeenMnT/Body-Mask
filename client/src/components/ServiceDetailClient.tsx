@@ -10,7 +10,12 @@ import GallerySection from "./GallerySection";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
+  gsap.defaults({ force3D: true, lazy: false });
 }
+
+// Tiny blur placeholder for instant visual feedback
+const BLUR_PLACEHOLDER =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88P/BfwYAB10L/j1fKSgAAAAASUVORK5CYII=";
 
 interface ServiceData {
   title: string;
@@ -68,14 +73,15 @@ export default function ServiceDetailClient({
         duration: 0.8,
         stagger: 0.2,
         ease: "power2.out",
+        force3D: true,
       });
 
-      // Media entrance
       gsap.from(mediaRef.current, {
         opacity: 0,
         scale: 0.9,
         duration: 1.2,
         ease: "power4.out",
+        force3D: true,
         scrollTrigger: {
           trigger: mediaRef.current,
           start: "top 85%",
@@ -83,13 +89,13 @@ export default function ServiceDetailClient({
         },
       });
 
-      // Quote entrance
       gsap.from(quoteRef.current, {
         x: 50,
         opacity: 0,
         duration: 1,
         delay: 0.4,
         ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
           trigger: quoteRef.current,
           start: "top 90%",
@@ -97,13 +103,13 @@ export default function ServiceDetailClient({
         },
       });
 
-      // CTA Button entrance
       gsap.from(ctaRef.current, {
         scale: 0.95,
         opacity: 0,
         duration: 0.8,
         delay: 0.6,
         ease: "back.out(1.7)",
+        force3D: true,
         scrollTrigger: {
           trigger: ctaRef.current,
           start: "top 95%",
@@ -126,6 +132,7 @@ export default function ServiceDetailClient({
             fill
             className="object-cover opacity-40 mix-blend-multiply"
             sizes="100vw"
+            loading="eager"
           />
         </div>
 
@@ -247,6 +254,8 @@ export default function ServiceDetailClient({
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
                     sizes="(max-width: 1024px) 100vw, 40vw"
                     priority
+                    placeholder="blur"
+                    blurDataURL={BLUR_PLACEHOLDER}
                   />
                   <div className="absolute inset-x-0 bottom-0 p-6 bg-linear-to-t from-black/60 to-transparent">
                     <p className="text-[8px] tracking-[0.4em] uppercase text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">
@@ -263,6 +272,9 @@ export default function ServiceDetailClient({
                     fill
                     className="object-cover"
                     sizes="20vw"
+                    loading="eager"
+                    placeholder="blur"
+                    blurDataURL={BLUR_PLACEHOLDER}
                   />
                 </div>
 

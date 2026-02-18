@@ -32,20 +32,6 @@ export const login = async (email: string, password: string) => {
   }
 };
 
-export const signup = async (email: string, password: string, name: string) => {
-  try {
-    const response = await axiosInstance.post("/api/auth/sign-up/email", {
-      email,
-      password,
-      name,
-    });
-    return { success: true, data: response.data };
-  } catch (error: any) {
-    const message = error.response?.data?.message || "Signup failed";
-    throw new Error(message);
-  }
-};
-
 export const logout = async () => {
   try {
     await axiosInstance.post("/api/auth/sign-out");

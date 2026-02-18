@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -123,14 +124,16 @@ export default function About() {
 
             {/* Signature / Button */}
             <div className="pt-4 flex flex-col md:flex-row items-center gap-6 justify-center lg:justify-start">
-              <button className="group relative px-8 py-3 bg-[#1a1a1a] text-white font-medium tracking-wide overflow-hidden rounded-sm">
-                <span className="relative z-10 flex items-center gap-2">
-                  Read More{" "}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-                <div className="absolute inset-0 bg-[#C5A367] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
-              </button>
-
+              <Link href="/about">
+                {" "}
+                <button className="group relative px-8 py-3 bg-[#1a1a1a] text-white font-medium tracking-wide overflow-hidden rounded-sm">
+                  <span className="relative z-10 flex items-center gap-2">
+                    Read More{" "}
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-[#C5A367] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
+                </button>
+              </Link>
               {/* Founder Name / Signature mockup */}
               <div className="text-right">
                 <span className="block font-serif text-xl text-[#C5A367] italic">

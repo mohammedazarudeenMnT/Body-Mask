@@ -9,6 +9,11 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.defaults({ force3D: true, lazy: false });
+
+// Tiny blur placeholder for instant visual feedback
+const BLUR_PLACEHOLDER =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88P/BfwYAB10L/j1fKSgAAAAASUVORK5CYII=";
 
 interface GalleryImage {
   src: string;
@@ -168,6 +173,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
           gsap.to(img, {
             yPercent: 15,
             ease: "none",
+            force3D: true,
             scrollTrigger: {
               trigger: item,
               start: "top bottom",
@@ -186,6 +192,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
             duration: 1.2,
             delay: (i % 3) * 0.2,
             ease: "power3.out",
+            force3D: true,
             scrollTrigger: {
               trigger: item,
               start: "top 90%",
@@ -335,6 +342,10 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                       fill
                       className="object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
                       sizes="(max-width: 768px) 100vw, 33vw"
+                      priority={idx < 3}
+                      loading={idx < 3 ? "eager" : "lazy"}
+                      placeholder="blur"
+                      blurDataURL={BLUR_PLACEHOLDER}
                     />
                     {/* Artistic Overlay */}
                     <div className="absolute inset-0 bg-[#0a0a0a]/20 group-hover:bg-transparent transition-colors duration-700" />

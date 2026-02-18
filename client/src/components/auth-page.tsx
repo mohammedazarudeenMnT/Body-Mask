@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { Eye, EyeOff, AlertCircle, ArrowRight } from "lucide-react";
-import { login, signup } from "@/lib/auth-api";
+import { login } from "@/lib/auth-api";
 import { useAuth } from "@/components/providers/auth-provider";
 import { CompanyLogo } from "@/components/ui/company-logo";
 import Link from "next/link";
@@ -10,20 +10,12 @@ import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-type AuthMode = "login" | "signup";
-
-export default function AuthPage({
-  initialMode = "login",
-}: {
-  initialMode?: AuthMode;
-}) {
+export default function AuthPage() {
   const { login: authLogin } = useAuth();
-  const [mode, setMode] = useState<AuthMode>(initialMode);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -36,7 +28,6 @@ export default function AuthPage({
 
   useGSAP(
     () => {
-      // Entrance Animation for text/form
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
       tl.fromTo(
         ".stagger-item",
@@ -44,14 +35,13 @@ export default function AuthPage({
         { y: 0, opacity: 1, duration: 1.2, stagger: 0.1 },
       );
 
-      // Hero image entrance
       gsap.fromTo(
         heroImageRef.current,
         { scale: 1.1, opacity: 0 },
         { scale: 1, opacity: 1, duration: 1.8, ease: "power2.out" },
       );
     },
-    { scope: containerRef, dependencies: [mode] },
+    { scope: containerRef },
   );
 
   useGSAP(() => {
@@ -76,27 +66,21 @@ export default function AuthPage({
     setError(null);
 
     try {
-      if (mode === "login") {
-        const response = await login(formData.email, formData.password);
-        if (response.success && response.data?.user) {
-          authLogin(response.data.user);
-          router.push("/dashboard");
-        }
-      } else {
-        const response = await signup(
-          formData.email,
-          formData.password,
-          formData.name,
-        );
-        if (response.success && response.data?.user) {
-          authLogin(response.data.user);
-          router.push("/dashboard");
-        }
+      const response = await login(formData.email, formData.password);
+      if (response.success && response.data?.user) {
+        authLogin(response.data.user);
+        router.push("/dashboard");
       }
-    } catch (error: any) {
-      setError(error.message || "Authentication failed");
-      // Shake animation on error
-      gsap.to(formRef.current, { x: 10, duration: 0.1, repeat: 5, yoyo: true });
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Authentication failed";
+      setError(message);
+      gsap.to(formRef.current, {
+        x: 10,
+        duration: 0.1,
+        repeat: 5,
+        yoyo: true,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -134,7 +118,7 @@ export default function AuthPage({
         </div>
       </div>
 
-      {/* Right Section: Refined Form */}
+      {/* Right Section: Login Form */}
       <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-24 relative">
         {/* Subtle Texture Overlay */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/pvc-noise.png')]" />
@@ -149,14 +133,10 @@ export default function AuthPage({
             </Link>
 
             <h1 className="text-4xl lg:text-5xl font-serif text-[#1A1A1A] mb-4 leading-tight">
-              {mode === "login"
-                ? "Welcome to the Studio"
-                : "Join the Collective"}
+              Welcome to the Studio
             </h1>
             <p className="text-[#6B6B6B] text-sm font-medium tracking-tight">
-              {mode === "login"
-                ? "Please sign in to access your administrative suite."
-                : "Register below for exclusive access to Body Mask services."}
+              Please sign in to access your administrative suite.
             </p>
           </div>
 
@@ -171,24 +151,6 @@ export default function AuthPage({
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {mode === "signup" && (
-              <div className="space-y-1 stagger-item">
-                <label className="text-[10px] font-bold text-[#A3A3A3] uppercase tracking-[0.2em] ml-1">
-                  Full Name
-                </label>
-                <div className="relative group">
-                  <input
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="w-full bg-transparent border-b-2 border-[#E5E5E5] py-3 px-1 text-[#1A1A1A] placeholder:text-[#D4D4D4] focus:outline-none focus:border-black transition-all duration-500 text-sm font-medium"
-                    placeholder="e.g. Elena Rossi"
-                  />
-                </div>
-              </div>
-            )}
-
             <div className="space-y-1 stagger-item">
               <label className="text-[10px] font-bold text-[#A3A3A3] uppercase tracking-[0.2em] ml-1">
                 Email Address
@@ -246,11 +208,7 @@ export default function AuthPage({
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   ) : (
                     <>
-                      <span>
-                        {mode === "login"
-                          ? "Authorize Entry"
-                          : "Establish Profile"}
-                      </span>
+                      <span>Authorize Entry</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
@@ -258,25 +216,6 @@ export default function AuthPage({
               </button>
             </div>
           </form>
-
-          {/* Footer Navigation */}
-          <div className="mt-16 text-center lg:text-left stagger-item">
-            <p className="text-[#A3A3A3] text-[11px] font-bold uppercase tracking-[0.2em] mb-4">
-              {mode === "login" ? "Haven't joined yet?" : "Already a member?"}
-            </p>
-            <button
-              onClick={() => {
-                setMode(mode === "login" ? "signup" : "login");
-                setError(null);
-              }}
-              className="group text-[#1A1A1A] font-serif italic text-lg hover:text-gray-600 transition-colors inline-flex items-center gap-2"
-            >
-              {mode === "login"
-                ? "Create an account"
-                : "Sign in to your studio"}
-              <div className="w-6 h-px bg-black group-hover:w-8 transition-all" />
-            </button>
-          </div>
         </div>
 
         {/* Global Boutique Accents */}

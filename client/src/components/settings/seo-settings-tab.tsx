@@ -421,12 +421,7 @@ export function SEOSettingsTab({ onMessage }: SEOSettingsTabProps) {
                 }
                 maxSizeMB={5}
                 aspectRatio="video"
-                label={
-                  <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                    <Globe className="w-4 h-4 text-[#c5a367]" />
-                    Social Share Image
-                  </span>
-                }
+                label="Social Share Image"
                 helperText="1200×630px recommended for social media sharing"
               />
 

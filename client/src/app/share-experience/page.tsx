@@ -1,9 +1,14 @@
+"use client";
+
 import TestimonialForm from "@/components/TestimonialForm";
 import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
+import { useDynamicLogo } from "@/hooks/useDynamicLogo";
 
 export default function ShareExperiencePage() {
+  const logoUrl = useDynamicLogo();
+
   return (
     <main className="relative min-h-screen flex flex-col lg:flex-row">
       {/* Global Background Image */}
@@ -28,7 +33,7 @@ export default function ShareExperiencePage() {
             className="relative block w-32 h-16 md:w-40 md:h-20 hover:opacity-90 transition-opacity"
           >
             <Image
-              src="/assets/logo.png"
+              src={logoUrl}
               alt="Body Mask Bridal Studio"
               fill
               className="object-contain object-left"

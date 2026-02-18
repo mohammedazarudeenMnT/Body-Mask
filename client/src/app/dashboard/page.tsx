@@ -1,10 +1,19 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
+
 export default function DashboardPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/dashboard/leads");
+  }, [router]);
+
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-      <p className="text-muted-foreground">
-        Welcome to the Body Mask management dashboard.
-      </p>
+    <div className="flex items-center justify-center min-h-screen">
+      <Loader2 className="w-8 h-8 animate-spin text-[#C5A367]" />
     </div>
   );
 }

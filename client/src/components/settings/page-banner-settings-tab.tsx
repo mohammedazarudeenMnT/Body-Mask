@@ -17,6 +17,7 @@ import {
 } from "@/lib/page-banner-api";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { cn } from "@/lib/utils";
 
 interface PageBannerSettingsTabProps {
@@ -26,6 +27,8 @@ interface PageBannerSettingsTabProps {
 const AVAILABLE_PAGES = [
   { key: "about", label: "About Us" },
   { key: "services", label: "Services" },
+  { key: "offers", label: "Offers" },
+  { key: "gallery", label: "Gallery" },
   { key: "contact", label: "Contact Us" },
 ];
 
@@ -35,6 +38,7 @@ export function PageBannerSettingsTab({
   const [banners, setBanners] = useState<PageBanner[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [editingBanner, setEditingBanner] =
     useState<Partial<SavePageBannerData> | null>(null);
 
@@ -81,11 +85,10 @@ export function PageBannerSettingsTab({
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this page banner?")) return;
-
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      const response = await pageBannerApi.deletePageBanner(id);
+      const response = await pageBannerApi.deletePageBanner(deleteTarget);
       if (response.success) {
         onMessage({
           type: "success",
@@ -96,6 +99,8 @@ export function PageBannerSettingsTab({
     } catch (error) {
       console.error("Error deleting page banner:", error);
       onMessage({ type: "error", text: "Failed to delete page banner" });
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -149,7 +154,7 @@ export function PageBannerSettingsTab({
                       size="icon"
                       variant="ghost"
                       className="h-8 w-8 text-red-500 hover:bg-red-50"
-                      onClick={() => handleDelete(banner._id)}
+                      onClick={() => setDeleteTarget(banner._id)}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -309,6 +314,16 @@ export function PageBannerSettingsTab({
           );
         })}
       </div>
+
+      <ConfirmationModal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+        title="Delete Page Banner"
+        description="Are you sure you want to delete this page banner? This action cannot be undone."
+        confirmText="Delete Banner"
+        variant="danger"
+      />
     </div>
   );
 }

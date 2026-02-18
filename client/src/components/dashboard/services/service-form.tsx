@@ -18,6 +18,7 @@ import { serviceApi } from "@/lib/service-api";
 import { Service, SaveServiceData } from "@/types/service";
 import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { MultiImageUpload } from "@/components/ui/multi-image-upload";
 import Link from "next/link";
 
 interface ServiceFormProps {
@@ -320,60 +321,26 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
 
           {/* Gallery */}
           <section className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
-            <div className="flex justify-between items-center border-b border-gray-50 pb-4">
+            <div className="border-b border-gray-50 pb-4">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-widest">
                 Gallery Portfolio
               </h3>
-              <Button
-                variant="ghost"
-                size="sm"
-                type="button"
-                onClick={() => {
-                  const gallery = [...(formData.content?.gallery || [])];
-                  gallery.push("");
-                  setFormData({
-                    ...formData,
-                    content: { ...formData.content!, gallery },
-                  });
-                }}
-                className="text-[#C5A367] hover:bg-[#C5A367]/5"
-              >
-                <Plus className="w-4 h-4" />
-              </Button>
+              <p className="text-xs text-gray-500 mt-1">
+                Upload multiple images to showcase this service
+              </p>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              {formData.content?.gallery?.map((img, idx) => (
-                <div key={idx} className="relative group">
-                  <ImageUpload
-                    value={img}
-                    onChange={(url) => {
-                      const gallery = [...(formData.content?.gallery || [])];
-                      gallery[idx] = url || "";
-                      setFormData({
-                        ...formData,
-                        content: { ...formData.content!, gallery },
-                      });
-                    }}
-                    aspectRatio="square"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const gallery = formData.content?.gallery?.filter(
-                        (_, i) => i !== idx,
-                      );
-                      setFormData({
-                        ...formData,
-                        content: { ...formData.content!, gallery },
-                      });
-                    }}
-                    className="absolute -top-2 -right-2 bg-white text-red-500 rounded-full p-1 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
+            <MultiImageUpload
+              value={formData.content?.gallery?.filter(Boolean) || []}
+              onChange={(images) => {
+                setFormData({
+                  ...formData,
+                  content: { ...formData.content!, gallery: images },
+                });
+              }}
+              maxImages={20}
+              maxSizeMB={5}
+              helperText="Recommended: high-quality images with consistent dimensions"
+            />
           </section>
         </div>
       </div>

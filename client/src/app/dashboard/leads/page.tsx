@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { leadApi, Lead } from "@/lib/lead-api";
 
 const EMPTY_FORM: Partial<Lead> = {
@@ -325,30 +326,16 @@ export default function LeadsAdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className=" mx-auto space-y-6">
         {/* Header */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-[#c5a367]/10 rounded-xl">
-              <Users className="w-7 h-7 text-[#c5a367]" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Leads Management
-              </h1>
-              <p className="text-gray-500 text-sm">
-                Track and manage customer inquiries and manually added leads
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setModalLead(null)}
-            className="flex items-center justify-center gap-2 bg-[#c5a367] hover:bg-[#b69357] text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-[#c5a367]/20 hover:-translate-y-0.5"
-          >
-            <Plus className="w-5 h-5" />
-            Add Manual Lead
-          </button>
-        </div>
+        <DashboardHeader
+          title="Leads Management"
+          description="Track and manage customer inquiries and manually added leads"
+          icon={Users}
+          variant="compact"
+          actionLabel="Add Manual Lead"
+          onAction={() => setModalLead(null)}
+        />
 
         {/* Filters & Search */}
         <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex flex-col md:flex-row gap-4 flex-wrap items-center">

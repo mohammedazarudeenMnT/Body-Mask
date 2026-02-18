@@ -119,12 +119,12 @@ const HeroBanner = ({
         <div className="relative z-10 text-center px-6" ref={contentRef}>
           <div className="hero-content">
             {title && (
-              <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-4 drop-shadow-2xl tracking-tight">
+              <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-4 drop-shadow-2xl tracking-tight opacity-0">
                 {title}
               </h1>
             )}
             {subtitle && (
-              <p className="hero-subtitle text-white/90 text-sm md:text-lg font-light tracking-[0.3em] uppercase drop-shadow-md">
+              <p className="hero-subtitle text-white/90 text-sm md:text-lg font-light tracking-[0.3em] uppercase drop-shadow-md opacity-0">
                 {subtitle}
               </p>
             )}

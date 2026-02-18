@@ -19,6 +19,7 @@ import {
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { ImageUpload } from "@/components/ui/image-upload";
 
 interface Offer {
@@ -457,30 +458,16 @@ export default function OffersAdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50/50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="mx-auto space-y-6">
         {/* Page Header */}
-        <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-[#c5a367]/10 rounded-xl">
-              <Sparkles className="w-7 h-7 text-[#c5a367]" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Offer Banners
-              </h1>
-              <p className="text-gray-500 text-sm">
-                Upload and manage promotional banners with expiry dates
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setModalOffer(null)}
-            className="flex items-center gap-2 bg-[#c5a367] hover:bg-[#b69357] text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-[#c5a367]/20 hover:-translate-y-0.5"
-          >
-            <Plus className="w-5 h-5" />
-            Add Banner
-          </button>
-        </div>
+        <DashboardHeader
+          title="Offer Banners"
+          description="Upload and manage promotional banners with expiry dates"
+          icon={Sparkles}
+          variant="compact"
+          actionLabel="Create Offer"
+          onAction={() => setModalOffer(null)}
+        />
 
         {/* Toolbar */}
         <div className="flex items-center justify-between gap-4 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm">

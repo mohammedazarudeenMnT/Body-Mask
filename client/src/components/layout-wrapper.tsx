@@ -9,7 +9,6 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const hideNavbarFooterWhatsApp = [
     "/login",
-    "/signup",
     "/share-experience",
     "/dashboard",
   ].some((route) => pathname === route || pathname.startsWith(route + "/"));
