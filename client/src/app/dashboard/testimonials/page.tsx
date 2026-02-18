@@ -2,19 +2,15 @@
 
 import { useState, useEffect } from "react";
 import {
-  Plus,
   Pencil,
   Trash2,
   Save,
   X,
   Star,
-  AlertCircle,
   CheckCircle2,
   Clock,
   Briefcase,
   Quote,
-  MoreVertical,
-  Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -49,11 +45,16 @@ function TestimonialModal({
   const [form, setForm] = useState({
     ...EMPTY_FORM,
     ...testimonial,
-    service: (testimonial?.service as any)?._id || testimonial?.service || "",
+    ...testimonial,
+    service:
+      typeof testimonial?.service === "object"
+        ? testimonial.service._id
+        : testimonial?.service || "",
   });
   const [saving, setSaving] = useState(false);
 
-  const set = (k: string, v: any) => setForm((f) => ({ ...f, [k]: v }));
+  const set = (k: string, v: string | number) =>
+    setForm((f) => ({ ...f, [k]: v }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,7 +116,7 @@ function TestimonialModal({
           <div className="space-y-4">
             <ImageUpload
               value={form.clientImage || ""}
-              onChange={(val) => set("clientImage", val)}
+              onChange={(val) => set("clientImage", val || "")}
               label="Client Image (Optional)"
               aspectRatio="square"
             />
@@ -382,7 +383,9 @@ export default function TestimonialsAdminPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 text-[10px] text-[#c5a367] font-bold uppercase">
                       <Briefcase className="w-3 h-3" />
-                      {(item.service as any)?.title || "General Story"}
+                      {(typeof item.service === "object"
+                        ? item.service?.title
+                        : null) || "General Story"}
                     </div>
                     <div className="text-[10px] text-gray-400 font-bold">
                       {new Date(item.createdAt!).toLocaleDateString()}

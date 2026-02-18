@@ -8,7 +8,6 @@ export default function ContactPage() {
         pageKey="contact"
         fallbackTitle="Contact Us"
         fallbackSubtitle="Ready to Transform Your Look?"
-        fallbackImage="/assets/contact/banner/contact-page-banner.jpg"
       />
       <ContactForm />
     </main>

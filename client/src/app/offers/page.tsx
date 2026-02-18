@@ -224,7 +224,6 @@ export default function OngoingOffersPage() {
         pageKey="offers"
         fallbackTitle="Curated Offers"
         fallbackSubtitle="Discover our latest promotions and seasonal beauty collections."
-        fallbackImage="/assets/services-section.jpg"
       />
 
       {/* Offers Grid */}

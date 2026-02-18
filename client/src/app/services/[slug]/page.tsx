@@ -93,7 +93,6 @@ export default function ServicePage({ params }: PageProps) {
         pageKey={`service-${service.slug}`}
         fallbackTitle={service.title}
         fallbackSubtitle={service.description}
-        fallbackImage={service.content?.heroImage || service.image}
       />
       <ServiceDetailClient service={adaptedService} />
     </main>

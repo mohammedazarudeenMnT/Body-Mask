@@ -57,7 +57,6 @@ export default function AboutPage() {
         pageKey="about"
         fallbackTitle="About Us"
         fallbackSubtitle="Luxury Bridal Studio & Professional Makeup"
-        fallbackImage="/assets/about/bridal-hero.jpg"
       />
 
       {/* 2. FEATURED IN MARQUEE */}

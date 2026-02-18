@@ -151,7 +151,6 @@ export default function GalleryPage() {
         pageKey="gallery"
         fallbackTitle="Visual Artistry"
         fallbackSubtitle="A curated collection of our finest transformations."
-        fallbackImage="/assets/skuncare-and-facials.png"
       />
       <div className="container mx-auto px-4 md:px-8 py-16">
         {/* Filter Navigation */}

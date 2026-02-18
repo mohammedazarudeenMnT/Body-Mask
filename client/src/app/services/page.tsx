@@ -168,7 +168,6 @@ export default function ServicesPage() {
         pageKey="services"
         fallbackTitle="Our Services"
         fallbackSubtitle="Luxury Treatments & Professional Artistry"
-        fallbackImage="/assets/services/banner/modern_radiance_hero_banner.png"
       />
 
       {/* Services Section */}

@@ -1,4 +1,5 @@
 import { axiosInstance } from "./axios";
+import { Service } from "@/types/service";
 
 export interface Testimonial {
   _id?: string;
@@ -7,7 +8,7 @@ export interface Testimonial {
   reviewMessage: string;
   clientImage?: string;
   status?: "Approved" | "Pending";
-  service?: string | any;
+  service?: string | Service;
   source?: "User Submitted" | "Manual Entry";
   createdAt?: string;
 }

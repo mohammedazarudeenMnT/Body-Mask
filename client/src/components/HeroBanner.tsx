@@ -15,7 +15,6 @@ interface HeroBannerProps {
   pageKey?: string;
   imageSrc?: string; // Legacy support
   imageAlt?: string; // Legacy support
-  fallbackImage?: string;
   fallbackTitle?: string;
   fallbackSubtitle?: string;
 }
@@ -24,11 +23,12 @@ const HeroBanner = ({
   pageKey,
   imageSrc,
   imageAlt,
-  fallbackImage,
   fallbackTitle,
   fallbackSubtitle,
 }: HeroBannerProps) => {
   const [banner, setBanner] = useState<PageBanner | null>(null);
+  const [loading, setLoading] = useState(true);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -42,7 +42,9 @@ const HeroBanner = ({
             setBanner(response.data);
           }
         } catch (error) {
-          console.error(`Error fetching banner for ${pageKey}:`, error);
+          console.error(`Error fetching banne r for ${pageKey}:`, error);
+        } finally {
+          setLoading(false);
         }
       };
       fetchBanner();
@@ -87,10 +89,17 @@ const HeroBanner = ({
     { dependencies: [banner], scope: containerRef },
   );
 
-  const image = banner?.imageUrl || fallbackImage || imageSrc || "";
+  const image = banner?.imageUrl || imageSrc || "";
   const title = banner?.title || fallbackTitle;
   const subtitle = banner?.subtitle || fallbackSubtitle;
   const altText = banner?.title || imageAlt || "Hero Banner";
+  if (loading) {
+    return (
+      <section className="relative w-full lg:h-screen overflow-hidden bg-white pt-24 md:pt-0 flex items-center justify-center">
+        <div className="h-10 w-10 animate-spin border-2 border-[#c5a367] border-t-transparent rounded-full" />
+      </section>
+    );
+  }
 
   return (
     <section

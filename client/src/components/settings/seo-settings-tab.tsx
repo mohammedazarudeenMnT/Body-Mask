@@ -37,6 +37,12 @@ const STUDIO_PAGES = [
     description: "Services offered",
   },
   {
+    id: "offers",
+    label: "Offers",
+    icon: "✨",
+    description: "Offers",
+  },
+  {
     id: "gallery",
     label: "Gallery",
     icon: "🖼️",
