@@ -1,4 +1,21 @@
 import { Banner } from "../model/Banner.js";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+  getUrlFromPublicId,
+} from "../utils/cloudinary-helper.js";
+
+/**
+ * Convert a banner doc's imageUrl (public_id) to a full Cloudinary URL.
+ */
+const bannerWithUrl = (banner) => {
+  if (!banner) return banner;
+  const obj = banner._doc ? { ...banner._doc } : { ...banner };
+  if (obj.imageUrl) {
+    obj.imageUrl = getUrlFromPublicId(obj.imageUrl);
+  }
+  return obj;
+};
 
 /**
  * Get all active banners for public frontend
@@ -8,7 +25,7 @@ export const getBanners = async (req, res) => {
     const banners = await Banner.find({ isActive: true }).sort({ order: 1 });
     res.status(200).json({
       success: true,
-      data: banners,
+      data: banners.map(bannerWithUrl),
     });
   } catch (error) {
     console.error("Error fetching banners:", error);
@@ -27,7 +44,7 @@ export const getAllBanners = async (req, res) => {
     const banners = await Banner.find({}).sort({ order: 1 });
     res.status(200).json({
       success: true,
-      data: banners,
+      data: banners.map(bannerWithUrl),
     });
   } catch (error) {
     console.error("Error fetching admin banners:", error);
@@ -52,10 +69,19 @@ export const createBanner = async (req, res) => {
       });
     }
 
+    let imagePublicId = imageUrl;
+    if (imageUrl.startsWith("data:image")) {
+      const uploadResult = await uploadToCloudinary(
+        imageUrl,
+        "body_mask/banners",
+      );
+      imagePublicId = uploadResult.public_id;
+    }
+
     const banner = await Banner.create({
       title,
       subtitle,
-      imageUrl,
+      imageUrl: imagePublicId,
       link,
       order,
       isActive,
@@ -63,7 +89,7 @@ export const createBanner = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      data: banner,
+      data: bannerWithUrl(banner),
       message: "Banner created successfully",
     });
   } catch (error) {
@@ -81,7 +107,19 @@ export const createBanner = async (req, res) => {
 export const updateBanner = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    const updateData = { ...req.body };
+
+    if (updateData.imageUrl && updateData.imageUrl.startsWith("data:image")) {
+      const existing = await Banner.findById(id);
+      if (existing?.imageUrl) {
+        await deleteFromCloudinary(existing.imageUrl);
+      }
+      const uploadResult = await uploadToCloudinary(
+        updateData.imageUrl,
+        "body_mask/banners",
+      );
+      updateData.imageUrl = uploadResult.public_id;
+    }
 
     const banner = await Banner.findByIdAndUpdate(id, updateData, {
       returnDocument: "after",
@@ -97,7 +135,7 @@ export const updateBanner = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: banner,
+      data: bannerWithUrl(banner),
       message: "Banner updated successfully",
     });
   } catch (error) {
@@ -123,6 +161,11 @@ export const deleteBanner = async (req, res) => {
         success: false,
         message: "Banner not found",
       });
+    }
+
+    // Clean up Cloudinary asset
+    if (banner.imageUrl) {
+      await deleteFromCloudinary(banner.imageUrl);
     }
 
     res.status(200).json({

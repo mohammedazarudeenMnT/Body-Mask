@@ -1,4 +1,21 @@
 import Testimonial from "../model/Testimonial.js";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+  getUrlFromPublicId,
+} from "../utils/cloudinary-helper.js";
+
+/**
+ * Convert a testimonial doc's clientImage (public_id) to a full Cloudinary URL.
+ */
+const testimonialWithUrl = (testimonial) => {
+  if (!testimonial) return testimonial;
+  const obj = testimonial._doc ? { ...testimonial._doc } : { ...testimonial };
+  if (obj.clientImage) {
+    obj.clientImage = getUrlFromPublicId(obj.clientImage);
+  }
+  return obj;
+};
 
 // Get all testimonials
 export const getTestimonials = async (req, res) => {
@@ -13,7 +30,7 @@ export const getTestimonials = async (req, res) => {
 
     res.json({
       success: true,
-      data: testimonials,
+      data: testimonials.map(testimonialWithUrl),
     });
   } catch (error) {
     console.error("Get testimonials error:", error);
@@ -27,7 +44,7 @@ export const getTestimonials = async (req, res) => {
 // Create a testimonial
 export const createTestimonial = async (req, res) => {
   try {
-    const testimonialData = req.body;
+    const testimonialData = { ...req.body };
     const isAdmin = req.user && req.user.role === "admin";
 
     if (isAdmin) {
@@ -39,10 +56,22 @@ export const createTestimonial = async (req, res) => {
       testimonialData.status = "Pending";
     }
 
+    // Upload client image to Cloudinary
+    if (
+      testimonialData.clientImage &&
+      testimonialData.clientImage.startsWith("data:image")
+    ) {
+      const uploadResult = await uploadToCloudinary(
+        testimonialData.clientImage,
+        "body_mask/testimonials",
+      );
+      testimonialData.clientImage = uploadResult.public_id;
+    }
+
     const testimonial = await Testimonial.create(testimonialData);
     res.status(201).json({
       success: true,
-      data: testimonial,
+      data: testimonialWithUrl(testimonial),
       message:
         "Testimonial created successfully" +
         (isAdmin ? "" : ". It will be visible after approval."),
@@ -61,11 +90,27 @@ export const createTestimonial = async (req, res) => {
 export const updateTestimonial = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    const updateData = { ...req.body };
 
     // Handle empty service string - convert to null or undefined to avoid CastError
     if (updateData.service === "") {
       updateData.service = null;
+    }
+
+    // Upload new client image to Cloudinary
+    if (
+      updateData.clientImage &&
+      updateData.clientImage.startsWith("data:image")
+    ) {
+      const existing = await Testimonial.findById(id);
+      if (existing?.clientImage) {
+        await deleteFromCloudinary(existing.clientImage);
+      }
+      const uploadResult = await uploadToCloudinary(
+        updateData.clientImage,
+        "body_mask/testimonials",
+      );
+      updateData.clientImage = uploadResult.public_id;
     }
 
     const testimonial = await Testimonial.findByIdAndUpdate(id, updateData, {
@@ -80,7 +125,7 @@ export const updateTestimonial = async (req, res) => {
 
     res.json({
       success: true,
-      data: testimonial,
+      data: testimonialWithUrl(testimonial),
       message: "Testimonial updated successfully",
     });
   } catch (error) {
@@ -102,6 +147,11 @@ export const deleteTestimonial = async (req, res) => {
         success: false,
         message: "Testimonial not found",
       });
+    }
+
+    // Clean up Cloudinary asset
+    if (testimonial.clientImage) {
+      await deleteFromCloudinary(testimonial.clientImage);
     }
 
     res.json({

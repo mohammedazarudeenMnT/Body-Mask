@@ -33,6 +33,7 @@ export const initAuth = () => {
 
     emailAndPassword: {
       enabled: true,
+      disableSignUp: true,
       minPasswordLength: 6,
       sendResetPassword: async ({ user, url, token }) => {
         const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";

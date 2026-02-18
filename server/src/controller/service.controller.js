@@ -1,4 +1,45 @@
 import Service from "../model/Service.js";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+  getUrlFromPublicId,
+} from "../utils/cloudinary-helper.js";
+
+/**
+ * Helper: Upload a single image field if it's base64, return public_id.
+ */
+const processImageField = async (value, folder) => {
+  if (!value) return value;
+  if (value.startsWith("data:image")) {
+    const result = await uploadToCloudinary(value, folder);
+    return result.public_id;
+  }
+  return value; // already a public_id or URL
+};
+
+/**
+ * Helper: Convert a service doc's image fields from public_ids to full URLs.
+ */
+const serviceWithUrls = (service) => {
+  if (!service) return service;
+  const obj = service._doc ? { ...service._doc } : { ...service };
+
+  if (obj.image) {
+    obj.image = getUrlFromPublicId(obj.image);
+  }
+  if (obj.content) {
+    obj.content = { ...obj.content };
+    if (obj.content.heroImage) {
+      obj.content.heroImage = getUrlFromPublicId(obj.content.heroImage);
+    }
+    if (obj.content.gallery && obj.content.gallery.length > 0) {
+      obj.content.gallery = obj.content.gallery.map((img) =>
+        img ? getUrlFromPublicId(img) : img,
+      );
+    }
+  }
+  return obj;
+};
 
 // Get all services
 export const getServices = async (req, res) => {
@@ -19,7 +60,7 @@ export const getServices = async (req, res) => {
 
     res.json({
       success: true,
-      data: services,
+      data: services.map(serviceWithUrls),
     });
   } catch (error) {
     console.error("Get services error:", error);
@@ -48,7 +89,7 @@ export const getServiceBySlug = async (req, res) => {
 
     res.json({
       success: true,
-      data: service,
+      data: serviceWithUrls(service),
     });
   } catch (error) {
     console.error("Get service by slug error:", error);
@@ -74,7 +115,7 @@ export const getServiceById = async (req, res) => {
 
     res.json({
       success: true,
-      data: service,
+      data: serviceWithUrls(service),
     });
   } catch (error) {
     console.error("Get service by ID error:", error);
@@ -88,7 +129,7 @@ export const getServiceById = async (req, res) => {
 // Create service
 export const createService = async (req, res) => {
   try {
-    const serviceData = req.body;
+    const serviceData = { ...req.body };
 
     // Check if slug exists
     if (serviceData.slug) {
@@ -101,12 +142,33 @@ export const createService = async (req, res) => {
       }
     }
 
+    // Upload images to Cloudinary
+    serviceData.image = await processImageField(
+      serviceData.image,
+      "body_mask/services",
+    );
+
+    if (serviceData.content) {
+      serviceData.content = { ...serviceData.content };
+      serviceData.content.heroImage = await processImageField(
+        serviceData.content.heroImage,
+        "body_mask/services/hero",
+      );
+      if (serviceData.content.gallery?.length > 0) {
+        serviceData.content.gallery = await Promise.all(
+          serviceData.content.gallery.map((img) =>
+            processImageField(img, "body_mask/services/gallery"),
+          ),
+        );
+      }
+    }
+
     const service = await Service.create(serviceData);
 
     res.status(201).json({
       success: true,
       message: "Service created successfully",
-      data: service,
+      data: serviceWithUrls(service),
     });
   } catch (error) {
     console.error("Create service error:", error);
@@ -122,23 +184,81 @@ export const createService = async (req, res) => {
 export const updateService = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    const updateData = { ...req.body };
 
-    const service = await Service.findByIdAndUpdate(id, updateData, {
-      returnDocument: "after",
-    });
-
-    if (!service) {
+    const existing = await Service.findById(id);
+    if (!existing) {
       return res.status(404).json({
         success: false,
         message: "Service not found",
       });
     }
 
+    // Handle main image
+    if (updateData.image && updateData.image.startsWith("data:image")) {
+      if (existing.image) await deleteFromCloudinary(existing.image);
+      updateData.image = await processImageField(
+        updateData.image,
+        "body_mask/services",
+      );
+    }
+
+    // Handle content images
+    if (updateData.content) {
+      updateData.content = { ...updateData.content };
+
+      // Hero image
+      if (
+        updateData.content.heroImage &&
+        updateData.content.heroImage.startsWith("data:image")
+      ) {
+        if (existing.content?.heroImage) {
+          await deleteFromCloudinary(existing.content.heroImage);
+        }
+        updateData.content.heroImage = await processImageField(
+          updateData.content.heroImage,
+          "body_mask/services/hero",
+        );
+      }
+
+      // Gallery images
+      if (updateData.content.gallery?.length > 0) {
+        updateData.content.gallery = await Promise.all(
+          updateData.content.gallery.map(async (img, idx) => {
+            if (img && img.startsWith("data:image")) {
+              // Delete old gallery image at same index if it existed
+              const oldGalleryImg = existing.content?.gallery?.[idx];
+              if (oldGalleryImg) await deleteFromCloudinary(oldGalleryImg);
+              return processImageField(img, "body_mask/services/gallery");
+            }
+            return img;
+          }),
+        );
+      }
+
+      // Clean up removed gallery images
+      if (existing.content?.gallery) {
+        const newGalleryLength = updateData.content.gallery?.length || 0;
+        for (
+          let i = newGalleryLength;
+          i < existing.content.gallery.length;
+          i++
+        ) {
+          if (existing.content.gallery[i]) {
+            await deleteFromCloudinary(existing.content.gallery[i]);
+          }
+        }
+      }
+    }
+
+    const service = await Service.findByIdAndUpdate(id, updateData, {
+      returnDocument: "after",
+    });
+
     res.json({
       success: true,
       message: "Service updated successfully",
-      data: service,
+      data: serviceWithUrls(service),
     });
   } catch (error) {
     console.error("Update service error:", error);
@@ -160,6 +280,18 @@ export const deleteService = async (req, res) => {
         success: false,
         message: "Service not found",
       });
+    }
+
+    // Clean up all Cloudinary assets
+    if (service.image) await deleteFromCloudinary(service.image);
+    if (service.content?.heroImage)
+      await deleteFromCloudinary(service.content.heroImage);
+    if (service.content?.gallery) {
+      await Promise.all(
+        service.content.gallery
+          .filter(Boolean)
+          .map((img) => deleteFromCloudinary(img)),
+      );
     }
 
     res.json({
