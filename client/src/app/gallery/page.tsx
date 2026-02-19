@@ -24,7 +24,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function GalleryPage() {
+import { serviceApi } from "@/lib/service-api";
+
+export default async function GalleryPage() {
+  const servicesRes = await serviceApi.getServices();
+
   return (
     <main className="min-h-screen bg-[#FDFBF7]">
       <HeroBanner
@@ -32,7 +36,7 @@ export default function GalleryPage() {
         fallbackTitle="Visual Artistry"
         fallbackSubtitle="A curated collection of our finest transformations."
       />
-      <GalleryPageContent />
+      <GalleryPageContent initialServices={servicesRes.data || []} />
     </main>
   );
 }

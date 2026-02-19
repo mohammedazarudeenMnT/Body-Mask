@@ -25,7 +25,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function ContactPage() {
+import { serviceApi } from "@/lib/service-api";
+import { axiosInstance } from "@/lib/axios";
+
+export default async function ContactPage() {
+  const [settingsRes, servicesRes] = await Promise.all([
+    axiosInstance.get("/api/settings/general").catch(() => ({ data: null })),
+    serviceApi.getServices().catch(() => ({ success: false, data: [] })),
+  ]);
+
   return (
     <main className="min-h-screen bg-cream">
       <HeroBanner
@@ -33,7 +41,10 @@ export default function ContactPage() {
         fallbackTitle="Contact Us"
         fallbackSubtitle="Ready to Transform Your Look?"
       />
-      <ContactForm />
+      <ContactForm
+        initialSettings={settingsRes.data}
+        initialServices={servicesRes.success ? servicesRes.data : []}
+      />
     </main>
   );
 }

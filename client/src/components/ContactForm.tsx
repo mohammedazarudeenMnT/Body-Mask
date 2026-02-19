@@ -42,16 +42,28 @@ interface GeneralSettings {
   googleMapEmbed?: string;
 }
 
-export default function ContactForm() {
+interface ContactFormProps {
+  initialSettings?: GeneralSettings | null;
+  initialServices?: Service[];
+}
+
+export default function ContactForm({
+  initialSettings = null,
+  initialServices = [],
+}: ContactFormProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const infoRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const mapHeaderRef = useRef<HTMLDivElement>(null);
   const mapContentRef = useRef<HTMLDivElement>(null);
 
-  const [settings, setSettings] = useState<GeneralSettings | null>(null);
-  const [services, setServices] = useState<Service[]>([]);
-  const [servicesLoading, setServicesLoading] = useState(true);
+  const [settings, setSettings] = useState<GeneralSettings | null>(
+    initialSettings,
+  );
+  const [services, setServices] = useState<Service[]>(initialServices);
+  const [servicesLoading, setServicesLoading] = useState(
+    initialServices.length === 0 && !initialSettings,
+  );
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -117,18 +129,24 @@ export default function ContactForm() {
   );
 
   useEffect(() => {
+    if (initialSettings && initialServices.length > 0) return;
+
     const fetchData = async () => {
       try {
-        // Fetch settings
-        const settingsRes = await axiosInstance.get("/api/settings/general");
-        if (settingsRes.data) {
-          setSettings(settingsRes.data);
+        // Fetch settings if not provided
+        if (!initialSettings) {
+          const settingsRes = await axiosInstance.get("/api/settings/general");
+          if (settingsRes.data) {
+            setSettings(settingsRes.data);
+          }
         }
 
-        // Fetch services
-        const servicesRes = await serviceApi.getServices();
-        if (servicesRes.success && servicesRes.data) {
-          setServices(servicesRes.data);
+        // Fetch services if not provided
+        if (initialServices.length === 0) {
+          const servicesRes = await serviceApi.getServices();
+          if (servicesRes.success && servicesRes.data) {
+            setServices(servicesRes.data);
+          }
         }
       } catch (error) {
         console.error("Failed to fetch data for contact form", error);
@@ -137,7 +155,7 @@ export default function ContactForm() {
       }
     };
     fetchData();
-  }, []);
+  }, [initialSettings, initialServices.length]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

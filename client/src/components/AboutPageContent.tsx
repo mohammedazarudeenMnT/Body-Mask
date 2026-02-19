@@ -1,46 +1,14 @@
-"use client";
-
 import Image from "next/image";
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Wifi, FlaskConical, Flower, Star } from "lucide-react";
 import { LuxuryBrandMarquee } from "@/components/ui/luxury-brand-marquee";
 import { EditorialTestimonial } from "@/components/ui/editorial-testimonial";
 import { LuxuryJourney } from "@/components/LuxuryJourney";
 import HeroBanner from "@/components/HeroBanner";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { RevealWrapper } from "@/components/ui/reveal-wrapper";
 
 export default function AboutPageContent() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      // Fade in sections
-      const sections = gsap.utils.toArray(".fade-section") as HTMLElement[];
-      sections.forEach((section) => {
-        gsap.from(section, {
-          opacity: 0,
-          y: 20,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 85%",
-            once: true,
-          },
-        });
-      });
-    },
-    { scope: containerRef },
-  );
-
   return (
-    <div ref={containerRef}>
+    <RevealWrapper>
       {/* 1. HERO SECTION */}
       <HeroBanner
         pageKey="about"
@@ -229,6 +197,6 @@ export default function AboutPageContent() {
 
       {/* 6. LUXURY JOURNEY (Redesigned Timeline) */}
       <LuxuryJourney />
-    </div>
+    </RevealWrapper>
   );
 }

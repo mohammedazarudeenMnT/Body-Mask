@@ -13,6 +13,8 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, Flip);
 }
 
+import { Service } from "@/types/service";
+
 interface GalleryItem {
   id: string;
   src: string;
@@ -21,11 +23,64 @@ interface GalleryItem {
   title: string;
 }
 
-export default function GalleryPageContent() {
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+interface GalleryPageContentProps {
+  initialServices?: Service[];
+}
+
+function processServicesToGalleryItems(services: Service[]): GalleryItem[] {
+  const items: GalleryItem[] = [];
+  services.forEach((service) => {
+    if (service.image) {
+      items.push({
+        id: `${service._id}-main`,
+        src: service.image,
+        category: service.title,
+        serviceId: service._id || "",
+        title: service.title,
+      });
+    }
+    if (service.content?.gallery && Array.isArray(service.content.gallery)) {
+      service.content.gallery.forEach((imgUrl, index) => {
+        let src = "";
+        if (typeof imgUrl === "string") {
+          src = imgUrl;
+        } else if (typeof imgUrl === "object" && imgUrl !== null) {
+          const imgObj = imgUrl as { url?: string; src?: string };
+          src = imgObj.url || imgObj.src || "";
+        }
+        if (src) {
+          items.push({
+            id: `${service._id}-${index}`,
+            src: src,
+            category: service.title,
+            serviceId: service._id || "",
+            title: service.title,
+          });
+        }
+      });
+    }
+  });
+  return items;
+}
+
+export default function GalleryPageContent({
+  initialServices = [],
+}: GalleryPageContentProps) {
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() =>
+    processServicesToGalleryItems(initialServices),
+  );
+  const [categories, setCategories] = useState<string[]>(() => [
+    "All",
+    ...Array.from(
+      new Set(
+        processServicesToGalleryItems(initialServices).map(
+          (item) => item.category,
+        ),
+      ),
+    ),
+  ]);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(initialServices.length === 0);
   const [visibleCount, setVisibleCount] = useState(12);
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
 
@@ -34,58 +89,20 @@ export default function GalleryPageContent() {
 
   // Fetch Data
   useEffect(() => {
+    if (initialServices.length > 0 && activeCategory === "All") return;
+
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await serviceApi.getServices(activeCategory);
+        const res = await serviceApi.getServices(
+          activeCategory === "All" ? undefined : activeCategory,
+        );
         if (res.success && res.data) {
-          const newItems: GalleryItem[] = [];
-          res.data.forEach((service) => {
-            // Main Image
-            if (service.image) {
-              newItems.push({
-                id: `${service._id}-main`,
-                src: service.image,
-                category: service.title,
-                serviceId: service._id || "",
-                title: service.title,
-              });
-            }
-            // Gallery Images
-            if (
-              service.content?.gallery &&
-              Array.isArray(service.content.gallery)
-            ) {
-              service.content.gallery.forEach((imgUrl, index) => {
-                let src = "";
-                if (typeof imgUrl === "string") {
-                  src = imgUrl;
-                } else if (typeof imgUrl === "object" && imgUrl !== null) {
-                  const imgObj = imgUrl as { url?: string; src?: string };
-                  src = imgObj.url || imgObj.src || "";
-                }
-                if (src) {
-                  newItems.push({
-                    id: `${service._id}-${index}`,
-                    src: src,
-                    category: service.title,
-                    serviceId: service._id || "",
-                    title: service.title,
-                  });
-                }
-              });
-            }
-          });
-
-          // Shuffle only if it's "All"
-          if (activeCategory === "All") {
-            newItems.sort(() => 0.5 - Math.random());
-          }
-
+          const newItems = processServicesToGalleryItems(res.data);
           setGalleryItems(newItems);
 
-          // Update categories only on initial load (when list is empty and category is All)
-          if (categories.length === 0 && activeCategory === "All") {
+          // Update categories only if they're empty
+          if (categories.length <= 1) {
             const cats = [
               "All",
               ...Array.from(new Set(newItems.map((item) => item.category))),
@@ -100,7 +117,7 @@ export default function GalleryPageContent() {
       }
     };
     fetchData();
-  }, [activeCategory]);
+  }, [activeCategory, initialServices.length]);
 
   const handleFilter = (category: string) => {
     if (category === activeCategory) return;
