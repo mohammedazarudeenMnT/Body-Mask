@@ -65,10 +65,14 @@ const fallbackServicesList = [
   },
 ] as unknown as Service[];
 
-const Services = () => {
+interface ServicesProps {
+  initialServices?: Service[];
+}
+
+const Services = ({ initialServices = [] }: ServicesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [services, setServices] = useState<Service[]>([]);
+  const [services, setServices] = useState<Service[]>(initialServices);
 
   useGSAP(
     () => {
@@ -113,6 +117,7 @@ const Services = () => {
   );
 
   useEffect(() => {
+    if (initialServices.length > 0) return;
     const fetchServices = async () => {
       try {
         const res = await serviceApi.getServices();
@@ -138,7 +143,7 @@ const Services = () => {
     >
       {/* Background Decor */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/assets/patterns/texture.png')] bg-repeat" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#C5A367_1px,transparent_1px)] bg-size-[40px_40px]" />
       </div>
 
       <div className="min-h-screen flex flex-col justify-center py-20">

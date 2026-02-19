@@ -12,6 +12,7 @@ import {
   Testimonial as TestimonialType,
 } from "@/lib/testimonial-api";
 import { serviceApi } from "@/lib/service-api";
+import { Service } from "@/types/service";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -26,14 +27,64 @@ interface GalleryImage {
   offset?: number;
 }
 
-export default function GalleryTestimonials() {
+interface GalleryTestimonialsProps {
+  initialTestimonials?: TestimonialType[];
+  initialServices?: Service[];
+}
+
+export default function GalleryTestimonials({
+  initialTestimonials = [],
+  initialServices = [],
+}: GalleryTestimonialsProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(2);
-  const [testimonials, setTestimonials] = useState<TestimonialType[]>([]);
+  const [testimonials, setTestimonials] =
+    useState<TestimonialType[]>(initialTestimonials);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(
+    initialTestimonials.length === 0 && initialServices.length === 0,
+  );
+
+  // Helper to build gallery images from services
+  const buildGallery = (services: Service[]) => {
+    const images: GalleryImage[] = [];
+    services.forEach((service) => {
+      if (service.image) {
+        images.push({
+          id: `service-${service._id}`,
+          src: service.image,
+          alt: service.title,
+        });
+      }
+      if (service.content?.gallery && service.content.gallery.length > 0) {
+        service.content.gallery.forEach((galleryUrl, gIdx) => {
+          if (galleryUrl) {
+            images.push({
+              id: `gallery-${service._id}-${gIdx}`,
+              src: galleryUrl,
+              alt: `${service.title} Gallery ${gIdx + 1}`,
+            });
+          }
+        });
+      }
+    });
+    return images;
+  };
+
+  // Build initial gallery from props
+  useEffect(() => {
+    if (initialServices.length > 0) {
+      const images = buildGallery(initialServices);
+      if (images.length > 0) {
+        setGalleryImages(images);
+        setActiveImageIndex(Math.min(2, images.length - 1));
+      }
+    }
+  }, [initialServices]);
 
   // Fetch testimonials and gallery images from APIs
   useEffect(() => {
+    if (initialTestimonials.length > 0 && initialServices.length > 0) return;
+
     const fetchData = async () => {
       try {
         const [testimonialRes, servicesRes] = await Promise.all([
@@ -50,41 +101,9 @@ export default function GalleryTestimonials() {
 
         // Build gallery images from all services' gallery content
         if (servicesRes.success && servicesRes.data?.length > 0) {
-          const images: GalleryImage[] = [];
-          let imageIndex = 0;
-
-          servicesRes.data.forEach((service) => {
-            // Add service main image
-            if (service.image) {
-              images.push({
-                id: `service-${service._id}`,
-                src: service.image,
-                alt: service.title,
-              });
-              imageIndex++;
-            }
-
-            // Add gallery images from service content
-            if (
-              service.content?.gallery &&
-              service.content.gallery.length > 0
-            ) {
-              service.content.gallery.forEach((galleryUrl, gIdx) => {
-                if (galleryUrl) {
-                  images.push({
-                    id: `gallery-${service._id}-${gIdx}`,
-                    src: galleryUrl,
-                    alt: `${service.title} Gallery ${gIdx + 1}`,
-                  });
-                  imageIndex++;
-                }
-              });
-            }
-          });
-
+          const images = buildGallery(servicesRes.data);
           if (images.length > 0) {
             setGalleryImages(images);
-            // Set starting index to center
             setActiveImageIndex(Math.min(2, images.length - 1));
           }
         }
@@ -96,7 +115,7 @@ export default function GalleryTestimonials() {
     };
 
     fetchData();
-  }, []);
+  }, [initialTestimonials.length, initialServices.length]);
 
   const displayTestimonials = useMemo(() => {
     if (testimonials.length > 0) return testimonials.slice(0, 4);

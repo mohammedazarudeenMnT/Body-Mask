@@ -16,6 +16,7 @@ interface HeroBannerProps {
   imageSrc?: string; // Legacy support
   imageAlt?: string; // Legacy support
   fallbackTitle?: string;
+  fallbackImage?: string;
   fallbackSubtitle?: string;
 }
 
@@ -24,6 +25,7 @@ const HeroBanner = ({
   imageSrc,
   imageAlt,
   fallbackTitle,
+  fallbackImage,
   fallbackSubtitle,
 }: HeroBannerProps) => {
   const [banner, setBanner] = useState<PageBanner | null>(null);
@@ -89,7 +91,7 @@ const HeroBanner = ({
     { dependencies: [banner], scope: containerRef },
   );
 
-  const image = banner?.imageUrl || imageSrc || "";
+  const image = banner?.imageUrl || imageSrc || fallbackImage || "";
   const title = banner?.title || fallbackTitle;
   const subtitle = banner?.subtitle || fallbackSubtitle;
   const altText = banner?.title || imageAlt || "Hero Banner";

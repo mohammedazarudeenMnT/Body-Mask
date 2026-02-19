@@ -1,46 +1,54 @@
-"use client";
-
-import { useEffect, useState, use } from "react";
+import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import { serviceApi } from "@/lib/service-api";
-import { Service } from "@/types/service";
 import HeroBanner from "@/components/HeroBanner";
 import ServiceDetailClient from "@/components/ServiceDetailClient";
-import { Loader2 } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export default function ServicePage({ params }: PageProps) {
-  const { slug } = use(params);
-  const [service, setService] = useState<Service | null>(null);
-  const [loading, setLoading] = useState(true);
+export async function generateMetadata(
+  { params }: PageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { slug } = await params;
+  try {
+    const response = await serviceApi.getServiceBySlug(slug);
+    if (!response.success || !response.data) {
+      return { title: "Service Not Found | Body Mask" };
+    }
+    const service = response.data;
+    const previousImages = (await parent).openGraph?.images || [];
 
-  useEffect(() => {
-    const fetchService = async () => {
-      try {
-        const response = await serviceApi.getServiceBySlug(slug);
-        if (response.success) {
-          setService(response.data);
-        } else {
-          setService(null);
-        }
-      } catch (error) {
-        console.error("Error fetching service:", error);
-      } finally {
-        setLoading(false);
-      }
+    return {
+      title: `${service.title} | Luxury Bridal Service | Body Mask`,
+      description: service.description,
+      openGraph: {
+        title: service.title,
+        description: service.description,
+        images: [
+          service.content?.heroImage || service.image,
+          ...previousImages,
+        ],
+      },
     };
-    fetchService();
-  }, [slug]);
+  } catch (error) {
+    return { title: "Service | Body Mask Bridal Studio" };
+  }
+}
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
-        <Loader2 className="w-12 h-12 text-[#C5A367] animate-spin" />
-      </div>
-    );
+export default async function ServicePage({ params }: PageProps) {
+  const { slug } = await params;
+  let service = null;
+
+  try {
+    const response = await serviceApi.getServiceBySlug(slug);
+    if (response.success) {
+      service = response.data;
+    }
+  } catch (error) {
+    console.error("Error fetching service:", error);
   }
 
   if (!service) {
@@ -48,12 +56,11 @@ export default function ServicePage({ params }: PageProps) {
   }
 
   // Transform Service to the format ServiceDetailClient expects
-  // If the ServiceDetailClient expects a different structure, we adapt it here
   const adaptedService = {
     title: service.title,
     subtitle: service.description,
     heroImage: service.content?.heroImage || service.image,
-    category: "Luxury Service", // Or add category to model
+    category: "Luxury Service",
     description: {
       intro: service.description,
       main: service.content?.fullDescription || service.description,
@@ -64,7 +71,7 @@ export default function ServicePage({ params }: PageProps) {
     benefits: service.content?.benefits || [],
     gallery: [
       { src: service.image, alt: service.title, label: "Main Feature" },
-      ...(service.content?.gallery?.map((img, i) => ({
+      ...(service.content?.gallery?.map((img: string, i: number) => ({
         src: img,
         alt: `${service.title} gallery ${i}`,
         label: "Artistry",
@@ -72,19 +79,15 @@ export default function ServicePage({ params }: PageProps) {
     ],
   };
 
-  // If gallery is empty or too short, we might want to add some defaults or handle it in the component
+  // Ensure enough items for the gallery layout if needed
   if (adaptedService.gallery.length < 3) {
-    // Add placeholders or duplicate if necessary for the layout
-    adaptedService.gallery.push({
-      src: service.image,
-      alt: service.title,
-      label: "Artistry",
-    });
-    adaptedService.gallery.push({
-      src: service.image,
-      alt: service.title,
-      label: "Artistry",
-    });
+    while (adaptedService.gallery.length < 3) {
+      adaptedService.gallery.push({
+        src: service.image,
+        alt: service.title,
+        label: "Artistry",
+      });
+    }
   }
 
   return (
@@ -93,6 +96,7 @@ export default function ServicePage({ params }: PageProps) {
         pageKey={`service-${service.slug}`}
         fallbackTitle={service.title}
         fallbackSubtitle={service.description}
+        fallbackImage={service.image}
       />
       <ServiceDetailClient service={adaptedService} />
     </main>

@@ -17,8 +17,10 @@ import {
   Loader2,
 } from "lucide-react";
 import { leadApi } from "@/lib/lead-api";
+import { serviceApi } from "@/lib/service-api";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
+import { Service } from "@/types/service";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -48,6 +50,8 @@ export default function ContactForm() {
   const mapContentRef = useRef<HTMLDivElement>(null);
 
   const [settings, setSettings] = useState<GeneralSettings | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [servicesLoading, setServicesLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -113,17 +117,26 @@ export default function ContactForm() {
   );
 
   useEffect(() => {
-    const fetchSettings = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axiosInstance.get("/api/settings/general");
-        if (res.data) {
-          setSettings(res.data);
+        // Fetch settings
+        const settingsRes = await axiosInstance.get("/api/settings/general");
+        if (settingsRes.data) {
+          setSettings(settingsRes.data);
+        }
+
+        // Fetch services
+        const servicesRes = await serviceApi.getServices();
+        if (servicesRes.success && servicesRes.data) {
+          setServices(servicesRes.data);
         }
       } catch (error) {
-        console.error("Failed to fetch settings for contact form", error);
+        console.error("Failed to fetch data for contact form", error);
+      } finally {
+        setServicesLoading(false);
       }
     };
-    fetchSettings();
+    fetchData();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -432,15 +445,19 @@ export default function ContactForm() {
                           value={formData.service}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:outline-none focus:ring-2 focus:ring-[#C5A367] focus:border-transparent bg-white transition-all text-gray-800"
+                          disabled={servicesLoading}
+                          className="w-full px-4 py-3 border border-gray-200 rounded-sm focus:outline-none focus:ring-2 focus:ring-[#C5A367] focus:border-transparent bg-white transition-all text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <option value="">Select a service</option>
-                          <option value="bridal-makeup">Bridal Makeup</option>
-                          <option value="hair-styling">Hair Styling</option>
-                          <option value="skin-care">Advanced Skin Care</option>
-                          <option value="nail-art">Nail Art & Manicure</option>
-                          <option value="pedicure">Anti-Tan Pedicure</option>
-                          <option value="other">Other Services</option>
+                          <option value="">
+                            {servicesLoading
+                              ? "Loading services..."
+                              : "Select a service"}
+                          </option>
+                          {services.map((service) => (
+                            <option key={service._id} value={service.title}>
+                              {service.title}
+                            </option>
+                          ))}
                         </select>
                       </div>
 
@@ -535,7 +552,21 @@ export default function ContactForm() {
               <div className="relative w-full h-[450px] md:h-[550px] overflow-hidden rounded-sm">
                 {settings?.googleMapEmbed ? (
                   <iframe
-                    srcDoc={`<html><body style="margin:0;padding:0;height:100%"><iframe src="${settings.googleMapEmbed}" width="100%" height="100%" style="border:0" allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe></body></html>`}
+                    srcDoc={
+                      settings.googleMapEmbed.includes("<iframe")
+                        ? `
+                        <html>
+                          <head>
+                            <style>
+                              html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+                              iframe { width: 100% !important; height: 100% !important; border: 0 !important; }
+                            </style>
+                          </head>
+                          <body>${settings.googleMapEmbed}</body>
+                        </html>
+                        `
+                        : `<html><body style="margin:0;padding:0;height:100%"><iframe src="${settings.googleMapEmbed}" width="100%" height="100%" style="border:0" allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe></body></html>`
+                    }
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -546,7 +577,7 @@ export default function ContactForm() {
                   />
                 ) : (
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.0234567890123!2d78.1234567890123!3d9.9234567890123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwNTUnMjQuNSJOIDc4wrAwNycyNC41IkU!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.374664301461!2d78.11886927502991!3d9.902720290197776!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c5e7f26e88d7%3A0x30a2110cf8b752c4!2sBody%20Mask%20Bridal%20Studio!5e0!3m2!1sen!2sin!4v1771418280783!5m2!1sen!2sin"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}

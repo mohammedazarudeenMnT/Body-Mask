@@ -175,9 +175,18 @@ const Navbar = () => {
               );
             })}
             <li className="pt-2 border-t border-gray-100 mobile-link">
-              <button className="w-full bg-gold-gradient text-white px-6 py-2 text-sm font-bold tracking-[0.2em] uppercase hover:shadow-lg transition-all duration-300 border-none">
-                Book Now
-              </button>
+              <Link
+                href="/contact"
+                className="block"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <button
+                  className="w-full bg-gold-gradient text-white px-6 py-2 text-sm font-bold tracking-[0.2em] uppercase hover:shadow-lg transition-all duration-300 border-none"
+                  aria-label="Book a consultation"
+                >
+                  Book Now
+                </button>
+              </Link>
             </li>
           </ul>
         </div>

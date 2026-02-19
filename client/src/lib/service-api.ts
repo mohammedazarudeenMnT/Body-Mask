@@ -1,5 +1,6 @@
 import { axiosInstance } from "./axios";
 import { Service, SaveServiceData } from "../types/service";
+import { cache } from "react";
 
 export const serviceApi = {
   // Public methods
@@ -13,13 +14,13 @@ export const serviceApi = {
     return response.data;
   },
 
-  async getServiceBySlug(slug: string) {
+  getServiceBySlug: cache(async (slug: string) => {
     const response = await axiosInstance.get<{
       success: boolean;
       data: Service;
     }>(`/api/services/${slug}`);
     return response.data;
-  },
+  }),
 
   async getServiceById(id: string) {
     const response = await axiosInstance.get<{

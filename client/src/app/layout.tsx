@@ -18,7 +18,47 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "Body Mask Bridal Studio",
-  description: "Luxury Bridal Studio & Professional Makeup Artistry",
+  description:
+    "Madurai's premier destination for luxury bridal makeup and professional beauty services. Experience exquisite artistry for your special day.",
+  keywords: [
+    "bridal makeup",
+    "makeup artist Madurai",
+    "wedding styling",
+    "luxury salon",
+    "beauty artistry",
+  ],
+  authors: [{ name: "Body Mask Team" }],
+  openGraph: {
+    title: "Body Mask Bridal Studio",
+    description:
+      "Madurai's premier destination for luxury bridal makeup and professional beauty services.",
+    url: "https://bodymask.com",
+    siteName: "Body Mask Bridal Studio",
+    images: [
+      {
+        url: "/assets/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Body Mask Bridal Studio - Luxury Bridal Artistry",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Body Mask Bridal Studio",
+    description:
+      "Madurai's premier destination for luxury bridal makeup and professional beauty services.",
+    images: ["/assets/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://bodymask.com",
+  ),
 };
 
 export default function RootLayout({

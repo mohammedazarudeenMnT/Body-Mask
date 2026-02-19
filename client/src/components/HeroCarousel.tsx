@@ -16,13 +16,18 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const HeroCarousel = () => {
-  const [banners, setBanners] = useState<Banner[]>([]);
-  const [loading, setLoading] = useState(true);
+interface HeroCarouselProps {
+  initialBanners?: Banner[];
+}
+
+const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
+  const [banners, setBanners] = useState<Banner[]>(initialBanners);
+  const [loading, setLoading] = useState(initialBanners.length === 0);
   const [api, setApi] = useState<CarouselApi>();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (initialBanners.length > 0) return;
     const fetchBanners = async () => {
       try {
         const response = await bannerApi.getBanners();

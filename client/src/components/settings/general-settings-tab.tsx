@@ -540,7 +540,21 @@ export function GeneralSettingsTab({ onMessage }: GeneralSettingsTabProps) {
                 <div className="h-64 bg-gray-50 flex items-center justify-center">
                   <iframe
                     title="Google Map Preview"
-                    src={settings.googleMapEmbed}
+                    srcDoc={
+                      settings.googleMapEmbed.includes("<iframe")
+                        ? `
+                        <html>
+                          <head>
+                            <style>
+                              html, body { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+                              iframe { width: 100% !important; height: 100% !important; border: 0 !important; }
+                            </style>
+                          </head>
+                          <body>${settings.googleMapEmbed}</body>
+                        </html>
+                        `
+                        : `<html><body style="margin:0;padding:0;height:100%"><iframe src="${settings.googleMapEmbed}" width="100%" height="100%" style="border:0" allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe></body></html>`
+                    }
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
