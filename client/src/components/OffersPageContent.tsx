@@ -87,14 +87,14 @@ function OfferCard({
   const isExpiringSoon = daysLeft <= 5 && daysLeft > 0;
 
   return (
-    <div className="offer-card opacity-0 group relative bg-white rounded-3xl overflow-hidden border border-[#e8e0d5] shadow-sm hover:shadow-2xl transition-all duration-700 hover:-translate-y-2">
+    <div className="offer-card opacity-0 group relative bg-white rounded-3xl overflow-hidden border border-[#e8e0d5] shadow-sm hover:shadow-2xl transition-shadow duration-500 hover:-translate-y-2">
       {/* image Banner */}
       <div className="relative flex flex-col">
         <div className="relative w-full overflow-hidden bg-gray-50 aspect-auto">
           <img
             src={offer.imageUrl || "/placeholder-offer.jpg"}
             alt="Ongoing Offer"
-            className="w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-[1.02]"
+            className="w-full h-auto object-contain group-hover:scale-[1.02] transition-opacity duration-300"
           />
 
           {/* Overlay on hover */}
@@ -129,7 +129,11 @@ function OfferCard({
           </div>
           <div className="flex items-center gap-1.5 text-xs text-gray-500">
             <Clock className="w-3.5 h-3.5 text-[#c5a367]" />
-            <span>Expires {expiryDate.toLocaleDateString()}</span>
+            <span>
+              Expires {expiryDate.getDate().toString().padStart(2, "0")}/
+              {(expiryDate.getMonth() + 1).toString().padStart(2, "0")}/
+              {expiryDate.getFullYear()}
+            </span>
           </div>
         </div>
       </div>
@@ -146,18 +150,27 @@ function OfferSkeleton() {
   );
 }
 
-export default function OffersPageContent() {
-  const [offers, setOffers] = useState<Offer[]>([]);
-  const [loading, setLoading] = useState(true);
+interface OffersPageContentProps {
+  initialOffers?: Offer[];
+}
+
+export default function OffersPageContent({
+  initialOffers = [],
+}: OffersPageContentProps) {
+  const [offers, setOffers] = useState<Offer[]>(initialOffers);
+  const [loading, setLoading] = useState(initialOffers.length === 0);
   const [error, setError] = useState<string | null>(null);
   const [activeLightbox, setActiveLightbox] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (initialOffers.length > 0) return;
     async function fetchOffers() {
       try {
-        const res = await axiosInstance.get("/api/offers?published=true");
-        setOffers(res.data);
+        const response = await axiosInstance.get<Offer[]>(
+          "/api/offers?published=true",
+        );
+        setOffers(response.data);
       } catch (err) {
         setError("Failed to load offers. Please try again.");
       } finally {
@@ -165,7 +178,7 @@ export default function OffersPageContent() {
       }
     }
     fetchOffers();
-  }, []);
+  }, [initialOffers.length]);
 
   const handleDownload = async (url: string) => {
     try {
@@ -190,17 +203,35 @@ export default function OffersPageContent() {
 
   useGSAP(
     () => {
-      if (!loading && offers.length > 0) {
-        gsap.to(".offer-card", {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".offers-grid",
-            start: "top 85%",
-          },
+      if (loading) return;
+
+      // Force refresh for SSR hydration
+      ScrollTrigger.refresh();
+
+      if (offers.length > 0) {
+        ScrollTrigger.batch(".offer-card", {
+          onEnter: (batch) =>
+            gsap.fromTo(
+              batch,
+              {
+                opacity: 0,
+                y: 50,
+                scale: 0.95,
+              },
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                stagger: 0.15,
+                duration: 1,
+                ease: "power3.out",
+                overwrite: true,
+                force3D: true,
+                immediateRender: false,
+              },
+            ),
+          start: "top 90%",
+          once: true,
         });
       }
     },

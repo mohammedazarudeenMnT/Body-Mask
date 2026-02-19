@@ -25,7 +25,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function OngoingOffersPage() {
+import { offerApi } from "@/lib/offer-api";
+
+export default async function OngoingOffersPage() {
+  const offersList = await offerApi.getOffers();
+
   return (
     <main className="min-h-screen bg-[#faf8f5]">
       {/* SEO/Hero */}
@@ -35,7 +39,7 @@ export default function OngoingOffersPage() {
         fallbackSubtitle="Discover our latest promotions and seasonal beauty collections."
       />
 
-      <OffersPageContent />
+      <OffersPageContent initialOffers={offersList} />
 
       {/* Bottom CTA Banner */}
       <section className="bg-[#1a1310] relative overflow-hidden py-24">

@@ -152,8 +152,9 @@ export default function ServicesPageContent({
             {
               opacity: 1,
               x: 0,
-              duration: 1.2,
+              duration: 0.8,
               ease: "expo.out",
+              force3D: true,
               scrollTrigger: {
                 trigger: row,
                 start: "top 85%",
@@ -170,8 +171,9 @@ export default function ServicesPageContent({
             {
               scale: 1,
               opacity: 1,
-              duration: 1.8,
+              duration: 0.8,
               ease: "power2.out",
+              force3D: true,
               scrollTrigger: {
                 trigger: row,
                 start: "top 85%",
@@ -302,7 +304,7 @@ export default function ServicesPageContent({
                   src={t.image}
                   alt={t.label}
                   fill
-                  className="object-cover opacity-45 group-hover:opacity-75 group-hover:scale-105 transition-all duration-700"
+                  className="object-cover opacity-45 group-hover:opacity-75 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 {/* Roman numeral ghost */}
