@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { serviceApi } from "@/lib/service-api";
-import { Loader2, ZoomIn, X, ChevronRight } from "lucide-react";
+import { Loader2, ZoomIn, X, ChevronRight, ChevronLeft } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
 import { ScrollTrigger, Flip } from "gsap/all";
 import gsap from "gsap";
@@ -163,6 +164,39 @@ export default function GalleryPageContent({
   const displayedItems = galleryItems.slice(0, visibleCount);
   const hasMore = visibleCount < galleryItems.length;
 
+  // Lightbox Navigation Logic
+  const navigateLightbox = (
+    direction: "next" | "prev",
+    e?: React.MouseEvent,
+  ) => {
+    if (e) e.stopPropagation();
+    if (!selectedImage) return;
+    const currentIndex = galleryItems.findIndex(
+      (i) => i.id === selectedImage.id,
+    );
+    if (currentIndex === -1) return;
+
+    if (direction === "next") {
+      const nextIndex = (currentIndex + 1) % galleryItems.length;
+      setSelectedImage(galleryItems[nextIndex]);
+    } else {
+      const prevIndex =
+        (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+      setSelectedImage(galleryItems[prevIndex]);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!selectedImage) return;
+      if (e.key === "ArrowLeft") navigateLightbox("prev");
+      if (e.key === "ArrowRight") navigateLightbox("next");
+      if (e.key === "Escape") setSelectedImage(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImage, galleryItems]);
+
   return (
     <div className="container mx-auto px-4 md:px-8 py-16" ref={containerRef}>
       {/* Filter Navigation */}
@@ -194,7 +228,7 @@ export default function GalleryPageContent({
       {/* Loading State */}
       {loading && (
         <div className="flex justify-center py-20">
-          <Loader2 className="w-10 h-10 animate-spin text-[#C5A367]" />
+          <Loader size="xl" />
         </div>
       )}
 
@@ -219,7 +253,7 @@ export default function GalleryPageContent({
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
+              <div className="absolute inset-0 bg-[#330000]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
                 <span className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
                   <ZoomIn className="w-8 h-8 text-white/90 mb-3 mx-auto" />
                 </span>
@@ -251,7 +285,7 @@ export default function GalleryPageContent({
             onClick={() => setVisibleCount((prev) => prev + 12)}
             className="group relative flex items-center gap-3 px-8 py-3 bg-white border border-[#C5A367]/20 rounded-full hover:border-[#C5A367] transition-colors"
           >
-            <span className="text-sm font-semibold tracking-widest uppercase text-[#1a1a1a] group-hover:text-[#C5A367] transition-colors">
+            <span className="text-sm font-semibold tracking-widest uppercase text-[#330000] group-hover:text-[#C5A367] transition-colors">
               Load More
             </span>
             <ChevronRight className="w-4 h-4 text-[#C5A367] group-hover:translate-x-1 transition-transform" />
@@ -265,9 +299,26 @@ export default function GalleryPageContent({
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300"
           onClick={() => setSelectedImage(null)}
         >
-          <button className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2">
+          <button className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors p-2 z-50">
             <X className="w-8 h-8" />
           </button>
+
+          <button
+            onClick={(e) => navigateLightbox("prev", e)}
+            className="absolute left-2 md:left-8 text-white/50 hover:text-white transition-colors p-2 md:p-3 hover:bg-white/10 rounded-full z-50"
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="w-8 h-8 md:w-12 md:h-12" />
+          </button>
+
+          <button
+            onClick={(e) => navigateLightbox("next", e)}
+            className="absolute right-2 md:right-8 text-white/50 hover:text-white transition-colors p-2 md:p-3 hover:bg-white/10 rounded-full z-50"
+            aria-label="Next image"
+          >
+            <ChevronRight className="w-8 h-8 md:w-12 md:h-12" />
+          </button>
+
           <div
             className="relative max-w-5xl w-full max-h-[90vh] aspect-3/4 md:aspect-video rounded-sm overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}

@@ -62,18 +62,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="relative text-white w-full">
-      {/* Marble Background with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/assets/footer/bg/footer-bg.png"
-          alt="Footer Background"
-          fill
-          className="object-cover"
-          sizes="100vw"
-        />
-      </div>
-
+    <footer className="relative text-white w-full bg-[#330000]">
       {/* Floating WhatsApp removed - now a global component */}
 
       {/* Main Content */}
@@ -86,7 +75,7 @@ const Footer = () => {
             <div className="mb-6">
               <Link
                 href="/"
-                className="relative h-16 w-32 md:w-40 flex-shrink-0 block mb-3"
+                className="relative h-16 w-32 md:w-40 shrink-0 block mb-3"
               >
                 <Image
                   src={logoUrl}
@@ -173,7 +162,7 @@ const Footer = () => {
               </div>
               <a
                 href={`tel:${(settings?.companyPhone || "08531865603").replace(/\D/g, "")}`}
-                className="inline-flex items-center gap-2 bg-[#C5A367] text-black px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#D4A574] transition-colors"
+                className="inline-flex items-center gap-2 bg-[#C5A367] text-[#330000] px-6 py-2.5 rounded-md text-sm font-medium hover:bg-[#D4A574] transition-colors"
               >
                 <Phone className="w-4 h-4" />
                 Call: {settings?.companyPhone || "085318 65603"}
@@ -252,14 +241,14 @@ const Footer = () => {
                 href={settings.socialMedia.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-[#330000] transition-all"
               >
                 <Instagram className="w-4 h-4" />
               </a>
             ) : (
               <a
                 href="#"
-                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-[#330000] transition-all"
               >
                 <Instagram className="w-4 h-4" />
               </a>
@@ -269,14 +258,14 @@ const Footer = () => {
                 href={settings.socialMedia.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-[#330000] transition-all"
               >
                 <Twitter className="w-4 h-4" />
               </a>
             ) : (
               <a
                 href="#"
-                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-[#330000] transition-all"
               >
                 <Twitter className="w-4 h-4" />
               </a>
@@ -286,14 +275,14 @@ const Footer = () => {
                 href={settings.socialMedia.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-[#330000] transition-all"
               >
                 <Youtube className="w-4 h-4" />
               </a>
             ) : (
               <a
                 href="#"
-                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-black transition-all"
+                className="w-8 h-8 rounded-full bg-[#C5A367]/10 border border-[#C5A367]/30 flex items-center justify-center text-[#C5A367] hover:bg-[#C5A367] hover:text-[#330000] transition-all"
               >
                 <Youtube className="w-4 h-4" />
               </a>

@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { LayoutWrapper } from "@/components/layout-wrapper";
+import Preloader from "@/components/Preloader";
 import { Toaster } from "sonner";
 
 const inter = Inter({
@@ -72,6 +73,7 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} antialiased bg-cream text-gray-900 font-sans`}
       >
         <AuthProvider>
+          <Preloader />
           <LayoutWrapper>{children}</LayoutWrapper>
           <Toaster position="top-right" richColors closeButton />
         </AuthProvider>

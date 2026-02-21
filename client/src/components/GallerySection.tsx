@@ -333,7 +333,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({
                 }}
               >
                 {/* ARCH MASK CONTAINER */}
-                <div className="relative aspect-4/5 overflow-hidden rounded-t-[200px] bg-[#1a1a1a] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)]">
+                <div className="relative aspect-4/5 overflow-hidden rounded-t-[200px] bg-[#330000] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)]">
                   {/* IMAGE WITH PARALLAX */}
                   <div className="absolute inset-x-0 -top-20 -bottom-20 overflow-hidden">
                     <Image

@@ -22,6 +22,7 @@ import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import Link from "next/link";
 import { serviceApi } from "@/lib/service-api";
 import { cn } from "@/lib/utils";
+import { Loader } from "@/components/ui/loader";
 
 interface ServicesListProps {
   onMessage: (message: { type: "success" | "error"; text: string }) => void;
@@ -70,7 +71,7 @@ export function ServicesList({ onMessage }: ServicesListProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-12">
-        <Loader2 className="w-8 h-8 animate-spin text-[#c5a367]" />
+        <Loader />
       </div>
     );
   }

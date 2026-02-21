@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import { cn } from "@/lib/utils";
+import { Loader } from "@/components/ui/loader";
 
 interface BannerSettingsTabProps {
   onMessage: (message: { type: "success" | "error"; text: string }) => void;
@@ -118,7 +119,7 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-12">
-        <Loader2 className="w-8 h-8 animate-spin text-[#c5a367]" />
+        <Loader />
       </div>
     );
   }
@@ -265,7 +266,7 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
             >
               {saving ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader size="xs" className="mr-2" />
                   Saving...
                 </>
               ) : (

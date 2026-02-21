@@ -210,7 +210,7 @@ export default function ContactForm({
                 <span className="text-[#C5A367] text-xs md:text-sm font-bold tracking-[0.2em] uppercase mb-4 block">
                   Our Information
                 </span>
-                <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif text-[#1a1a1a] leading-tight">
+                <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif text-[#330000] leading-tight">
                   Visit Our{" "}
                   <span className="text-[#C5A367] italic">Studio</span>
                 </h2>
@@ -236,7 +236,7 @@ export default function ContactForm({
                     <MapPin className="w-5 h-5 text-[#C5A367]" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg text-[#1a1a1a] mb-2">
+                    <h3 className="font-serif text-lg text-[#330000] mb-2">
                       Visit Us
                     </h3>
                     <p className="text-sm text-gray-600 font-light leading-relaxed">
@@ -260,7 +260,7 @@ export default function ContactForm({
                     <Phone className="w-5 h-5 text-[#C5A367]" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg text-[#1a1a1a] mb-2">
+                    <h3 className="font-serif text-lg text-[#330000] mb-2">
                       Call Us
                     </h3>
                     <p className="text-sm text-gray-600 font-light">
@@ -280,7 +280,7 @@ export default function ContactForm({
                     <Mail className="w-5 h-5 text-[#C5A367]" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg text-[#1a1a1a] mb-2">
+                    <h3 className="font-serif text-lg text-[#330000] mb-2">
                       Email Us
                     </h3>
                     <p className="text-sm text-gray-600 font-light">
@@ -300,7 +300,7 @@ export default function ContactForm({
                     <Clock className="w-5 h-5 text-[#C5A367]" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg text-[#1a1a1a] mb-2">
+                    <h3 className="font-serif text-lg text-[#330000] mb-2">
                       Business Hours
                     </h3>
                     <p className="text-sm text-gray-600 font-light leading-relaxed">
@@ -377,7 +377,7 @@ export default function ContactForm({
               {/* Main Form Frame */}
               <div className="relative z-10 border border-[#C5A367]/30 p-4 bg-white/50 backdrop-blur-sm shadow-xl rounded-sm">
                 <div className="relative bg-white p-8 md:p-10 rounded-sm">
-                  <h3 className="font-serif text-2xl md:text-3xl text-[#1a1a1a] mb-2 text-center">
+                  <h3 className="font-serif text-2xl md:text-3xl text-[#330000] mb-2 text-center">
                     Book Your{" "}
                     <span className="text-[#C5A367] italic">Appointment</span>
                   </h3>
@@ -520,7 +520,7 @@ export default function ContactForm({
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full group relative px-8 py-4 bg-[#1a1a1a] text-white font-medium tracking-wide overflow-hidden rounded-sm disabled:opacity-70"
+                      className="w-full group relative px-8 py-4 bg-[#330000] text-white font-medium tracking-wide overflow-hidden rounded-sm disabled:opacity-70"
                     >
                       <span className="relative z-10 flex items-center justify-center gap-2 uppercase text-xs tracking-widest font-bold">
                         {isSubmitting ? (
@@ -546,9 +546,9 @@ export default function ContactForm({
       </section>
 
       {/* Map Section */}
-      <section className="relative w-full py-16 md:py-10 overflow-hidden bg-white">
-        <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-20">
-          <div ref={mapHeaderRef} className="text-center mb-16">
+      <section className="relative w-full overflow-hidden bg-white">
+        <div className="relative z-10 py-16 md:py-20 container mx-auto px-6 md:px-12 lg:px-20">
+          <div ref={mapHeaderRef} className="text-center">
             <div className="flex items-center justify-center gap-3 md:gap-6 mb-4">
               <div className="w-1.5 h-1.5 md:w-2 md:h-2 rotate-45 bg-[#C5A367]" />
               <span className="text-[#C5A367] text-xs md:text-sm font-bold tracking-[0.2em] uppercase">
@@ -556,23 +556,23 @@ export default function ContactForm({
               </span>
               <div className="w-1.5 h-1.5 md:w-2 md:h-2 rotate-45 bg-[#C5A367]" />
             </div>
-            <h2 className="font-serif text-3xl md:text-5xl text-[#1a1a1a]">
+            <h2 className="font-serif text-3xl md:text-5xl text-[#330000]">
               Our <span className="italic text-[#C5A367]">Location</span>
             </h2>
             <p className="text-sm md:text-base text-gray-600 mt-4 max-w-2xl mx-auto font-light leading-relaxed">
               Visit us at our studio in the heart of Madurai
             </p>
           </div>
+        </div>
 
-          <div ref={mapContentRef} className="max-w-6xl mx-auto">
-            {/* Map Frame - Clean Design */}
-            <div className="relative border border-[#C5A367]/20 p-1 bg-white shadow-2xl rounded-sm overflow-hidden">
-              <div className="relative w-full h-[450px] md:h-[550px] overflow-hidden rounded-sm">
-                {settings?.googleMapEmbed ? (
-                  <iframe
-                    srcDoc={
-                      settings.googleMapEmbed.includes("<iframe")
-                        ? `
+        <div ref={mapContentRef} className="w-full">
+          {/* Map Frame - Full Width Design */}
+          <div className="relative w-full h-[50vh] md:h-[70vh] lg:h-[80vh] overflow-hidden">
+            {settings?.googleMapEmbed ? (
+              <iframe
+                srcDoc={
+                  settings.googleMapEmbed.includes("<iframe")
+                    ? `
                         <html>
                           <head>
                             <style>
@@ -583,31 +583,29 @@ export default function ContactForm({
                           <body>${settings.googleMapEmbed}</body>
                         </html>
                         `
-                        : `<html><body style="margin:0;padding:0;height:100%"><iframe src="${settings.googleMapEmbed}" width="100%" height="100%" style="border:0" allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe></body></html>`
-                    }
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    title="Body Mask Bridal Studio Location"
-                    className="rounded-sm"
-                  />
-                ) : (
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.374664301461!2d78.11886927502991!3d9.902720290197776!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c5e7f26e88d7%3A0x30a2110cf8b752c4!2sBody%20Mask%20Bridal%20Studio!5e0!3m2!1sen!2sin!4v1771418280783!5m2!1sen!2sin"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Body Mask Bridal Studio Location"
-                    className="rounded-sm"
-                  />
-                )}
-              </div>
-            </div>
+                    : `<html><body style="margin:0;padding:0;height:100%"><iframe src="${settings.googleMapEmbed}" width="100%" height="100%" style="border:0" allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe></body></html>`
+                }
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                title="Body Mask Bridal Studio Location"
+                className="rounded-sm"
+              />
+            ) : (
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.374664301461!2d78.11886927502991!3d9.902720290197776!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00c5e7f26e88d7%3A0x30a2110cf8b752c4!2sBody%20Mask%20Bridal%20Studio!5e0!3m2!1sen!2sin!4v1771418280783!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Body Mask Bridal Studio Location"
+                className="rounded-sm"
+              />
+            )}
           </div>
         </div>
       </section>
