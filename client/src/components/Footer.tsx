@@ -118,7 +118,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/gallery"
+                  href="/Luxury-Bridal-Salon-Madurai"
                   className="hover:text-[#C5A367] transition-colors"
                 >
                   • Gallery
@@ -126,7 +126,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/about"
+                  href="/Professional-Makeup-Artist-Madurai"
                   className="hover:text-[#C5A367] transition-colors"
                 >
                   • About Us
@@ -134,7 +134,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/Best-Makeup-Artist-in-Madurai"
                   className="hover:text-[#C5A367] transition-colors"
                 >
                   • Contact

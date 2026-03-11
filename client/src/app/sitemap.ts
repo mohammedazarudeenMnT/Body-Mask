@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/about`,
+      url: `${baseUrl}/Professional-Makeup-Artist-Madurai`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
@@ -25,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/gallery`,
+      url: `${baseUrl}/Luxury-Bridal-Salon-Madurai`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
@@ -37,13 +37,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/offers`,
+      url: `${baseUrl}/Bridal-Makeup-Artist-Madurai`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/contact`,
+      url: `${baseUrl}/Best-Makeup-Artist-in-Madurai`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.5,

@@ -124,7 +124,7 @@ export default function About() {
 
             {/* Signature / Button */}
             <div className="pt-4 flex flex-col md:flex-row items-center gap-6 justify-center lg:justify-start">
-              <Link href="/about">
+              <Link href="/Professional-Makeup-Artist-Madurai">
                 {" "}
                 <button className="group relative px-8 py-3 bg-[#1a1a1a] text-white font-medium tracking-wide overflow-hidden rounded-sm">
                   <span className="relative z-10 flex items-center gap-2">

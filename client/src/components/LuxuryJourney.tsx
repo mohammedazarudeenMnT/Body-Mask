@@ -156,7 +156,7 @@ export function LuxuryJourney() {
 
         {/* Closing CTA */}
         <div className="mt-40 text-center">
-          <Link href="/contact">
+          <Link href="/Best-Makeup-Artist-in-Madurai">
             {" "}
             <button className="px-12 py-5 bg-[#1C1C1C] text-white font-serif italic text-xl hover:bg-[#B8860B] transition-colors duration-500 rounded-sm shadow-xl group">
               Start Your Journey

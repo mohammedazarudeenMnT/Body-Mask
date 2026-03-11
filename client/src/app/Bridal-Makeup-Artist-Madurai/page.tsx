@@ -58,7 +58,7 @@ export default async function OngoingOffersPage() {
             Reserve Your Signature Experience
           </h2>
           <a
-            href="/contact"
+            href="/Best-Makeup-Artist-in-Madurai"
             className="group flex items-center gap-4 bg-white text-[#1a1310] font-bold px-12 py-5 rounded-full transition-all duration-500 hover:bg-[#c5a367] hover:text-white shadow-2xl hover:shadow-[#c5a367]/40"
           >
             Book My Session
