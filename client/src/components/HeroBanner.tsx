@@ -112,14 +112,16 @@ const HeroBanner = ({
         ref={imageRef}
         className="absolute inset-0 w-full h-[130%] -top-[15%]"
       >
-        <Image
-          src={image}
-          alt={altText}
-          fill
-          className="object-cover opacity-80 will-change-transform"
-          sizes="100vw"
-          priority
-        />
+        {image ? (
+          <Image
+            src={image}
+            alt={altText}
+            fill
+            className="object-cover opacity-80 will-change-transform"
+            sizes="100vw"
+            priority
+          />
+        ) : null}
         {/* Luxury Vignette & Gradient */}
         <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-[#0a0a0a]" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-[#0a0a0a] to-transparent" />

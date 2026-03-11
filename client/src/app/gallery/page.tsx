@@ -24,10 +24,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-import { serviceApi } from "@/lib/service-api";
+import { galleryApi } from "@/lib/gallery-api";
 
 export default async function GalleryPage() {
-  const servicesRes = await serviceApi.getServices();
+  const galleryRes = await galleryApi.getGalleryItems();
 
   return (
     <main className="min-h-screen bg-[#FDFBF7]">
@@ -36,7 +36,7 @@ export default async function GalleryPage() {
         fallbackTitle="Visual Artistry"
         fallbackSubtitle="A curated collection of our finest transformations."
       />
-      <GalleryPageContent initialServices={servicesRes.data || []} />
+      <GalleryPageContent initialItems={galleryRes.data || []} />
     </main>
   );
 }

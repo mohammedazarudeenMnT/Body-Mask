@@ -6,7 +6,6 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, CheckCircle, ArrowRight, Quote } from "lucide-react";
-import GallerySection from "./GallerySection";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -35,11 +34,6 @@ interface ServiceData {
   benefits: Array<{
     title: string;
     description: string;
-  }>;
-  gallery: Array<{
-    src: string;
-    alt: string;
-    label: string;
   }>;
 }
 
@@ -248,8 +242,8 @@ export default function ServiceDetailClient({
                 {/* Primary 'Other' Image */}
                 <div className="absolute inset-0 z-10 border border-white/50 shadow-2xl rounded-sm overflow-hidden transform -rotate-2 hover:rotate-0 hover:translate-y-[-10px] transition-all duration-700">
                   <Image
-                    src={service.gallery[1]?.src || service.gallery[0].src}
-                    alt={service.gallery[1]?.alt || service.gallery[0].alt}
+                    src={service.heroImage}
+                    alt={service.title}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
                     sizes="(max-width: 1024px) 100vw, 40vw"
@@ -259,24 +253,12 @@ export default function ServiceDetailClient({
                   />
                   <div className="absolute inset-x-0 bottom-0 p-6 bg-linear-to-t from-black/60 to-transparent">
                     <p className="text-[8px] tracking-[0.4em] uppercase text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                      {service.gallery[1]?.label || "Visual Story"}
+                      {service.title}
                     </p>
                   </div>
                 </div>
 
                 {/* Secondary 'Other' Image - Overlapping Bottom Left */}
-                <div className="absolute bottom-[-10%] left-[-15%] w-3/5 aspect-3/4 z-20 border border-white/50 shadow-2xl rounded-sm overflow-hidden hidden md:block transform -rotate-6 group-hover:-rotate-2 group-hover:translate-x-4 transition-all duration-700">
-                  <Image
-                    src={service.gallery[2]?.src || service.gallery[0].src}
-                    alt={service.gallery[2]?.alt || service.gallery[0].alt}
-                    fill
-                    className="object-cover"
-                    sizes="20vw"
-                    loading="eager"
-                    placeholder="blur"
-                    blurDataURL={BLUR_PLACEHOLDER}
-                  />
-                </div>
 
                 {/* Decorative Elements */}
                 <div className="absolute -top-12 -right-12 w-48 h-48 border border-[#C5A367]/10 rounded-full flex items-center justify-center p-12 -z-10 group-hover:scale-110 transition-transform duration-1000">
@@ -325,12 +307,6 @@ export default function ServiceDetailClient({
         </div>
       </section>
 
-      {/* Gallery Section */}
-      <GallerySection
-        images={service.gallery}
-        title={`${service.title} Portfolio`}
-        description={`Witness the meticulous artistry behind our most celebrated ${service.title.toLowerCase()} transformations.`}
-      />
     </div>
   );
 }

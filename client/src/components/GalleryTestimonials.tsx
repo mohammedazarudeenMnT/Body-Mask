@@ -11,8 +11,7 @@ import {
   testimonialApi,
   Testimonial as TestimonialType,
 } from "@/lib/testimonial-api";
-import { serviceApi } from "@/lib/service-api";
-import { Service } from "@/types/service";
+import { galleryApi, GalleryItem as ApiGalleryItem } from "@/lib/gallery-api";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -29,69 +28,52 @@ interface GalleryImage {
 
 interface GalleryTestimonialsProps {
   initialTestimonials?: TestimonialType[];
-  initialServices?: Service[];
+  initialGalleryItems?: ApiGalleryItem[];
 }
 
 export default function GalleryTestimonials({
   initialTestimonials = [],
-  initialServices = [],
+  initialGalleryItems = [],
 }: GalleryTestimonialsProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(2);
   const [testimonials, setTestimonials] =
     useState<TestimonialType[]>(initialTestimonials);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [loading, setLoading] = useState(
-    initialTestimonials.length === 0 && initialServices.length === 0,
+    initialTestimonials.length === 0 && initialGalleryItems.length === 0,
   );
 
-  // Helper to build gallery images from services
-  const buildGallery = (services: Service[]) => {
-    const images: GalleryImage[] = [];
-    services.forEach((service) => {
-      if (service.image) {
-        images.push({
-          id: `service-${service._id}`,
-          src: service.image,
-          alt: service.title,
-        });
-      }
-      if (service.content?.gallery && service.content.gallery.length > 0) {
-        service.content.gallery.forEach((galleryUrl, gIdx) => {
-          if (galleryUrl) {
-            images.push({
-              id: `gallery-${service._id}-${gIdx}`,
-              src: galleryUrl,
-              alt: `${service.title} Gallery ${gIdx + 1}`,
-            });
-          }
-        });
-      }
-    });
-    return images;
+  // Helper to build gallery images from API items
+  const buildGallery = (items: ApiGalleryItem[]) => {
+    return items.map((item) => ({
+      id: item._id || "",
+      src: item.imageUrl,
+      alt: item.title,
+    }));
   };
 
   // Build initial gallery from props
   useEffect(() => {
-    if (initialServices.length > 0) {
-      const images = buildGallery(initialServices);
+    if (initialGalleryItems.length > 0) {
+      const images = buildGallery(initialGalleryItems);
       if (images.length > 0) {
         setGalleryImages(images);
         setActiveImageIndex(Math.min(2, images.length - 1));
       }
     }
-  }, [initialServices]);
+  }, [initialGalleryItems]);
 
   // Fetch testimonials and gallery images from APIs
   useEffect(() => {
-    if (initialTestimonials.length > 0 && initialServices.length > 0) return;
+    if (initialTestimonials.length > 0 && initialGalleryItems.length > 0) return;
 
     const fetchData = async () => {
       try {
-        const [testimonialRes, servicesRes] = await Promise.all([
+        const [testimonialRes, galleryRes] = await Promise.all([
           testimonialApi
             .getTestimonials()
             .catch(() => ({ success: false, data: [] })),
-          serviceApi.getServices().catch(() => ({ success: false, data: [] })),
+          galleryApi.getGalleryItems().catch(() => ({ success: false, data: [] })),
         ]);
 
         // Set testimonials
@@ -99,9 +81,9 @@ export default function GalleryTestimonials({
           setTestimonials(testimonialRes.data);
         }
 
-        // Build gallery images from all services' gallery content
-        if (servicesRes.success && servicesRes.data?.length > 0) {
-          const images = buildGallery(servicesRes.data);
+        // Build gallery images
+        if (galleryRes.success && galleryRes.data?.length > 0) {
+          const images = buildGallery(galleryRes.data);
           if (images.length > 0) {
             setGalleryImages(images);
             setActiveImageIndex(Math.min(2, images.length - 1));
@@ -115,7 +97,7 @@ export default function GalleryTestimonials({
     };
 
     fetchData();
-  }, [initialTestimonials.length, initialServices.length]);
+  }, [initialTestimonials.length, initialGalleryItems.length]);
 
   const displayTestimonials = useMemo(() => {
     if (testimonials.length > 0) return testimonials.slice(0, 4);
@@ -292,8 +274,8 @@ export default function GalleryTestimonials({
                         visibilityClass,
                       )}
                       style={{
-                        width: isCenter ? "min(100%, 280px)" : "180px",
-                        height: isCenter ? "min(450px, 80vw)" : "300px",
+                        width: isCenter ? "min(100%, 320px)" : "220px",
+                        height: isCenter ? "min(400px, 75vw)" : "280px",
                         zIndex: isCenter ? 50 : 10,
                         transform: `scale(${isCenter ? 1.1 : isNeighbor ? 0.9 : 0.8})`,
                       }}

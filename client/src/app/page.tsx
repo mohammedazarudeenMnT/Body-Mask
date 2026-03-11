@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { seoApi } from "@/lib/seo-api";
 import { bannerApi } from "@/lib/banner-api";
-import { serviceApi } from "@/lib/service-api";
+import { galleryApi } from "@/lib/gallery-api";
 import { testimonialApi } from "@/lib/testimonial-api";
 import ModernHeroCarousel from "@/components/HeroCarousel";
 import About from "@/components/About";
@@ -30,9 +30,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [bannersRes, servicesRes, testimonialsRes] = await Promise.all([
+  const [bannersRes, galleryRes, testimonialsRes] = await Promise.all([
     bannerApi.getBanners().catch(() => ({ success: false, data: [] })),
-    serviceApi.getServices().catch(() => ({ success: false, data: [] })),
+    galleryApi.getGalleryItems().catch(() => ({ success: false, data: [] })),
     testimonialApi
       .getTestimonials()
       .catch(() => ({ success: false, data: [] })),
@@ -44,9 +44,9 @@ export default async function Home() {
         initialBanners={bannersRes.success ? bannersRes.data : []}
       />
       <About />
-      <Services initialServices={servicesRes.success ? servicesRes.data : []} />
+      <Services />
       <GalleryTestimonials
-        initialServices={servicesRes.success ? servicesRes.data : []}
+        initialGalleryItems={galleryRes.success ? galleryRes.data : []}
         initialTestimonials={
           testimonialsRes.success ? testimonialsRes.data : []
         }

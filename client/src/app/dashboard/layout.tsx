@@ -14,6 +14,7 @@ import {
   Gift,
   Images,
   Star,
+  Youtube,
 } from "lucide-react";
 
 export default function DashboardLayout({
@@ -70,6 +71,18 @@ export default function DashboardLayout({
       href: "/dashboard/leads",
       icon: <Users className="w-5 h-5" />,
       isActive: pathname.startsWith("/dashboard/leads"),
+    },
+    {
+      label: "Videos",
+      href: "/dashboard/videos",
+      icon: <Youtube className="w-5 h-5" />,
+      isActive: pathname.startsWith("/dashboard/videos"),
+    },
+    {
+      label: "Gallery",
+      href: "/dashboard/gallery",
+      icon: <Images className="w-5 h-5" />,
+      isActive: pathname.startsWith("/dashboard/gallery"),
     },
   ];
 

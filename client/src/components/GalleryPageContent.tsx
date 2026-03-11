@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { serviceApi } from "@/lib/service-api";
+import { galleryApi, GalleryItem as ApiGalleryItem } from "@/lib/gallery-api";
 import { Loader2, ZoomIn, X, ChevronRight, ChevronLeft } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
@@ -14,74 +14,32 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, Flip);
 }
 
-import { Service } from "@/types/service";
 
 interface GalleryItem {
   id: string;
   src: string;
-  category: string;
-  serviceId: string;
   title: string;
 }
 
 interface GalleryPageContentProps {
-  initialServices?: Service[];
+  initialItems?: ApiGalleryItem[];
 }
 
-function processServicesToGalleryItems(services: Service[]): GalleryItem[] {
-  const items: GalleryItem[] = [];
-  services.forEach((service) => {
-    if (service.image) {
-      items.push({
-        id: `${service._id}-main`,
-        src: service.image,
-        category: service.title,
-        serviceId: service._id || "",
-        title: service.title,
-      });
-    }
-    if (service.content?.gallery && Array.isArray(service.content.gallery)) {
-      service.content.gallery.forEach((imgUrl, index) => {
-        let src = "";
-        if (typeof imgUrl === "string") {
-          src = imgUrl;
-        } else if (typeof imgUrl === "object" && imgUrl !== null) {
-          const imgObj = imgUrl as { url?: string; src?: string };
-          src = imgObj.url || imgObj.src || "";
-        }
-        if (src) {
-          items.push({
-            id: `${service._id}-${index}`,
-            src: src,
-            category: service.title,
-            serviceId: service._id || "",
-            title: service.title,
-          });
-        }
-      });
-    }
-  });
-  return items;
+function processApiItemsToGalleryItems(items: ApiGalleryItem[]): GalleryItem[] {
+  return items.map((item) => ({
+    id: item._id || "",
+    src: item.imageUrl,
+    title: item.title,
+  }));
 }
 
 export default function GalleryPageContent({
-  initialServices = [],
+  initialItems = [],
 }: GalleryPageContentProps) {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() =>
-    processServicesToGalleryItems(initialServices),
+    processApiItemsToGalleryItems(initialItems),
   );
-  const [categories, setCategories] = useState<string[]>(() => [
-    "All",
-    ...Array.from(
-      new Set(
-        processServicesToGalleryItems(initialServices).map(
-          (item) => item.category,
-        ),
-      ),
-    ),
-  ]);
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [loading, setLoading] = useState(initialServices.length === 0);
+  const [loading, setLoading] = useState(initialItems.length === 0);
   const [visibleCount, setVisibleCount] = useState(12);
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
 
@@ -90,26 +48,15 @@ export default function GalleryPageContent({
 
   // Fetch Data
   useEffect(() => {
-    if (initialServices.length > 0 && activeCategory === "All") return;
+    if (initialItems.length > 0) return;
 
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await serviceApi.getServices(
-          activeCategory === "All" ? undefined : activeCategory,
-        );
+        const res = await galleryApi.getGalleryItems();
         if (res.success && res.data) {
-          const newItems = processServicesToGalleryItems(res.data);
+          const newItems = processApiItemsToGalleryItems(res.data);
           setGalleryItems(newItems);
-
-          // Update categories only if they're empty
-          if (categories.length <= 1) {
-            const cats = [
-              "All",
-              ...Array.from(new Set(newItems.map((item) => item.category))),
-            ];
-            setCategories(cats);
-          }
         }
       } catch (error) {
         console.error("Failed to fetch gallery", error);
@@ -118,31 +65,13 @@ export default function GalleryPageContent({
       }
     };
     fetchData();
-  }, [activeCategory, initialServices.length]);
+  }, [initialItems.length]);
 
-  const handleFilter = (category: string) => {
-    if (category === activeCategory) return;
-    setActiveCategory(category);
-    setVisibleCount(12);
-  };
 
   // Entrance Animation
   useGSAP(
     () => {
       if (loading || galleryItems.length === 0) return;
-
-      // Animate filter buttons
-      gsap.fromTo(
-        ".filter-ui > button",
-        { y: -30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: "power3.out",
-          stagger: 0.1,
-        },
-      );
 
       // Animate grid items
       gsap.fromTo(
@@ -199,31 +128,6 @@ export default function GalleryPageContent({
 
   return (
     <div className="container mx-auto px-4 md:px-8 py-16" ref={containerRef}>
-      {/* Filter Navigation */}
-      <div className="filter-ui flex flex-wrap justify-center gap-3 mb-16">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => handleFilter(cat)}
-            className={cn(
-              "relative px-6 py-2.5 rounded-full text-sm font-medium tracking-wide transition-all duration-300 overflow-hidden group",
-              activeCategory === cat
-                ? "text-white shadow-lg shadow-[#C5A367]/30"
-                : "text-gray-500 hover:text-[#C5A367] bg-white border border-gray-100",
-            )}
-          >
-            {/* Active Background */}
-            {activeCategory === cat && (
-              <span className="absolute inset-0 bg-[#C5A367] z-0" />
-            )}
-            {/* Hover Background */}
-            {activeCategory !== cat && (
-              <span className="absolute inset-0 bg-[#C5A367]/5 scale-0 group-hover:scale-100 transition-transform duration-300 rounded-full z-0" />
-            )}
-            <span className="relative z-10">{cat}</span>
-          </button>
-        ))}
-      </div>
 
       {/* Loading State */}
       {loading && (
@@ -246,10 +150,10 @@ export default function GalleryPageContent({
             <div className="relative w-full">
               <Image
                 src={item.src}
-                alt={item.category}
+                alt={item.title}
                 width={600}
                 height={800}
-                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
+                className="w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-110"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               {/* Overlay */}
@@ -258,7 +162,7 @@ export default function GalleryPageContent({
                   <ZoomIn className="w-8 h-8 text-white/90 mb-3 mx-auto" />
                 </span>
                 <p className="text-[#C5A367] text-xs font-bold uppercase tracking-[0.2em] transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                  {item.category}
+                  Signature Artistry
                 </p>
                 <h3 className="text-white font-serif text-xl mt-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-150">
                   View Details
@@ -273,7 +177,7 @@ export default function GalleryPageContent({
       {!loading && displayedItems.length === 0 && (
         <div className="text-center py-20 text-gray-400">
           <p className="text-xl font-serif">
-            No images found in this category yet.
+            No images found in the gallery yet.
           </p>
         </div>
       )}
@@ -332,7 +236,7 @@ export default function GalleryPageContent({
             />
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/80 to-transparent text-white">
               <p className="text-[#C5A367] text-xs font-bold uppercase tracking-widest mb-1">
-                {selectedImage.category}
+                Signature Artistry
               </p>
               <h3 className="font-serif text-2xl">{selectedImage.title}</h3>
             </div>

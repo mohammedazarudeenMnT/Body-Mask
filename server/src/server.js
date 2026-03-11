@@ -15,6 +15,8 @@ import serviceRoutes from "./routes/service.routes.js";
 import offerRoutes from "./routes/offer.routes.js";
 import leadRoutes from "./routes/lead.routes.js";
 import testimonialRoutes from "./routes/testimonial.routes.js";
+import videoRoutes from "./routes/video.routes.js";
+import galleryRoutes from "./routes/gallery.routes.js";
 
 dotenv.config();
 
@@ -73,6 +75,8 @@ const startServer = async () => {
     app.use("/api/offers", offerRoutes);
     app.use("/api/leads", leadRoutes);
     app.use("/api/testimonials", testimonialRoutes);
+    app.use("/api/videos", videoRoutes);
+    app.use("/api/gallery", galleryRoutes);
 
     app.get("/", (req, res) => {
       res.send("Body Mask Backend is running");

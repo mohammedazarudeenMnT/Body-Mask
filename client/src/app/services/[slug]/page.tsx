@@ -69,26 +69,7 @@ export default async function ServicePage({ params }: PageProps) {
     },
     features: service.content?.features || [],
     benefits: service.content?.benefits || [],
-    gallery: [
-      { src: service.image, alt: service.title, label: "Main Feature" },
-      ...(service.content?.gallery?.map((img: string, i: number) => ({
-        src: img,
-        alt: `${service.title} gallery ${i}`,
-        label: "Artistry",
-      })) || []),
-    ],
   };
-
-  // Ensure enough items for the gallery layout if needed
-  if (adaptedService.gallery.length < 3) {
-    while (adaptedService.gallery.length < 3) {
-      adaptedService.gallery.push({
-        src: service.image,
-        alt: service.title,
-        label: "Artistry",
-      });
-    }
-  }
 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
