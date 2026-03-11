@@ -134,7 +134,7 @@ const Navbar = () => {
             {/* Subtle gold accent light on the right edge */}
             <div className="absolute right-0 top-1/4 bottom-1/4 w-[2px] bg-gradient-to-b from-transparent via-[#C5A367] to-transparent opacity-80 blur-[1px]"></div>
             
-            <Link href="/" className="relative h-12 w-32 md:h-16 md:w-44 shrink-0 z-10 transition-transform duration-700 hover:scale-105">
+            <Link href="/" className="relative h-14 w-36 md:h-20 md:w-52 shrink-0 z-10 transition-transform duration-700 hover:scale-105">
               <Image
                 src={logoUrl}
                 alt="Body Mask Bridal Studio"
@@ -142,7 +142,7 @@ const Navbar = () => {
                 className="object-contain drop-shadow-[0_0_15px_rgba(197,163,103,0.3)]"
                 loading="eager"
                 fetchPriority="high"
-                sizes="(max-width: 768px) 128px, 176px"
+                sizes="(max-width: 768px) 144px, 208px"
               />
             </Link>
           </div>
