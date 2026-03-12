@@ -178,6 +178,7 @@ export function PageBannerSettingsTab({
                         })
                       }
                       aspectRatio="video"
+                      helperText="Optimal: 1920 × 800px. Used as the majestic background for the top of this page."
                     />
                   </div>
                   <div className="space-y-2">

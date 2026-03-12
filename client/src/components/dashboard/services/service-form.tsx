@@ -722,7 +722,7 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
               }}
               maxImages={20}
               maxSizeMB={5}
-              helperText="Recommended: high-quality images with consistent dimensions"
+              helperText="Recommended: 1200 × 1200px for high-quality display. Showcases the service results in the portfolio section."
             />
           </section>
         </div>

@@ -243,6 +243,7 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
                 onChange={(url: string | null) =>
                   setEditingBanner({ ...editingBanner, imageUrl: url || "" })
                 }
+                helperText="Optimal: 1920 × 1080px. Note: If your image already has text on it, leave the Title and Subtitle fields empty. Keep focus points (heads/text) away from the very top/bottom edges as they may be cropped to fit different screens."
               />
             </div>
           </div>

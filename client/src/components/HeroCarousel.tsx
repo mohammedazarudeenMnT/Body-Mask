@@ -139,23 +139,25 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
                   src={banner.imageUrl || "/placeholder.svg"}
                   alt={banner.title || "Banner"}
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                   sizes="100vw"
                   priority={index === 0}
                 />
-                {/* Overlay with Text */}
-                <div className="absolute inset-0 bg-black/20 flex flex-col items-center justify-center text-center px-6">
-                  {banner.title && (
-                    <h2 className="text-white text-3xl md:text-5xl lg:text-7xl font-serif mb-4 drop-shadow-lg opacity-0">
-                      {banner.title}
-                    </h2>
-                  )}
-                  {banner.subtitle && (
-                    <p className="text-white/90 text-sm md:text-lg lg:text-xl font-light tracking-widest uppercase mb-8 opacity-0">
-                      {banner.subtitle}
-                    </p>
-                  )}
-                </div>
+                {/* Overlay with Text - Only shows if title or subtitle exists */}
+                {(banner.title || banner.subtitle) && (
+                  <div className="absolute inset-0 bg-black/20 flex flex-col items-center justify-center text-center px-6">
+                    {banner.title && (
+                      <h2 className="text-white text-3xl md:text-5xl lg:text-7xl font-serif mb-4 drop-shadow-lg opacity-0">
+                        {banner.title}
+                      </h2>
+                    )}
+                    {banner.subtitle && (
+                      <p className="text-white/90 text-sm md:text-lg lg:text-xl font-light tracking-widest uppercase mb-8 opacity-0">
+                        {banner.subtitle}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             );
 
