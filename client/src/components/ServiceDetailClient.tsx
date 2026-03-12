@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
@@ -295,14 +296,17 @@ export default function ServiceDetailClient({
                 ref={ctaRef}
                 className="mt-16 flex justify-center lg:justify-start"
               >
-                <button className="group relative flex items-center gap-6 bg-[#1a1a1a] text-white px-10 py-5 rounded-full overflow-hidden transition-all shadow-xl hover:shadow-[#C5A367]/20 active:scale-95 hover:scale-105">
+                <Link
+                  href="/Best-Makeup-Artist-in-Madurai"
+                  className="group relative flex items-center gap-6 bg-[#1a1a1a] text-white px-10 py-5 rounded-full overflow-hidden transition-all shadow-xl hover:shadow-[#C5A367]/20 active:scale-95 hover:scale-105"
+                >
                   <span className="relative z-10 flex items-center gap-3 text-sm font-bold tracking-[0.3em] uppercase">
                     <Calendar className="w-4 h-4" />
                     Reserve Your Session
                   </span>
                   <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   <div className="absolute inset-0 bg-[#C5A367] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
-                </button>
+                </Link>
               </div>
             </div>
           </div>
