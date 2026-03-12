@@ -29,9 +29,16 @@ export interface SidebarProps {
   user?: SidebarUser;
   className?: string;
   onLinkClick?: (href: string) => void;
+  footer?: React.ReactNode;
 }
 
-export function Sidebar({ links, user, className, onLinkClick }: SidebarProps) {
+export function Sidebar({
+  links,
+  user,
+  className,
+  onLinkClick,
+  footer,
+}: SidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isPinned, setIsPinned] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -242,6 +249,7 @@ export function Sidebar({ links, user, className, onLinkClick }: SidebarProps) {
 
         {/* User Section */}
         <div className="p-4 border-t border-gray-200 bg-linear-to-r from-gray-50 to-transparent shrink-0">
+          {!isCollapsed && footer && <div className="mb-4">{footer}</div>}
           <div
             className={cn(
               "flex items-center gap-3 transition-all overflow-hidden",

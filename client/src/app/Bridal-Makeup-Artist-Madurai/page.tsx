@@ -26,6 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import { offerApi } from "@/lib/offer-api";
+export const dynamic = "force-dynamic";
 
 export default async function OngoingOffersPage() {
   const offersList = await offerApi.getOffers();

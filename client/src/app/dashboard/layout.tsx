@@ -114,6 +114,15 @@ export default function DashboardLayout({
         links={sidebarLinks}
         user={sidebarUser}
         onLinkClick={(href) => router.push(href)}
+        footer={
+          <button
+            onClick={() => router.push("/")}
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all mb-2"
+          >
+            <Home className="w-5 h-5 text-[#c5a367]" />
+            <span className="font-medium">Visit Site</span>
+          </button>
+        }
       />
       <main className="flex-1 overflow-auto p-8">{children}</main>
     </div>
