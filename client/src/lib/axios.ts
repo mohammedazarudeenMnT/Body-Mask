@@ -7,20 +7,26 @@ import { getSignatureHeaders } from "./signature-utils";
 
 // Dynamic API URL based on environment
 const getApiUrl = () => {
+  // 1. Explicitly check the public environment variable first
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
   }
 
+  // 2. Client-side logic: use window.location if not on localhost
   if (typeof window !== "undefined") {
-    if (
-      window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1"
-    ) {
+    const isLocalhost = 
+      window.location.hostname === "localhost" || 
+      window.location.hostname === "127.0.0.1";
+
+    if (isLocalhost) {
       return "http://localhost:5000";
     }
-    return `${window.location.origin}`;
+
+    // Default to the current origin if no API URL is specified (useful for unified deployments)
+    return window.location.origin;
   }
 
+  // 3. Server-side fallback (during build or SSR)
   return process.env.API_URL || "http://localhost:5000";
 };
 

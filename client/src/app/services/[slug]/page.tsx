@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { serviceApi } from "@/lib/service-api";
 import HeroBanner from "@/components/HeroBanner";
 import ServiceDetailClient from "@/components/ServiceDetailClient";
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

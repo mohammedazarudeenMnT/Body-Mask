@@ -4,6 +4,7 @@ import HeroBanner from "@/components/HeroBanner";
 import ServicesPageContent from "@/components/ServicesPageContent";
 
 import { serviceApi } from "@/lib/service-api";
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await seoApi.getByPageName("services");
