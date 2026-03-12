@@ -1,15 +1,39 @@
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
+import { settingsApi } from "@/lib/settings-api";
 
 export default function FloatingWhatsApp() {
   const containerRef = useRef<HTMLDivElement>(null);
   const rotationRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
+  const [whatsappNumber, setWhatsappNumber] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWhatsAppNumber = async () => {
+      try {
+        const settings = await settingsApi.getGeneralSettings();
+        setWhatsappNumber(settings.whatsappNumber || "");
+      } catch (error) {
+        console.error("Failed to fetch WhatsApp number:", error);
+        // Fallback to hardcoded number if API fails
+        setWhatsappNumber("919876543210");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWhatsAppNumber();
+  }, []);
 
   const openWhatsApp = () => {
-    window.open("https://wa.me/919876543210", "_blank");
+    if (whatsappNumber) {
+      // Clean the number by removing any non-digit characters except +
+      const cleanNumber = whatsappNumber.replace(/[^\d+]/g, "");
+      window.open(`https://wa.me/${cleanNumber}`, "_blank");
+    }
   };
 
   useGSAP(
@@ -32,6 +56,11 @@ export default function FloatingWhatsApp() {
   const handleMouseLeave = () => {
     gsap.to(buttonRef.current, { scale: 1, duration: 0.3 });
   };
+
+  // Don't render if loading or no WhatsApp number is available
+  if (isLoading || !whatsappNumber) {
+    return null;
+  }
 
   return (
     <div
