@@ -392,6 +392,7 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<SaveServiceData>>({
     title: "",
+    slug: "",
     description: "",
     image: "",
     isActive: true,
@@ -404,6 +405,14 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
       gallery: [],
     },
   });
+
+  const generateSlug = (text: string) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with -
+      .replace(/(^-|-$)+/g, ""); // Remove leading/trailing hyphens
+  };
 
   useEffect(() => {
     if (initialData) {
@@ -494,14 +503,38 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
                 <input
                   type="text"
                   value={formData.title || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const newTitle = e.target.value;
+                    const newSlug = generateSlug(newTitle);
+                    setFormData({
+                      ...formData,
+                      title: newTitle,
+                      slug: initialData ? formData.slug : newSlug, // Auto-slug only for new services
+                    });
+                  }}
                   className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#c5a367]/20 outline-none transition-all"
                   placeholder="e.g., Luxury Bridal Makeup"
                   required
                 />
               </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  URL Slug (websitename/your-slug)
+                </label>
+                <input
+                  type="text"
+                  value={formData.slug || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, slug: generateSlug(e.target.value) })
+                  }
+                  className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#c5a367]/20 outline-none transition-all font-mono text-[#c5a367]"
+                  placeholder="luxury-bridal-makeup"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700">
                   Display Order

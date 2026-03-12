@@ -165,7 +165,7 @@ const Services = ({ initialServices = [] }: ServicesProps) => {
         >
           {servicesList.map((service, index) => (
             <Link
-              href={`/services/${service.slug || service._id}`}
+              href={`/${service.slug || service._id}`}
               key={service._id}
               className="service-card group shrink-0 w-[280px] md:w-[350px] lg:w-[450px] relative overflow-hidden rounded-2xl block"
             >

@@ -56,7 +56,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (response.success && Array.isArray(response.data)) {
       const serviceRoutes: MetadataRoute.Sitemap = response.data.map(
         (service: any) => ({
-          url: `${baseUrl}/services/${service.slug}`,
+          url: `${baseUrl}/${service.slug}`,
           lastModified: new Date(service.updatedAt || new Date()),
           changeFrequency: "weekly",
           priority: 0.6,

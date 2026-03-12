@@ -180,7 +180,7 @@ const Navbar = () => {
                           {services.map(service => (
                             <Link
                               key={service._id}
-                              href={`/services/${service.slug || service._id}`}
+                              href={`/${service.slug || service._id}`}
                               className="group/item px-5 py-3 text-[11px] lg:text-xs font-sans font-semibold tracking-[0.1em] text-gray-700 hover:text-[#C5A367] hover:bg-[#C5A367]/5 flex items-center justify-between transition-all duration-300 uppercase border-b border-gray-100/50 last:border-none"
                             >
                               <span>{service.title}</span>
@@ -265,7 +265,7 @@ const Navbar = () => {
                             {services.map((service, idx) => (
                               <li key={service._id} style={{ transitionDelay: `${idx * 50}ms` }} className={`transition-all duration-300 ${isServicesMobileOpen ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}`}>
                                 <Link
-                                  href={`/services/${service.slug || service._id}`}
+                                  href={`/${service.slug || service._id}`}
                                   className="text-xs font-sans font-semibold tracking-[0.1em] text-gray-600 hover:text-[#C5A367] block py-1.5 uppercase"
                                   onClick={() => {
                                     gsap.to(menuRef.current, {
