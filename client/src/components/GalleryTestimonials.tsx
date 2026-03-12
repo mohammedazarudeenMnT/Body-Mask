@@ -302,14 +302,14 @@ export default function GalleryTestimonials({
               {/* Nav Arrows */}
               <button
                 onClick={prevGallery}
-                className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/90 border border-[#C5A367] shadow-lg text-[#C5A367] hover:bg-[#C5A367] hover:text-white transition-all focus:outline-none"
+                className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/90 border border-[#C5A367] shadow-lg text-[#C5A367] hover:bg-[#C5A367] hover:text-white transition-all focus:outline-none"
                 aria-label="Previous image"
               >
                 <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
               </button>
               <button
                 onClick={nextGallery}
-                className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-50 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/90 border border-[#C5A367] shadow-lg text-[#C5A367] hover:bg-[#C5A367] hover:text-white transition-all focus:outline-none"
+                className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-30 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/90 border border-[#C5A367] shadow-lg text-[#C5A367] hover:bg-[#C5A367] hover:text-white transition-all focus:outline-none"
                 aria-label="Next image"
               >
                 <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
