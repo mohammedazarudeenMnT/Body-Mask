@@ -140,6 +140,22 @@ const Footer = () => {
                   • Contact
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/Bridal-Makeup-Artist-Madurai"
+                  className="hover:text-[#C5A367] transition-colors"
+                >
+                  • Offers
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/videos"
+                  className="hover:text-[#C5A367] transition-colors"
+                >
+                  • Videos
+                </Link>
+              </li>
             </ul>
           </div>
 
