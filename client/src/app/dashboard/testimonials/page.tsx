@@ -118,6 +118,7 @@ function TestimonialModal({
               value={form.clientImage || ""}
               onChange={(val) => set("clientImage", val || "")}
               label="Client Image (Optional)"
+              helperText="Optimal: 400 × 400px (1:1 Square). High-quality portraits work best."
               aspectRatio="square"
             />
 

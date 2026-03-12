@@ -115,7 +115,7 @@ function OfferModal({
               value={form.imageUrl}
               onChange={(val) => set("imageUrl", val)}
               label="Offer Banner"
-              helperText="Upload a high-quality banner for the offer"
+              helperText="Recommended: 1200 × 675px (16:9 ratio) for clear promotional text."
               aspectRatio="video"
               required
             />

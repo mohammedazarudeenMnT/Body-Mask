@@ -5,7 +5,8 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Calendar, CheckCircle, ArrowRight, Quote } from "lucide-react";
+import { Calendar, CheckCircle, ArrowRight, Quote, Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -35,6 +36,7 @@ interface ServiceData {
     title: string;
     description: string;
   }>;
+  gallery?: string[];
 }
 
 interface ServiceDetailClientProps {
@@ -307,6 +309,54 @@ export default function ServiceDetailClient({
         </div>
       </section>
 
+      {/* Gallery Portfolio Section - Luxury Editorial Style */}
+      {service.gallery && service.gallery.length > 0 && (
+        <section className="py-24 bg-white overflow-hidden">
+          <div className="container mx-auto px-6 lg:px-20">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 px-4">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-px bg-[#C5A367]" />
+                  <span className="text-[#C5A367] text-[10px] font-bold tracking-[0.4em] uppercase">
+                    Artist Portfolio
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-6xl font-serif text-[#1a1a1a]">
+                  Service <span className="text-[#C5A367] italic">Gallery</span>
+                </h2>
+              </div>
+              <p className="text-gray-500 text-sm font-light max-w-md leading-relaxed">
+                A visual journey through our signature transformations for this
+                exclusive service. Every look is a unique masterpiece.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {service.gallery.map((img, idx) => (
+                <div
+                  key={idx}
+                  className={cn(
+                    "group relative overflow-hidden rounded-2xl bg-gray-100 transition-all duration-700 hover:shadow-2xl hover:shadow-[#C5A367]/20",
+                    idx === 0 || idx === 3 ? "md:row-span-2 aspect-[3/4]" : "aspect-square"
+                  )}
+                >
+                  <Image
+                    src={img}
+                    alt={`${service.title} Gallery ${idx + 1}`}
+                    fill
+                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute bottom-6 left-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                     <Plus className="text-white w-8 h-8 font-light" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

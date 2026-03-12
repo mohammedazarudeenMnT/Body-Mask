@@ -58,7 +58,7 @@ const HeroBanner = ({
       if (!imageRef.current) return;
 
       gsap.to(imageRef.current, {
-        yPercent: 30,
+        yPercent: 10,
         ease: "none",
         force3D: true,
         scrollTrigger: {
@@ -110,7 +110,7 @@ const HeroBanner = ({
     >
       <div
         ref={imageRef}
-        className="absolute inset-0 w-full h-[130%] -top-[15%]"
+        className="absolute inset-0 w-full h-[110%] -top-[5%]"
       >
         {image ? (
           <Image

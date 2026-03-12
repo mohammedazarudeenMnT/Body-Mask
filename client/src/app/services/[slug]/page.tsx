@@ -60,7 +60,7 @@ export default async function ServicePage({ params }: PageProps) {
   const adaptedService = {
     title: service.title,
     subtitle: service.description,
-    heroImage: service.content?.heroImage || service.image,
+    heroImage: service.image, // Use the Main Portrait image for the side feature
     category: "Luxury Service",
     description: {
       intro: service.description,
@@ -70,6 +70,7 @@ export default async function ServicePage({ params }: PageProps) {
     },
     features: service.content?.features || [],
     benefits: service.content?.benefits || [],
+    gallery: service.content?.gallery || [],
   };
 
   return (
@@ -78,7 +79,7 @@ export default async function ServicePage({ params }: PageProps) {
         pageKey={`service-${service.slug}`}
         fallbackTitle={service.title}
         fallbackSubtitle={service.description}
-        fallbackImage={service.image}
+        fallbackImage={service.content?.heroImage || service.image} // Use Wide Banner if available
       />
       <ServiceDetailClient service={adaptedService} />
     </main>

@@ -82,7 +82,8 @@ function ImageUpload({
               <Upload className="w-8 h-8 text-gray-400 group-hover:text-[#c5a367] transition-colors" />
             </div>
             <span className="text-sm font-medium">Click to upload image</span>
-            <span className="text-xs mt-1">PNG, JPG, WebP up to 5MB</span>
+            <span className="text-[10px] text-[#c5a367] font-bold mt-1">Recommended: 1200 × 1200px</span>
+            <span className="text-xs mt-0.5 text-gray-400">PNG, JPG, WebP up to 5MB</span>
           </div>
         )}
       </div>

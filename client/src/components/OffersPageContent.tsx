@@ -87,14 +87,14 @@ function OfferCard({
   const isExpiringSoon = daysLeft <= 5 && daysLeft > 0;
 
   return (
-    <div className="offer-card opacity-0 group relative bg-white rounded-3xl overflow-hidden border border-[#e8e0d5] shadow-sm hover:shadow-2xl transition-shadow duration-500 hover:-translate-y-2">
+    <div className="offer-card opacity-0 group relative bg-white rounded-3xl overflow-hidden border border-[#e8e0d5] shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 h-full flex flex-col">
       {/* image Banner */}
-      <div className="relative flex flex-col">
-        <div className="relative w-full overflow-hidden bg-gray-50 aspect-auto">
+      <div className="relative flex-1 flex flex-col">
+        <div className="relative w-full aspect-video overflow-hidden bg-gray-50">
           <img
             src={offer.imageUrl || "/placeholder-offer.jpg"}
             alt="Ongoing Offer"
-            className="w-full h-auto object-contain group-hover:scale-[1.02] transition-opacity duration-300"
+            className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700"
           />
 
           {/* Overlay on hover */}

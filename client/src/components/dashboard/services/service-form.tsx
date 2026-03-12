@@ -595,11 +595,8 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
                   })
                 }
                 aspectRatio="banner"
+                helperText="Optimal: 1920 × 800px. Tip: Keep text/logos away from the extreme top/bottom edges as they may be hidden by the parallax scroll effect."
               />
-              <p className="text-[10px] text-gray-400 italic">
-                Optional. Used as the majestic background for the service detail
-                page.
-              </p>
             </div>
           </section>
         </div>
@@ -614,6 +611,7 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
               value={formData.image || ""}
               onChange={(url) => setFormData({ ...formData, image: url || "" })}
               aspectRatio="portrait"
+              helperText="Recommended: 800 × 1000px (Portrait). Best for the curved boutique layouts."
             />
           </section>
 
