@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import { seoApi } from "@/lib/seo-api";
 import { VideoSection } from "@/components/VideoSection";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await seoApi.getByPageName("videos").catch(() => null);
 

@@ -18,6 +18,7 @@ const playfair = Playfair_Display({
 });
 
 import { settingsApi } from "@/lib/settings-api";
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await settingsApi.getGeneralSettings().catch(() => null);

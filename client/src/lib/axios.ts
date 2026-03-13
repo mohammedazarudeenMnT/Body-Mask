@@ -7,27 +7,35 @@ import { getSignatureHeaders } from "./signature-utils";
 
 // Dynamic API URL based on environment
 const getApiUrl = () => {
-  // 1. Explicitly check the public environment variable first
+  // 1. Server-side (SSR/Build time): Use API_URL or NEXT_PUBLIC_API_URL
+  if (typeof window === "undefined") {
+    // During build/SSR, prefer API_URL, fallback to NEXT_PUBLIC_API_URL
+    const serverApiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+    
+    if (serverApiUrl) {
+      return serverApiUrl;
+    }
+    
+    // If no API URL is set, default to localhost for development
+    return "http://localhost:5000";
+  }
+
+  // 2. Client-side: Use NEXT_PUBLIC_API_URL if available
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
   }
 
-  // 2. Client-side logic: use window.location if not on localhost
-  if (typeof window !== "undefined") {
-    const isLocalhost = 
-      window.location.hostname === "localhost" || 
-      window.location.hostname === "127.0.0.1";
+  // 3. Client-side fallback: use window.location if not on localhost
+  const isLocalhost = 
+    window.location.hostname === "localhost" || 
+    window.location.hostname === "127.0.0.1";
 
-    if (isLocalhost) {
-      return "http://localhost:5000";
-    }
-
-    // Default to the current origin if no API URL is specified (useful for unified deployments)
-    return window.location.origin;
+  if (isLocalhost) {
+    return "http://localhost:5000";
   }
 
-  // 3. Server-side fallback (during build or SSR)
-  return process.env.API_URL || "http://localhost:5000";
+  // Default to the current origin if no API URL is specified (useful for unified deployments)
+  return window.location.origin;
 };
 
 export const axiosInstance = axios.create({

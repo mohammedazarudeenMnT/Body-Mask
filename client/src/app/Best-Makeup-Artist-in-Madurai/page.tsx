@@ -3,6 +3,8 @@ import { seoApi } from "@/lib/seo-api";
 import HeroBanner from "@/components/HeroBanner";
 import ContactForm from "@/components/ContactForm";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await seoApi.getByPageName("contact");
 

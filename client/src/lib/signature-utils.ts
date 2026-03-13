@@ -11,8 +11,18 @@ export function generateHMACSignature(
   timestamp: string,
   secret: string,
 ) {
+  // Extract path portion if a full URL is provided
+  let normalizedPath = path;
+  if (path.startsWith("http")) {
+    try {
+      normalizedPath = new URL(path).pathname;
+    } catch (e) {
+      // Fallback if URL parsing fails
+    }
+  }
+
   // Standardize the payload: METHOD:PATH:TIMESTAMP
-  const rawPath = path.split("?")[0].toLowerCase();
+  const rawPath = normalizedPath.split("?")[0].toLowerCase();
   const standardizedPath =
     rawPath.endsWith("/") && rawPath.length > 1
       ? rawPath.slice(0, -1)

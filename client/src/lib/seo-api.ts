@@ -16,8 +16,9 @@ export const seoApi = {
     try {
       const response = await axiosInstance.get("/api/seo");
       return response.data;
-    } catch (error) {
-      console.error("Error fetching SEO settings:", error);
+    } catch (error: any) {
+      console.error("Error fetching SEO settings:", error?.message || error);
+      // Return empty array on error to prevent build failures
       return [];
     }
   },
@@ -32,8 +33,9 @@ export const seoApi = {
     try {
       const settings = await seoApi.getSettings();
       return settings.find((p) => p.pageName === pageName) || null;
-    } catch (error) {
-      console.error(`Error fetching SEO settings for ${pageName}:`, error);
+    } catch (error: any) {
+      console.error(`Error fetching SEO settings for ${pageName}:`, error?.message || error);
+      // Return null on error to use fallback metadata
       return null;
     }
   },

@@ -8,6 +8,9 @@ import About from "@/components/About";
 import Services from "@/components/Services";
 import GalleryTestimonials from "@/components/GalleryTestimonials";
 
+// Bypass cache for fresh SEO & Banner data
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await seoApi.getByPageName("home");
 
@@ -29,14 +32,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+import { serviceApi } from "@/lib/service-api";
+
 export default async function Home() {
-  const [bannersRes, galleryRes, testimonialsRes] = await Promise.all([
-    bannerApi.getBanners().catch(() => ({ success: false, data: [] })),
-    galleryApi.getGalleryItems().catch(() => ({ success: false, data: [] })),
-    testimonialApi
-      .getTestimonials()
-      .catch(() => ({ success: false, data: [] })),
-  ]);
+  const [bannersRes, galleryRes, testimonialsRes, servicesRes] =
+    await Promise.all([
+      bannerApi.getBanners().catch(() => ({ success: false, data: [] })),
+      galleryApi.getGalleryItems().catch(() => ({ success: false, data: [] })),
+      testimonialApi
+        .getTestimonials()
+        .catch(() => ({ success: false, data: [] })),
+      serviceApi.getServices().catch(() => ({ success: false, data: [] })),
+    ]);
 
   return (
     <main className="min-h-screen bg-cream">
@@ -44,7 +51,7 @@ export default async function Home() {
         initialBanners={bannersRes.success ? bannersRes.data : []}
       />
       <About />
-      <Services />
+      <Services initialServices={servicesRes.success ? servicesRes.data : []} />
       <GalleryTestimonials
         initialGalleryItems={galleryRes.success ? galleryRes.data : []}
         initialTestimonials={
