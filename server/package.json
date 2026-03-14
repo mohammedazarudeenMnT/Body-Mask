@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "fix-gallery": "node scripts/fix-gallery-event-types.js"
   },
   "dependencies": {
     "better-auth": "^1.4.10",

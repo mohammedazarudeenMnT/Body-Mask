@@ -17,6 +17,18 @@ const gallerySchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    eventType: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "EventType",
+      default: null,
+      validate: {
+        validator: function(v) {
+          // Allow null or valid ObjectId
+          return v === null || mongoose.Types.ObjectId.isValid(v);
+        },
+        message: 'Invalid event type ID'
+      }
+    },
     status: {
       type: String,
       enum: ["Published", "Hidden"],

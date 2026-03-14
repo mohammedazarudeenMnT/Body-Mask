@@ -23,7 +23,13 @@ export const getGalleryItems = async (req, res) => {
     const isAdmin = req.user && req.user.role === "admin";
     const query = isAdmin ? {} : { status: "Published" };
 
-    const items = await Gallery.find(query).sort({ order: 1, createdAt: -1 });
+    const items = await Gallery.find(query)
+      .populate({
+        path: 'eventType',
+        match: { _id: { $exists: true } },
+        options: { strictPopulate: false }
+      })
+      .sort({ order: 1, createdAt: -1 });
 
     res.json({
       success: true,
@@ -34,6 +40,7 @@ export const getGalleryItems = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch gallery items",
+      error: error.message,
     });
   }
 };
@@ -41,7 +48,9 @@ export const getGalleryItems = async (req, res) => {
 // Create a gallery item (Admin only)
 export const createGalleryItem = async (req, res) => {
   try {
-    const { title, image, status, order } = req.body;
+    const { title, image, eventType, status, order } = req.body;
+
+    console.log("Creating gallery item with data:", { title, eventType, status, order });
 
     if (!title || !image) {
       return res.status(400).json({
@@ -61,12 +70,24 @@ export const createGalleryItem = async (req, res) => {
           });
     }
 
+    // Validate eventType if provided
+    const eventTypeValue = eventType && eventType.trim() !== "" ? eventType : null;
+
     const item = await Gallery.create({
       title,
       imageUrl: getUrlFromPublicId(publicId),
       publicId,
+      eventType: eventTypeValue,
       status: status || "Published",
       order: order || 0,
+    });
+
+    console.log("Gallery item created:", item);
+
+    // Populate eventType before returning
+    await item.populate({
+      path: 'eventType',
+      options: { strictPopulate: false }
     });
 
     res.status(201).json({
@@ -88,7 +109,9 @@ export const createGalleryItem = async (req, res) => {
 export const updateGalleryItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, image, status, order } = req.body;
+    const { title, image, eventType, status, order } = req.body;
+
+    console.log("Updating gallery item with data:", { id, title, eventType, status, order });
 
     const existing = await Gallery.findById(id);
     if (!existing) {
@@ -98,7 +121,10 @@ export const updateGalleryItem = async (req, res) => {
       });
     }
 
-    const updateData = { title, status, order };
+    // Validate eventType if provided
+    const eventTypeValue = eventType && eventType.trim() !== "" ? eventType : null;
+
+    const updateData = { title, eventType: eventTypeValue, status, order };
 
     if (image && image.startsWith("data:image")) {
       // Delete old image
@@ -114,7 +140,12 @@ export const updateGalleryItem = async (req, res) => {
     const item = await Gallery.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
+    }).populate({
+      path: 'eventType',
+      options: { strictPopulate: false }
     });
+
+    console.log("Gallery item updated:", item);
 
     res.json({
       success: true,
@@ -126,6 +157,7 @@ export const updateGalleryItem = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to update gallery item",
+      error: error.message,
     });
   }
 };
