@@ -35,23 +35,29 @@ const Navbar = () => {
       try {
         const res = await serviceApi.getServices();
         if (res.success && res.data && res.data.length > 0) {
+          console.log("Fetched services:", res.data.map(s => ({ title: s.title, slug: s.slug })));
           setServices(res.data);
         } else {
+          // Fallback services matching the seed data
           setServices([
-            { _id: "hair", title: "Hair Care", slug: "hair-care" },
-            { _id: "skin", title: "Skin Care", slug: "skin-care" },
-            { _id: "nail", title: "Nails", slug: "nails" },
-            { _id: "makup", title: "Makeup Services", slug: "makeup-services" },
-            { _id: "pedicure", title: "Anti Tan Pedicure", slug: "anti-tan-pedicure" },
-            { _id: "removal", title: "Hair Removal", slug: "hair-removal" },
-            { _id: "bridal", title: "Bridal Services", slug: "bridal-services" },
+            { _id: "bridal", title: "Bridal Makeup", slug: "bridal-makeup" },
+            { _id: "hair", title: "Hair Styling", slug: "hair-styling" },
+            { _id: "facial", title: "Advanced Facials", slug: "advanced-facials" },
+            { _id: "nail", title: "Nail Art", slug: "nail-art" },
+            { _id: "pedicure", title: "Pedicure Spa", slug: "pedicure-spa" },
+            { _id: "manicure", title: "Premium Manicure", slug: "premium-manicure" },
+            { _id: "skin", title: "Skin Treatments", slug: "skin-treatments" },
+            { _id: "waxing", title: "Professional Waxing", slug: "professional-waxing" },
           ]);
         }
       } catch (error) {
+        console.error("Error fetching services:", error);
+        // Fallback services matching the seed data
         setServices([
-          { _id: "hair", title: "Hair Care", slug: "hair-care" },
-          { _id: "skin", title: "Skin Care", slug: "skin-care" },
-          { _id: "bridal", title: "Bridal Services", slug: "bridal-services" },
+          { _id: "bridal", title: "Bridal Makeup", slug: "bridal-makeup" },
+          { _id: "hair", title: "Hair Styling", slug: "hair-styling" },
+          { _id: "facial", title: "Advanced Facials", slug: "advanced-facials" },
+          { _id: "nail", title: "Nail Art", slug: "nail-art" },
         ]);
       }
     };

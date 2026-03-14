@@ -530,9 +530,11 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
                 <input
                   type="text"
                   value={formData.slug || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, slug: generateSlug(e.target.value) })
-                  }
+                  onChange={(e) => {
+                    // Allow manual editing but ensure it's lowercase and valid
+                    const value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                    setFormData({ ...formData, slug: value });
+                  }}
                   className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#c5a367]/20 outline-none transition-all font-mono text-[#c5a367]"
                   placeholder="luxury-bridal-makeup"
                   required

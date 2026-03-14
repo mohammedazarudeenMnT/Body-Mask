@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { serviceApi } from "@/lib/service-api";
 import { Service } from "@/types/service";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,31 +74,40 @@ const Services = ({ initialServices = [] }: ServicesProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [services, setServices] = useState<Service[]>(initialServices);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  // Check scroll position to show/hide arrows
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const canLeft = scrollLeft > 10;
+      const canRight = scrollLeft < scrollWidth - clientWidth - 10;
+      console.log('Scroll check:', { scrollLeft, scrollWidth, clientWidth, canLeft, canRight });
+      setCanScrollLeft(canLeft);
+      setCanScrollRight(canRight);
+    }
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 400; // Adjust scroll distance
+      const newScrollLeft = direction === 'left' 
+        ? scrollRef.current.scrollLeft - scrollAmount
+        : scrollRef.current.scrollLeft + scrollAmount;
+      
+      scrollRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   useGSAP(
     () => {
-      if (!containerRef.current || !scrollRef.current) return;
+      if (!containerRef.current) return;
 
-      const scrollWidth = scrollRef.current.scrollWidth;
-      const windowWidth = window.innerWidth;
-      const amountToScroll = scrollWidth - windowWidth;
-
-      if (amountToScroll > 0) {
-        gsap.to(scrollRef.current, {
-          x: -amountToScroll,
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: `+=${amountToScroll}`,
-            pin: true,
-            scrub: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-      }
-
-      // Individual cards animation
+      // Individual cards animation on scroll into view
       gsap.utils.toArray(".service-card").forEach((card: any) => {
         gsap.from(card, {
           opacity: 0,
@@ -105,9 +115,8 @@ const Services = ({ initialServices = [] }: ServicesProps) => {
           duration: 1,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: card,
-            containerAnimation: amountToScroll > 0 ? undefined : undefined,
-            start: "left right",
+            trigger: containerRef.current,
+            start: "top 80%",
             toggleActions: "play none none reverse",
           },
         });
@@ -134,20 +143,38 @@ const Services = ({ initialServices = [] }: ServicesProps) => {
     fetchServices();
   }, []);
 
+  useEffect(() => {
+    // Initial check after a short delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      checkScroll();
+    }, 100);
+
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      return () => {
+        clearTimeout(timer);
+        scrollElement.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [services]);
+
   const servicesList = services.length > 0 ? services : fallbackServicesList;
 
   return (
     <section
       ref={containerRef}
-      className="relative bg-[#0a0a0a] overflow-hidden"
+      className="relative bg-[#0a0a0a] overflow-hidden py-20"
     >
       {/* Background Decor */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#C5A367_1px,transparent_1px)] bg-size-[40px_40px]" />
       </div>
 
-      <div className="min-h-screen flex flex-col justify-center py-20">
-        {/* Header - Fixed or Scrolling? We'll make it part of the flow */}
+      <div className="flex flex-col justify-center">
+        {/* Header */}
         <div className="px-6 md:px-16 mb-12">
           <p className="text-[#C5A367] text-xs font-bold tracking-[0.3em] uppercase mb-4">
             EXPERTISE & ARTISTRY
@@ -158,43 +185,69 @@ const Services = ({ initialServices = [] }: ServicesProps) => {
           </h2>
         </div>
 
-        {/* Horizontal Scroll Content */}
-        <div
-          ref={scrollRef}
-          className="flex flex-nowrap gap-8 px-6 md:px-16 pb-12 w-max items-stretch"
-        >
-          {servicesList.map((service, index) => (
-            <Link
-              href={`/${service.slug || service._id}`}
-              key={service._id}
-              className="service-card group shrink-0 w-[280px] md:w-[350px] lg:w-[450px] relative overflow-hidden rounded-2xl block"
-            >
-              <div className="aspect-4/5 relative w-full overflow-hidden">
-                <Image
-                  src={service.image || "/assets/services/default.png"}
-                  alt={service.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  sizes="(max-width: 768px) 280px, (max-width: 1200px) 450px, 600px"
-                />
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
+        {/* Horizontal Scroll Content with Navigation */}
+        <div className="relative">
+          {/* Left Arrow */}
+          <button
+            onClick={() => scroll('left')}
+            className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-[#C5A367] text-white flex items-center justify-center hover:bg-[#E2C792] transition-all shadow-xl hover:scale-110 ${
+              canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
 
-                {/* Content */}
-                <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="text-[#C5A367] text-[10px] font-bold tracking-[0.2em] uppercase mb-2 block opacity-0 group-hover:opacity-100 transition-opacity delay-100">
-                    SERVICE {index + 1}
-                  </span>
-                  <h3 className="text-2xl md:text-3xl font-serif text-white mb-3">
-                    {service.title}
-                  </h3>
-                  <p className="text-white/60 text-xs md:text-sm leading-relaxed max-w-sm opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-500">
-                    {service.description}
-                  </p>
+          {/* Right Arrow */}
+          <button
+            onClick={() => scroll('right')}
+            className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-[#C5A367] text-white flex items-center justify-center hover:bg-[#E2C792] transition-all shadow-xl hover:scale-110 ${
+              canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* Scrollable Container */}
+          <div
+            ref={scrollRef}
+            className="flex flex-nowrap gap-8 px-6 md:px-16 pb-12 overflow-x-auto scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {servicesList.map((service, index) => (
+              <Link
+                href={`/${service.slug || service._id}`}
+                key={service._id}
+                className="service-card group shrink-0 w-[280px] md:w-[350px] lg:w-[450px] relative overflow-hidden rounded-2xl block"
+              >
+                <div className="aspect-4/5 relative w-full overflow-hidden">
+                  <Image
+                    src={service.image || "/assets/services/default.png"}
+                    alt={service.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 768px) 280px, (max-width: 1200px) 450px, 600px"
+                  />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
+
+                  {/* Content */}
+                  <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <span className="text-[#C5A367] text-[10px] font-bold tracking-[0.2em] uppercase mb-2 block opacity-0 group-hover:opacity-100 transition-opacity delay-100">
+                      SERVICE {index + 1}
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-serif text-white mb-3">
+                      {service.title}
+                    </h3>
+                    <p className="text-white/60 text-xs md:text-sm leading-relaxed max-w-sm opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-500">
+                      {service.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 

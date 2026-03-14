@@ -13,8 +13,6 @@ import {
   Info,
   Facebook,
   Instagram,
-  Twitter,
-  Linkedin,
   MessageCircle,
   CheckCircle2,
 } from "lucide-react";
@@ -37,8 +35,7 @@ export function GeneralSettingsTab({ onMessage }: GeneralSettingsTabProps) {
     socialMedia: {
       facebook: "",
       instagram: "",
-      twitter: "",
-      linkedin: "",
+      youtube: "",
       whatsapp: "",
     },
     whatsappNumber: "",
@@ -67,8 +64,7 @@ export function GeneralSettingsTab({ onMessage }: GeneralSettingsTabProps) {
           socialMedia: {
             facebook: res.data.socialMedia?.facebook || "",
             instagram: res.data.socialMedia?.instagram || "",
-            twitter: res.data.socialMedia?.twitter || "",
-            linkedin: res.data.socialMedia?.linkedin || "",
+            youtube: res.data.socialMedia?.youtube || "",
             whatsapp: res.data.socialMedia?.whatsapp || "",
           },
           whatsappNumber: res.data.whatsappNumber || "",
@@ -393,45 +389,25 @@ export function GeneralSettingsTab({ onMessage }: GeneralSettingsTabProps) {
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                <Twitter className="w-4 h-4 text-sky-500" />
-                Twitter
+                <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                YouTube
               </label>
               <input
                 type="url"
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c5a367]/20 focus:border-[#c5a367] transition-colors"
-                value={settings.socialMedia.twitter}
+                value={settings.socialMedia.youtube}
                 onChange={(e) =>
                   setSettings({
                     ...settings,
                     socialMedia: {
                       ...settings.socialMedia,
-                      twitter: e.target.value,
+                      youtube: e.target.value,
                     },
                   })
                 }
-                placeholder="https://twitter.com/yourhandle"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                <Linkedin className="w-4 h-4 text-blue-700" />
-                LinkedIn
-              </label>
-              <input
-                type="url"
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c5a367]/20 focus:border-[#c5a367] transition-colors"
-                value={settings.socialMedia.linkedin}
-                onChange={(e) =>
-                  setSettings({
-                    ...settings,
-                    socialMedia: {
-                      ...settings.socialMedia,
-                      linkedin: e.target.value,
-                    },
-                  })
-                }
-                placeholder="https://linkedin.com/company/yourcompany"
+                placeholder="https://youtube.com/@yourchannel"
               />
             </div>
 

@@ -14,6 +14,10 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { slug } = await params;
+  if (slug.includes('.') || ["favicon.ico", "robots.txt", "sitemap.xml", "track"].includes(slug)) {
+    return { title: "Not Found | Body Mask" };
+  }
+
   try {
     const response = await serviceApi.getServiceBySlug(slug);
     if (!response.success || !response.data) {
@@ -55,6 +59,10 @@ export async function generateMetadata(
 
 export default async function ServicePage({ params }: PageProps) {
   const { slug } = await params;
+  if (slug.includes('.') || ["favicon.ico", "robots.txt", "sitemap.xml"].includes(slug)) {
+    notFound();
+  }
+
   let service = null;
 
   try {
@@ -62,8 +70,10 @@ export default async function ServicePage({ params }: PageProps) {
     if (response.success) {
       service = response.data;
     }
-  } catch (error) {
-    console.error("Error fetching service:", error);
+  } catch (error: any) {
+    if (error.response?.status !== 404) {
+      console.error("Error fetching service:", error);
+    }
   }
 
   if (!service) {

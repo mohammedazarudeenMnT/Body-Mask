@@ -1,10 +1,12 @@
 import { axiosInstance } from "./axios";
+import { EventType } from "./event-type-api";
 
 export interface GalleryItem {
   _id?: string;
   title: string;
   imageUrl: string;
   publicId: string;
+  eventType?: string | EventType;
   status?: "Published" | "Hidden";
   order?: number;
   createdAt?: string;

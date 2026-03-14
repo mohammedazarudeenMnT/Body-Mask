@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Star, ChevronRight, ChevronLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
   testimonialApi,
@@ -341,9 +342,12 @@ export default function GalleryTestimonials({
                   <h3 className="text-2xl md:text-3xl font-serif text-[#2B2622] font-bold">
                     Client Love
                   </h3>
-                  <span className="text-[#C5A367] font-serif text-base md:text-lg flex items-center gap-1 cursor-pointer hover:underline underline-offset-4">
+                  <Link 
+                    href="/testimonials"
+                    className="text-[#C5A367] font-serif text-base md:text-lg flex items-center gap-1 cursor-pointer hover:underline underline-offset-4 transition-all"
+                  >
                     View All <ArrowRight className="w-4 h-4" />
-                  </span>
+                  </Link>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">

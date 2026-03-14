@@ -13,8 +13,7 @@ const generalSettingsSchema = new mongoose.Schema(
     socialMedia: {
       facebook: { type: String },
       instagram: { type: String },
-      twitter: { type: String },
-      linkedin: { type: String },
+      youtube: { type: String },
       whatsapp: { type: String },
     },
     whatsappNumber: { type: String },
