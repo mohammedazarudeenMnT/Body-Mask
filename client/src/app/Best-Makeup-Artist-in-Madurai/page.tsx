@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { seoApi } from "@/lib/seo-api";
 import HeroBanner from "@/components/HeroBanner";
 import ContactForm from "@/components/ContactForm";
+import ScrollToHashWrapper from "@/components/ScrollToHashWrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -37,16 +38,18 @@ export default async function ContactPage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-cream">
-      <HeroBanner
-        pageKey="contact"
-        fallbackTitle="Contact Us"
-        fallbackSubtitle="Ready to Transform Your Look?"
-      />
-      <ContactForm
-        initialSettings={settingsRes.data}
-        initialServices={servicesRes.success ? servicesRes.data : []}
-      />
-    </main>
+    <ScrollToHashWrapper>
+      <main className="min-h-screen bg-cream">
+        <HeroBanner
+          pageKey="contact"
+          fallbackTitle="Contact Us"
+          fallbackSubtitle="Ready to Transform Your Look?"
+        />
+        <ContactForm
+          initialSettings={settingsRes.data}
+          initialServices={servicesRes.success ? servicesRes.data : []}
+        />
+      </main>
+    </ScrollToHashWrapper>
   );
 }

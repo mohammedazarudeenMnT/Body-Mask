@@ -10,6 +10,7 @@ import { useGSAP } from "@gsap/react";
 import { useDynamicLogo } from "@/hooks/useDynamicLogo";
 import { serviceApi } from "@/lib/service-api";
 import { Service } from "@/types/service";
+import BookAppointmentButton from "@/components/BookAppointmentButton";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -204,14 +205,13 @@ const Navbar = () => {
 
           {/* Desktop CTA Button */}
           <div className="hidden md:flex items-center">
-            <Link
-              href="/Best-Makeup-Artist-in-Madurai#contact-form"
+            <BookAppointmentButton
               className="group relative inline-flex items-center justify-center px-7 py-2.5 text-xs lg:text-sm font-sans font-semibold tracking-[0.2em] text-[#2B0000] uppercase border-none overflow-hidden transition-all duration-500 shrink-0 hover:shadow-[0_0_20px_rgba(197,163,103,0.4)] rounded-sm bg-gradient-to-r from-[#C5A367] via-[#E2C792] to-[#C5A367] bg-[length:200%_auto] hover:bg-right"
             >
               <span className="relative z-10 transition-colors duration-500 group-hover:text-[#1A1A1A]">
                 Book Appointment
               </span>
-            </Link>
+            </BookAppointmentButton>
           </div>
 
           {/* Mobile Menu Button */}
@@ -312,15 +312,13 @@ const Navbar = () => {
                 );
               })}
               <li className="pt-4 mt-2 border-t border-[#C5A367]/20 mobile-link">
-                <Link
-                  href="/Best-Makeup-Artist-in-Madurai#contact-form"
-                  className="block group relative overflow-hidden rounded-sm transition-all duration-500 hover:shadow-[0_0_15px_rgba(197,163,103,0.3)] bg-gradient-to-r from-[#C5A367] via-[#E2C792] to-[#C5A367] bg-[length:200%_auto] hover:bg-right"
-                  onClick={() => setIsMenuOpen(false)}
+                <BookAppointmentButton
+                  className="block group relative overflow-hidden rounded-sm transition-all duration-500 hover:shadow-[0_0_15px_rgba(197,163,103,0.3)] bg-gradient-to-r from-[#C5A367] via-[#E2C792] to-[#C5A367] bg-[length:200%_auto] hover:bg-right w-full"
                 >
                   <div className="relative z-10 w-full py-3.5 text-center text-[11px] font-sans font-bold tracking-[0.2em] text-[#2B0000] uppercase transition-colors duration-500">
                     Book Appointment
                   </div>
-                </Link>
+                </BookAppointmentButton>
               </li>
             </ul>
           </div>

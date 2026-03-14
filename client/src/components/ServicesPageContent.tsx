@@ -11,6 +11,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import BookAppointmentButton from "@/components/BookAppointmentButton";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -685,12 +686,11 @@ export default function ServicesPageContent({
               ))}
             </div>
 
-            <Link
-              href="/Best-Makeup-Artist-in-Madurai#contact-form"
+            <BookAppointmentButton
               className="px-12 py-5 bg-[#C5A367] text-white text-[11px] font-bold tracking-[0.2em] uppercase rounded-full hover:bg-white hover:text-[#330000] transition-all duration-500 shadow-xl shadow-black/20"
             >
               Reserve Your Date
-            </Link>
+            </BookAppointmentButton>
           </div>
         </div>
       </section> */}

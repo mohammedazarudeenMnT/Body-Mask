@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import BookAppointmentButton from "@/components/BookAppointmentButton";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -156,15 +157,14 @@ export function LuxuryJourney() {
 
         {/* Closing CTA */}
         <div className="mt-40 text-center">
-          <Link href="/Best-Makeup-Artist-in-Madurai#contact-form">
-            {" "}
-            <button className="px-12 py-5 bg-[#1C1C1C] text-white font-serif italic text-xl hover:bg-[#B8860B] transition-colors duration-500 rounded-sm shadow-xl group">
-              Start Your Journey
-              <span className="inline-block ml-3 group-hover:translate-x-2 transition-transform duration-300">
-                →
-              </span>
-            </button>
-          </Link>
+          <BookAppointmentButton
+            className="px-12 py-5 bg-[#1C1C1C] text-white font-serif italic text-xl hover:bg-[#B8860B] transition-colors duration-500 rounded-sm shadow-xl group"
+          >
+            Start Your Journey
+            <span className="inline-block ml-3 group-hover:translate-x-2 transition-transform duration-300">
+              →
+            </span>
+          </BookAppointmentButton>
         </div>
       </div>
     </section>

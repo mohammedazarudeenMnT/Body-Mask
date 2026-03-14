@@ -8,6 +8,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, CheckCircle, ArrowRight, Quote, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import BookAppointmentButton from "@/components/BookAppointmentButton";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -296,8 +297,7 @@ export default function ServiceDetailClient({
                 ref={ctaRef}
                 className="mt-16 flex justify-center lg:justify-start"
               >
-                <Link
-                  href="/Best-Makeup-Artist-in-Madurai#contact-form"
+                <BookAppointmentButton
                   className="group relative flex items-center gap-6 bg-[#1a1a1a] text-white px-10 py-5 rounded-full overflow-hidden transition-all shadow-xl hover:shadow-[#C5A367]/20 active:scale-95 hover:scale-105"
                 >
                   <span className="relative z-10 flex items-center gap-3 text-sm font-bold tracking-[0.3em] uppercase">
@@ -306,7 +306,7 @@ export default function ServiceDetailClient({
                   </span>
                   <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   <div className="absolute inset-0 bg-[#C5A367] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
-                </Link>
+                </BookAppointmentButton>
               </div>
             </div>
           </div>
