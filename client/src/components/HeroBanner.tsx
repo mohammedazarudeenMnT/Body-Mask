@@ -123,8 +123,7 @@ const HeroBanner = ({
           />
         ) : null}
         {/* Luxury Vignette & Gradient */}
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-[#0a0a0a]" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-[#0a0a0a] to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-transparent" />
       </div>
 
       {/* Dynamic Content Overlay */}

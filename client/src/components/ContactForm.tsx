@@ -199,6 +199,7 @@ export default function ContactForm({
     <>
       {/* Contact Information Section */}
       <section
+        id="contact-form"
         ref={containerRef}
         className="relative w-full py-20 md:py-22 overflow-hidden bg-linear-to-b from-white via-cream to-white"
       >

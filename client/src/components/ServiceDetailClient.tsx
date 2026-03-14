@@ -297,7 +297,7 @@ export default function ServiceDetailClient({
                 className="mt-16 flex justify-center lg:justify-start"
               >
                 <Link
-                  href="/Best-Makeup-Artist-in-Madurai"
+                  href="/Best-Makeup-Artist-in-Madurai#contact-form"
                   className="group relative flex items-center gap-6 bg-[#1a1a1a] text-white px-10 py-5 rounded-full overflow-hidden transition-all shadow-xl hover:shadow-[#C5A367]/20 active:scale-95 hover:scale-105"
                 >
                   <span className="relative z-10 flex items-center gap-3 text-sm font-bold tracking-[0.3em] uppercase">

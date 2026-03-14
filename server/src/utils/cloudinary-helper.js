@@ -29,6 +29,10 @@ export const getPublicIdFromUrl = (url) => {
 export const getUrlFromPublicId = (publicId, customOptions = {}) => {
   if (!publicId) return null;
   if (publicId.startsWith("http")) return publicId;
+  
+  // If it's a local path (starts with /), return as-is
+  // These will be served by Next.js from the public folder
+  if (publicId.startsWith("/")) return publicId;
 
   return cloudinary.url(publicId, {
     secure: true,

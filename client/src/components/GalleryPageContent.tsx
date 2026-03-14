@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { galleryApi, GalleryItem as ApiGalleryItem } from "@/lib/gallery-api";
-import { Loader2, ZoomIn, X, ChevronRight, ChevronLeft } from "lucide-react";
+import { eventTypeApi, EventType } from "@/lib/event-type-api";
+import { Loader2, ZoomIn, X, ChevronRight, ChevronLeft, Filter } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { cn } from "@/lib/utils";
 import { ScrollTrigger, Flip } from "gsap/all";
@@ -19,6 +20,7 @@ interface GalleryItem {
   id: string;
   src: string;
   title: string;
+  eventType?: EventType;
 }
 
 interface GalleryPageContentProps {
@@ -30,15 +32,18 @@ function processApiItemsToGalleryItems(items: ApiGalleryItem[]): GalleryItem[] {
     id: item._id || "",
     src: item.imageUrl,
     title: item.title,
+    eventType: typeof item.eventType === 'object' ? item.eventType : undefined,
   }));
 }
 
 export default function GalleryPageContent({
   initialItems = [],
 }: GalleryPageContentProps) {
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() =>
+  const [allGalleryItems, setAllGalleryItems] = useState<GalleryItem[]>(() =>
     processApiItemsToGalleryItems(initialItems),
   );
+  const [eventTypes, setEventTypes] = useState<EventType[]>([]);
+  const [selectedEventType, setSelectedEventType] = useState<string>("all");
   const [loading, setLoading] = useState(initialItems.length === 0);
   const [visibleCount, setVisibleCount] = useState(12);
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
@@ -46,20 +51,35 @@ export default function GalleryPageContent({
   const containerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
+  // Filter gallery items based on selected event type
+  const galleryItems = selectedEventType === "all" 
+    ? allGalleryItems 
+    : allGalleryItems.filter(item => item.eventType?._id === selectedEventType);
+
   // Fetch Data
   useEffect(() => {
-    if (initialItems.length > 0) return;
-
     const fetchData = async () => {
-      setLoading(true);
+      if (initialItems.length === 0) {
+        setLoading(true);
+      }
+      
       try {
-        const res = await galleryApi.getGalleryItems();
-        if (res.success && res.data) {
-          const newItems = processApiItemsToGalleryItems(res.data);
-          setGalleryItems(newItems);
+        // Fetch event types
+        const eventTypesRes = await eventTypeApi.getEventTypes();
+        if (eventTypesRes.success && eventTypesRes.data) {
+          setEventTypes(eventTypesRes.data.filter((et: EventType) => et.isActive));
+        }
+
+        // Fetch gallery items if not provided
+        if (initialItems.length === 0) {
+          const res = await galleryApi.getGalleryItems();
+          if (res.success && res.data) {
+            const newItems = processApiItemsToGalleryItems(res.data);
+            setAllGalleryItems(newItems);
+          }
         }
       } catch (error) {
-        console.error("Failed to fetch gallery", error);
+        console.error("Failed to fetch gallery data", error);
       } finally {
         setLoading(false);
       }
@@ -87,7 +107,7 @@ export default function GalleryPageContent({
         },
       );
     },
-    { scope: containerRef, dependencies: [loading, galleryItems] },
+    { scope: containerRef, dependencies: [loading, galleryItems, selectedEventType] },
   );
 
   const displayedItems = galleryItems.slice(0, visibleCount);
@@ -128,6 +148,51 @@ export default function GalleryPageContent({
 
   return (
     <div className="container mx-auto px-4 md:px-8 py-16" ref={containerRef}>
+
+      {/* Event Type Filters */}
+      {eventTypes.length > 0 && (
+        <div className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <Filter className="w-5 h-5 text-[#C5A367]" />
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-[#330000]">
+              Filter by Event
+            </h3>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => {
+                setSelectedEventType("all");
+                setVisibleCount(12);
+              }}
+              className={cn(
+                "px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider uppercase transition-all duration-300",
+                selectedEventType === "all"
+                  ? "bg-[#C5A367] text-white shadow-lg shadow-[#C5A367]/30"
+                  : "bg-white border border-gray-200 text-gray-700 hover:border-[#C5A367] hover:text-[#C5A367]"
+              )}
+            >
+              All Events
+            </button>
+            {eventTypes.map((eventType) => (
+              <button
+                key={eventType._id}
+                onClick={() => {
+                  setSelectedEventType(eventType._id!);
+                  setVisibleCount(12);
+                }}
+                className={cn(
+                  "px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider uppercase transition-all duration-300",
+                  selectedEventType === eventType._id
+                    ? "bg-[#C5A367] text-white shadow-lg shadow-[#C5A367]/30"
+                    : "bg-white border border-gray-200 text-gray-700 hover:border-[#C5A367] hover:text-[#C5A367]"
+                )}
+              >
+                {eventType.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Loading State */}
       {loading && (
@@ -235,9 +300,11 @@ export default function GalleryPageContent({
               quality={100}
             />
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/80 to-transparent text-white">
-              <p className="text-[#C5A367] text-xs font-bold uppercase tracking-widest mb-1">
-                Signature Artistry
-              </p>
+              {selectedImage.eventType && (
+                <p className="text-[#C5A367] text-xs font-bold uppercase tracking-widest mb-1">
+                  {selectedImage.eventType.name}
+                </p>
+              )}
               <h3 className="font-serif text-2xl">{selectedImage.title}</h3>
             </div>
           </div>

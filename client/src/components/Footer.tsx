@@ -75,22 +75,16 @@ const Footer = () => {
             <div className="mb-6">
               <Link
                 href="/"
-                className="relative h-16 w-32 md:w-40 shrink-0 block mb-3"
+                className="relative h-24 w-48 md:w-56 shrink-0 block"
               >
                 <Image
                   src={logoUrl}
                   alt="Body Mask Bridal Studio"
                   fill
                   className="object-contain object-left"
-                  sizes="(max-width: 768px) 128px, 160px"
+                  sizes="(max-width: 768px) 192px, 224px"
                 />
               </Link>
-              <h2 className="text-[#C5A367] font-serif text-2xl tracking-wider">
-                {settings?.companyName || "BODY MASK"}
-              </h2>
-              <p className="text-gray-400 text-xs tracking-[0.3em] uppercase">
-                Bridal Studio
-              </p>
             </div>
           </div>
 
@@ -245,10 +239,27 @@ const Footer = () => {
 
         {/* Bottom Section - Copyright */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <p className="text-gray-500 text-xs">
-            © {new Date().getFullYear()} All rights reserved. Body Mask Bridal
-            Studio
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <p className="text-gray-500 text-xs">
+              © {new Date().getFullYear()} All rights reserved. Body Mask Bridal
+              Studio
+            </p>
+            <div className="flex items-center gap-4 text-xs">
+              <Link
+                href="/privacy-policy"
+                className="text-gray-500 hover:text-[#C5A367] transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <span className="text-gray-500">•</span>
+              <Link
+                href="/terms-and-conditions"
+                className="text-gray-500 hover:text-[#C5A367] transition-colors"
+              >
+                Terms & Conditions
+              </Link>
+            </div>
+          </div>
 
           {/* Social Icons */}
           <div className="flex items-center gap-4">

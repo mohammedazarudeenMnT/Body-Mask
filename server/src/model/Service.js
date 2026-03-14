@@ -30,6 +30,27 @@ const serviceSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    // SEO Fields
+    seo: {
+      metaTitle: {
+        type: String,
+        trim: true,
+        maxlength: 60,
+      },
+      metaDescription: {
+        type: String,
+        trim: true,
+        maxlength: 160,
+      },
+      keywords: {
+        type: String,
+        trim: true,
+      },
+      ogImage: {
+        type: String,
+        trim: true,
+      },
+    },
     // Detailed Content for Service Page
     content: {
       heroImage: {

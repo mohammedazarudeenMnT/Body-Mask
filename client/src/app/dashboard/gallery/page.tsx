@@ -12,17 +12,308 @@ import {
   Plus,
   GripVertical,
   Upload,
+  Tag,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { galleryApi, GalleryItem } from "@/lib/gallery-api";
+import { eventTypeApi, EventType } from "@/lib/event-type-api";
 
 const EMPTY_FORM: Partial<GalleryItem> = {
   title: "",
+  eventType: "",
   status: "Published",
   order: 0,
 };
+
+// ─── Event Type Form Modal ────────────────────────────────────────────────────
+function EventTypeFormModal({
+  item,
+  onClose,
+  onSaved,
+}: {
+  item: Partial<EventType> | null;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const isEdit = !!item?._id;
+  const [form, setForm] = useState({
+    name: item?.name || "",
+    isActive: item?.isActive ?? true,
+    order: item?.order || 0,
+  });
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim()) {
+      toast.error("Event type name is required");
+      return;
+    }
+    setSaving(true);
+    try {
+      if (isEdit) {
+        await eventTypeApi.updateEventType(item!._id!, form);
+        toast.success("Event type updated!");
+      } else {
+        await eventTypeApi.createEventType(form);
+        toast.success("Event type created!");
+      }
+      onSaved();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to save event type");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const inputCls =
+    "w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-[#c5a367]/20 focus:border-[#c5a367] outline-none transition-colors bg-white text-gray-900 placeholder:text-gray-400";
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-100">
+        <div className="border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-[#c5a367]/10 rounded-lg">
+              <Tag className="w-5 h-5 text-[#c5a367]" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">
+                {isEdit ? "Edit Event Type" : "Add Event Type"}
+              </h2>
+              <p className="text-xs text-gray-500">
+                {isEdit ? "Update event type details" : "Create a new event category"}
+              </p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-700">Event Name *</label>
+            <input
+              className={inputCls}
+              value={form.name}
+              onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
+              placeholder="e.g. Bridal, Engagement, Reception"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-gray-700">Status</label>
+              <select
+                className={inputCls}
+                value={form.isActive ? "active" : "inactive"}
+                onChange={(e) => setForm(f => ({ ...f, isActive: e.target.value === "active" }))}
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-gray-700">Display Order</label>
+              <input
+                type="number"
+                className={inputCls}
+                value={form.order}
+                onChange={(e) => setForm(f => ({ ...f, order: parseInt(e.target.value) || 0 }))}
+                min={0}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2.5 border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#c5a367] text-white rounded-lg text-sm font-semibold hover:bg-[#b69357] disabled:opacity-60 transition-all shadow-lg shadow-[#c5a367]/20"
+            >
+              <Save className="w-4 h-4" />
+              {saving ? "Saving..." : isEdit ? "Update" : "Create"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// ─── Event Types Management Modal ─────────────────────────────────────────────
+function EventTypesModal({
+  eventTypes,
+  onClose,
+  onRefresh,
+}: {
+  eventTypes: EventType[];
+  onClose: () => void;
+  onRefresh: () => void;
+}) {
+  const [formModalItem, setFormModalItem] = useState<Partial<EventType> | null | undefined>(undefined);
+  const [deleteTarget, setDeleteTarget] = useState<EventType | null>(null);
+
+  const handleToggleStatus = async (item: EventType) => {
+    try {
+      await eventTypeApi.updateEventType(item._id!, { isActive: !item.isActive });
+      toast.success(`Event type ${!item.isActive ? "activated" : "deactivated"}`);
+      onRefresh();
+    } catch {
+      toast.error("Action failed");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    try {
+      await eventTypeApi.deleteEventType(deleteTarget._id!);
+      toast.success("Event type deleted");
+      setDeleteTarget(null);
+      onRefresh();
+    } catch {
+      toast.error("Delete failed");
+    }
+  };
+
+  return (
+    <>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden border border-gray-100">
+          <div className="border-b border-gray-100 px-6 py-4 flex items-center justify-between sticky top-0 bg-white z-10">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-[#c5a367]/10 rounded-lg">
+                <Tag className="w-5 h-5 text-[#c5a367]" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">Manage Event Types</h2>
+                <p className="text-xs text-gray-500">Create and manage event categories for gallery</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFormModalItem(null)}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[#c5a367] text-white rounded-lg text-sm font-semibold hover:bg-[#b69357] transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                Add Event Type
+              </button>
+              <button onClick={onClose} className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+            {eventTypes.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="w-16 h-16 bg-[#c5a367]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Tag className="w-8 h-8 text-[#c5a367]/40" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">No event types yet</h3>
+                <p className="text-gray-500 text-sm mb-6">
+                  Create event types to categorize your gallery images.
+                </p>
+                <button
+                  onClick={() => setFormModalItem(null)}
+                  className="inline-flex items-center gap-2 bg-[#c5a367] hover:bg-[#b69357] text-white font-semibold px-6 py-2.5 rounded-lg transition-all"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add First Event Type
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {eventTypes.map((item) => (
+                  <div
+                    key={item._id}
+                    className={cn(
+                      "bg-white rounded-xl border p-4 hover:shadow-lg transition-all",
+                      item.isActive ? "border-gray-200 border-l-4 border-l-green-400" : "border-gray-200 border-l-4 border-l-gray-300 opacity-75"
+                    )}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="font-bold text-gray-900 text-base mb-1">{item.name}</h3>
+                        <div className="flex items-center gap-2">
+                          <span className={cn(
+                            "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider",
+                            item.isActive ? "bg-green-500 text-white" : "bg-gray-500 text-white"
+                          )}>
+                            {item.isActive ? "Active" : "Inactive"}
+                          </span>
+                          <span className="text-[10px] text-gray-400 font-bold">Order: #{item.order}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-3 border-t border-gray-50">
+                      <button
+                        onClick={() => handleToggleStatus(item)}
+                        className={cn(
+                          "flex-1 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5",
+                          item.isActive ? "bg-green-50 text-green-700 hover:bg-green-100" : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                        )}
+                      >
+                        {item.isActive ? <><Eye className="w-3 h-3" /> Active</> : <><EyeOff className="w-3 h-3" /> Inactive</>}
+                      </button>
+                      <button onClick={() => setFormModalItem(item)} className="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors">
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                      <button onClick={() => setDeleteTarget(item)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {formModalItem !== undefined && (
+        <EventTypeFormModal
+          item={formModalItem}
+          onClose={() => setFormModalItem(undefined)}
+          onSaved={() => {
+            setFormModalItem(undefined);
+            onRefresh();
+          }}
+        />
+      )}
+
+      {deleteTarget && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+            <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-4">
+              <Trash2 className="w-6 h-6 text-red-500" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-1">Delete Event Type?</h3>
+            <p className="text-sm text-gray-500 mb-6">
+              Are you sure you want to delete <span className="font-semibold text-gray-700">&quot;{deleteTarget.name}&quot;</span>? This cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button onClick={() => setDeleteTarget(null)} className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors">Cancel</button>
+              <button onClick={handleDelete} className="flex-1 py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition-colors">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 
 // ─── Image Upload Component ──────────────────────────────────────────────────
 function ImageUpload({ 
@@ -103,14 +394,23 @@ function GalleryModal({
   item,
   onClose,
   onSaved,
+  eventTypes,
 }: {
   item: Partial<GalleryItem> | null;
   onClose: () => void;
   onSaved: () => void;
+  eventTypes: EventType[];
 }) {
   const isEdit = !!item?._id;
+  const eventTypeId = typeof item?.eventType === 'object' && item?.eventType?._id 
+    ? item.eventType._id 
+    : typeof item?.eventType === 'string' 
+    ? item.eventType 
+    : "";
+    
   const [form, setForm] = useState({ 
     title: item?.title || "",
+    eventType: eventTypeId,
     status: item?.status || "Published",
     order: item?.order || 0,
     image: item?.imageUrl || ""
@@ -183,6 +483,25 @@ function GalleryModal({
               placeholder="e.g. Luxury Car Modification"
               required
             />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-gray-700">Event Type</label>
+            <select
+              className={inputCls}
+              value={form.eventType}
+              onChange={(e) => setForm(f => ({ ...f, eventType: e.target.value }))}
+            >
+              <option value="">No Event Type</option>
+              {eventTypes.filter(et => et.isActive).map(eventType => (
+                <option key={eventType._id} value={eventType._id}>{eventType.name}</option>
+              ))}
+            </select>
+            {eventTypes.length === 0 && (
+              <p className="text-xs text-gray-500 mt-1">
+                No event types available. Create one in settings.
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -274,6 +593,13 @@ function GalleryCard({
       </div>
 
       <div className="p-4 flex flex-col flex-1">
+        {item.eventType && typeof item.eventType === 'object' && (
+          <div className="mb-2">
+            <span className="inline-block px-2 py-0.5 bg-[#c5a367]/10 text-[#c5a367] rounded-md text-[10px] font-bold uppercase tracking-wider">
+              {item.eventType.name}
+            </span>
+          </div>
+        )}
         <h3 className="font-bold text-gray-900 text-sm mb-3 line-clamp-1 leading-tight">
           {item.title}
         </h3>
@@ -303,9 +629,11 @@ function GalleryCard({
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function GalleryAdminPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
+  const [eventTypes, setEventTypes] = useState<EventType[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalItem, setModalItem] = useState<Partial<GalleryItem> | null | undefined>(undefined);
   const [deleteTarget, setDeleteTarget] = useState<GalleryItem | null>(null);
+  const [showEventTypesModal, setShowEventTypesModal] = useState(false);
 
   const fetchItems = async () => {
     try {
@@ -318,8 +646,18 @@ export default function GalleryAdminPage() {
     }
   };
 
+  const fetchEventTypes = async () => {
+    try {
+      const res = await eventTypeApi.getEventTypes();
+      if (res.success) setEventTypes(res.data);
+    } catch {
+      console.error("Failed to load event types.");
+    }
+  };
+
   useEffect(() => {
     fetchItems();
+    fetchEventTypes();
   }, []);
 
   const handleToggleStatus = async (item: GalleryItem) => {
@@ -360,6 +698,16 @@ export default function GalleryAdminPage() {
           actionLabel="Add Image"
           onAction={() => setModalItem(null)}
         />
+
+        <div className="flex items-center justify-end gap-2 -mt-4 mb-4">
+          <button
+            onClick={() => setShowEventTypesModal(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <Tag className="w-4 h-4" />
+            Manage Event Types
+          </button>
+        </div>
 
         {!loading && items.length > 0 && (
           <div className="grid grid-cols-3 gap-4">
@@ -430,6 +778,7 @@ export default function GalleryAdminPage() {
             setModalItem(undefined);
             fetchItems();
           }}
+          eventTypes={eventTypes}
         />
       )}
 
@@ -449,6 +798,14 @@ export default function GalleryAdminPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {showEventTypesModal && (
+        <EventTypesModal
+          eventTypes={eventTypes}
+          onClose={() => setShowEventTypesModal(false)}
+          onRefresh={fetchEventTypes}
+        />
       )}
     </div>
   );

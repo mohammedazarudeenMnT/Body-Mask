@@ -17,6 +17,14 @@ const services = [
     description:
       "Exquisite bridal makeup to make your special day unforgettable.",
     image: "/assets/services/bridal-makup.png",
+    seo: {
+      metaTitle: "Bridal Makeup Services in Madurai | Body Mask Studio",
+      metaDescription:
+        "Transform your wedding day with our exquisite bridal makeup services. HD makeup, long-lasting, personalized looks by expert artists in Madurai.",
+      keywords:
+        "bridal makeup madurai, wedding makeup, HD bridal makeup, professional bridal makeup artist",
+      ogImage: "/assets/services/bridal-makup-banner.jpg",
+    },
     content: {
       heroImage: "/assets/banner/bridal-makup-banner.jpg",
       fullDescription:

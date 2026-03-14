@@ -22,16 +22,30 @@ export async function generateMetadata(
     const service = response.data;
     const previousImages = (await parent).openGraph?.images || [];
 
+    // Use SEO fields if available, otherwise fall back to service data
+    const metaTitle = service.seo?.metaTitle || 
+      `${service.title} | Luxury Bridal Service | Body Mask`;
+    const metaDescription = service.seo?.metaDescription || service.description;
+    const keywords = service.seo?.keywords?.split(',').map(k => k.trim()) || [];
+    const ogImage = service.seo?.ogImage || 
+      service.content?.heroImage || 
+      service.image;
+
     return {
-      title: `${service.title} | Luxury Bridal Service | Body Mask`,
-      description: service.description,
+      title: metaTitle,
+      description: metaDescription,
+      keywords: keywords.length > 0 ? keywords : undefined,
       openGraph: {
-        title: service.title,
-        description: service.description,
-        images: [
-          service.content?.heroImage || service.image,
-          ...previousImages,
-        ],
+        title: metaTitle,
+        description: metaDescription,
+        images: [ogImage, ...previousImages],
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: metaTitle,
+        description: metaDescription,
+        images: [ogImage],
       },
     };
   } catch (error) {
@@ -73,8 +87,37 @@ export default async function ServicePage({ params }: PageProps) {
     gallery: service.content?.gallery || [],
   };
 
+  // JSON-LD structured data for SEO
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.seo?.metaDescription || service.description,
+    provider: {
+      "@type": "BeautySalon",
+      name: "Body Mask Bridal Studio",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Madurai",
+        addressRegion: "Tamil Nadu",
+        addressCountry: "IN",
+      },
+    },
+    image: service.seo?.ogImage || service.content?.heroImage || service.image,
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/InStock",
+    },
+  };
+
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
+      {/* JSON-LD for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
       <HeroBanner
         pageKey={`service-${service.slug}`}
         fallbackTitle={service.title}

@@ -6,6 +6,12 @@ export interface Service {
   slug: string;
   order: number;
   isActive: boolean;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    keywords?: string;
+    ogImage?: string;
+  };
   content: {
     heroImage?: string;
     fullDescription?: string;
@@ -32,5 +38,6 @@ export interface SaveServiceData {
   slug?: string;
   order?: number;
   isActive?: boolean;
+  seo?: Service["seo"];
   content?: Service["content"];
 }

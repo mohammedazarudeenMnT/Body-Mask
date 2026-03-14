@@ -397,6 +397,12 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
     image: "",
     isActive: true,
     order: 0,
+    seo: {
+      metaTitle: "",
+      metaDescription: "",
+      keywords: "",
+      ogImage: "",
+    },
     content: {
       fullDescription: "",
       heroImage: "",
@@ -584,6 +590,113 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
               >
                 Publicly Visible
               </label>
+            </div>
+          </section>
+
+          {/* SEO Section */}
+          <section className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+            <div className="flex items-center gap-3 border-b border-gray-50 pb-4">
+              <svg
+                className="w-5 h-5 text-[#c5a367]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <h3 className="text-xl font-serif text-gray-900">
+                SEO Settings
+              </h3>
+            </div>
+
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Meta Title
+                  <span className="text-xs text-gray-500 ml-2">(Max 60 characters)</span>
+                </label>
+                <input
+                  type="text"
+                  maxLength={60}
+                  value={formData.seo?.metaTitle || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      seo: { ...formData.seo, metaTitle: e.target.value },
+                    })
+                  }
+                  className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#c5a367]/20 outline-none transition-all"
+                  placeholder="Leave empty to use service title"
+                />
+                <p className="text-xs text-gray-500">
+                  {formData.seo?.metaTitle?.length || 0}/60 characters
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Meta Description
+                  <span className="text-xs text-gray-500 ml-2">(Max 160 characters)</span>
+                </label>
+                <textarea
+                  maxLength={160}
+                  value={formData.seo?.metaDescription || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      seo: { ...formData.seo, metaDescription: e.target.value },
+                    })
+                  }
+                  className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#c5a367]/20 outline-none min-h-[100px] transition-all"
+                  placeholder="Leave empty to use service description"
+                />
+                <p className="text-xs text-gray-500">
+                  {formData.seo?.metaDescription?.length || 0}/160 characters
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  Keywords
+                  <span className="text-xs text-gray-500 ml-2">(Comma separated)</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.seo?.keywords || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      seo: { ...formData.seo, keywords: e.target.value },
+                    })
+                  }
+                  className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#c5a367]/20 outline-none transition-all"
+                  placeholder="bridal makeup, wedding makeup, luxury makeup"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700">
+                  OG Image (Social Media Preview)
+                </label>
+                <ImageUpload
+                  value={formData.seo?.ogImage || ""}
+                  onChange={(url) =>
+                    setFormData({
+                      ...formData,
+                      seo: { ...formData.seo, ogImage: url },
+                    })
+                  }
+                  label="Upload OG Image"
+                />
+                <p className="text-xs text-gray-500">
+                  Leave empty to use hero image. Recommended: 1200x630px
+                </p>
+              </div>
             </div>
           </section>
 
