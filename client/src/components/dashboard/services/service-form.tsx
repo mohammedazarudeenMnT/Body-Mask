@@ -690,7 +690,7 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
                   onChange={(url) =>
                     setFormData({
                       ...formData,
-                      seo: { ...formData.seo, ogImage: url },
+                      seo: { ...formData.seo, ogImage: url || "" },
                     })
                   }
                   label="Upload OG Image"

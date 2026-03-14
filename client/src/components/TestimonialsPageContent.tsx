@@ -70,7 +70,7 @@ export default function TestimonialsPageContent({
 
                   {/* Review Text */}
                   <p className="text-gray-700 leading-relaxed mb-6 italic">
-                    "{testimonial.review}"
+                    "{testimonial.reviewMessage}"
                   </p>
 
                   {/* Client Info */}
@@ -95,9 +95,9 @@ export default function TestimonialsPageContent({
                       <h4 className="font-semibold text-gray-900">
                         {testimonial.clientName}
                       </h4>
-                      {testimonial.serviceName && (
+                      {testimonial.service && typeof testimonial.service === 'object' && (
                         <p className="text-sm text-gray-500">
-                          {testimonial.serviceName}
+                          {testimonial.service.title}
                         </p>
                       )}
                     </div>
