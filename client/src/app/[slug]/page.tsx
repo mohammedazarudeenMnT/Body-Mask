@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { serviceApi } from "@/lib/service-api";
 import HeroBanner from "@/components/HeroBanner";
 import ServiceDetailClient from "@/components/ServiceDetailClient";
+import { stripHtml } from "@/lib/utils";
+
 export const dynamic = "force-dynamic";
 
 interface PageProps {
@@ -29,7 +31,8 @@ export async function generateMetadata(
     // Use SEO fields if available, otherwise fall back to service data
     const metaTitle = service.seo?.metaTitle || 
       `${service.title} | Luxury Bridal Service | Body Mask`;
-    const metaDescription = service.seo?.metaDescription || service.description;
+    const metaDescription = service.seo?.metaDescription || stripHtml(service.description || "");
+
     const keywords = service.seo?.keywords?.split(',').map(k => k.trim()) || [];
     const ogImage = service.seo?.ogImage || 
       service.content?.heroImage || 
@@ -131,7 +134,8 @@ export default async function ServicePage({ params }: PageProps) {
       <HeroBanner
         pageKey={`service-${service.slug}`}
         fallbackTitle={service.title}
-        fallbackSubtitle={service.description}
+        fallbackSubtitle={stripHtml(service.description || "")}
+
         fallbackImage={service.content?.heroImage || service.image} // Use Wide Banner if available
       />
       <ServiceDetailClient service={adaptedService} />

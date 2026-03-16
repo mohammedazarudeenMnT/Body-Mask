@@ -61,7 +61,7 @@ export default function DashboardLayout({
     },
 
     {
-      label: "Testimonials",
+      label: "Client Memoirs",
       href: "/dashboard/testimonials",
       icon: <Star className="w-5 h-5" />,
       isActive: pathname.startsWith("/dashboard/testimonials"),

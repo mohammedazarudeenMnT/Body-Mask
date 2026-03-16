@@ -239,7 +239,8 @@ export default function GalleryTestimonials({
                 className="text-[#C5A367] text-xs md:text-sm font-bold tracking-[0.2em] uppercase mb-4 text-center"
                 style={{ letterSpacing: "0.05em" }}
               >
-                Gallery & Testimonials
+                Gallery & Client Memoirs
+
               </h2>
               <div className="w-1.5 h-1.5 md:w-2 md:h-2 rotate-45 bg-[#C5A367]" />
             </div>
@@ -346,8 +347,9 @@ export default function GalleryTestimonials({
                     href="/testimonials"
                     className="text-[#C5A367] font-serif text-base md:text-lg flex items-center gap-1 cursor-pointer hover:underline underline-offset-4 transition-all"
                   >
-                    View All <ArrowRight className="w-4 h-4" />
+                    View All Memoirs <ArrowRight className="w-4 h-4" />
                   </Link>
+
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">

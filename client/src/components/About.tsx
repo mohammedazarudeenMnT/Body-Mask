@@ -137,7 +137,8 @@ export default function About() {
               {/* Founder Name / Signature mockup */}
               <div className="text-right">
                 <span className="block font-serif text-xl text-[#C5A367] italic">
-                  Radha
+                  Raadha
+
                 </span>
                 <span className="text-xs uppercase tracking-widest text-gray-400">
                   Founder & Lead Artist

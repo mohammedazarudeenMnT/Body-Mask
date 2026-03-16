@@ -95,12 +95,14 @@ function TestimonialModal({
             </div>
             <div>
               <h2 className="text-lg font-bold text-gray-900">
-                {isEdit ? "Edit Testimonial" : "Add Testimonial"}
+                {isEdit ? "Edit Memoir" : "Add Memoir"}
+
               </h2>
               <p className="text-xs text-gray-500">
                 {isEdit
                   ? "Update review content"
-                  : "Manually add a client testimonial"}
+                  : "Manually add a client memoir"}
+
               </p>
             </div>
           </div>
@@ -216,8 +218,9 @@ function TestimonialModal({
               {saving
                 ? "Saving..."
                 : isEdit
-                  ? "Update Testimonial"
-                  : "Add Testimonial"}
+                  ? "Update Memoir"
+                  : "Add Memoir"}
+
             </button>
           </div>
         </form>
@@ -285,14 +288,15 @@ export default function TestimonialsAdminPage() {
       <div className="mx-auto space-y-6">
         {/* Header */}
         <DashboardHeader
-          title="Testimonials"
+          title="Client Memoirs"
           description="Review, approve, and manage customer stories"
           icon={Star}
           variant="compact"
           iconColor="text-amber-500"
-          actionLabel="Add Testimonial"
+          actionLabel="Add Memoir"
           onAction={() => setModalTestimonial(null)}
         />
+
 
         {/* List Content */}
         {loading ? (
@@ -308,7 +312,8 @@ export default function TestimonialsAdminPage() {
           <div className="bg-white rounded-3xl border border-dashed border-gray-300 py-32 text-center">
             <Quote className="w-12 h-12 text-gray-200 mx-auto mb-4" />
             <h3 className="text-lg font-bold text-gray-900">
-              No testimonials yet
+              No memoirs yet
+
             </h3>
             <p className="text-gray-500 text-sm mb-6">
               Start by adding manual reviews or wait for customers to submit

@@ -12,6 +12,8 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BookAppointmentButton from "@/components/BookAppointmentButton";
+import { stripHtml } from "@/lib/utils";
+
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -595,8 +597,9 @@ export default function ServicesPageContent({
                     </h3>
 
                     <p className="text-sm sm:text-base text-[#777] font-sans leading-relaxed max-w-md line-clamp-3 sm:line-clamp-none">
-                      {service.description}
+                      {stripHtml(service.description)}
                     </p>
+
 
                     <Link
                       href={`/services/${service.slug}`}

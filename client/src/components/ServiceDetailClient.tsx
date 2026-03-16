@@ -167,13 +167,16 @@ export default function ServiceDetailClient({
 
               {/* Description Body */}
               <div className="animate-item space-y-8">
-                <p className="text-xl md:text-2xl text-gray-800 font-serif italic leading-relaxed first-letter:text-7xl first-letter:font-serif first-letter:mr-4 first-letter:float-left first-letter:text-[#C5A367] first-letter:leading-none">
-                  {service.description.intro}
-                </p>
+                <div 
+                  className="text-xl md:text-2xl text-gray-800 font-serif italic leading-relaxed first-letter:text-7xl first-letter:font-serif first-letter:mr-4 first-letter:float-left first-letter:text-[#C5A367] first-letter:leading-none ql-editor !p-0"
+                  dangerouslySetInnerHTML={{ __html: service.description.intro }}
+                />
 
-                <p className="text-lg text-gray-600 font-light leading-relaxed max-w-2xl">
-                  {service.description.main}
-                </p>
+                <div 
+                  className="text-lg text-gray-600 font-light leading-relaxed max-w-2xl ql-editor !p-0"
+                  dangerouslySetInnerHTML={{ __html: service.description.main }}
+                />
+
               </div>
 
               {/* Features Grid */}
@@ -226,9 +229,10 @@ export default function ServiceDetailClient({
                         <h4 className="text-sm font-bold text-[#1a1a1a] mb-2 uppercase tracking-wider">
                           {benefit.title}
                         </h4>
-                        <p className="text-xs text-gray-600 font-light leading-relaxed">
-                          {benefit.description}
-                        </p>
+                        <div 
+                          className="text-xs text-gray-600 font-light leading-relaxed ql-editor !p-0"
+                          dangerouslySetInnerHTML={{ __html: benefit.description }}
+                        />
                       </div>
                     ))}
                   </div>

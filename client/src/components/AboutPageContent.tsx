@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Wifi, FlaskConical, Flower, Star } from "lucide-react";
 import { LuxuryBrandMarquee } from "@/components/ui/luxury-brand-marquee";
-import { EditorialTestimonial } from "@/components/ui/editorial-testimonial";
+
 import { LuxuryJourney } from "@/components/LuxuryJourney";
 import HeroBanner from "@/components/HeroBanner";
 import { RevealWrapper } from "@/components/ui/reveal-wrapper";
@@ -39,135 +39,69 @@ export default function AboutPageContent() {
 
               <div className="space-y-6 text-[#4A4A4A] text-lg leading-relaxed font-light max-w-2xl">
                 <p>
-                  Posuere a reawino a or top-notch beauty and grooming,
-                  chusttince the road to where checkuonol adcaowd eposcopie,
-                  Madurai.
+                  Welcome to Body Mask Bridal Studio.
                 </p>
                 <p>
-                  Founded with a passion for timeless beauty, Body Mask has
-                  evolved into Madurai&apos;s premier destination for luxury
-                  grooming.
+                  I am Raadha, the founder of Body Mask Bridal Studio. With a deep passion for beauty and bridal artistry, I started this studio to help every bride feel confident, elegant, and beautiful on her special day. Our goal is to enhance natural beauty and create a flawless bridal look that reflects each bride’s personality and style.
+                </p>
+                <p>
+                  At Body Mask Bridal Studio, we specialize in professional bridal makeup, skincare treatments, and beauty services designed especially for weddings and special occasions. We use high-quality products and modern techniques to ensure long-lasting, stunning results.
+                </p>
+                <p>
+                  Every bride is unique, and we believe that your makeup should highlight your individuality while making you feel comfortable and radiant. From pre-bridal care to the final bridal look, we are committed to giving you a memorable beauty experience.
                 </p>
               </div>
 
-              <div className="pt-8 mt-4">
-                <blockquote className="text-3xl md:text-4xl font-serif italic text-[#2C2C2C] leading-snug">
-                  &ldquo;Every bride deserves to feel royal,&rdquo;
-                </blockquote>
-                <div className="mt-4 flex items-center gap-3">
-                  <div className="h-[2px] w-8 bg-[#1C1C1C]" />
-                  <span className="text-lg font-serif italic text-[#1C1C1C] font-medium">
-                    Founder
-                  </span>
-                </div>
+              <div className="pt-4 mt-2">
+                <p className="text-xl font-serif text-[#1C1C1C] leading-snug">
+                  Let Body Mask Bridal Studio be a part of your beautiful journey.
+                </p>
               </div>
+
             </div>
 
-            {/* Team & Amenities */}
-            <div className="fade-section space-y-12 pt-4">
-              <h3 className="text-4xl font-serif text-[#463C2F]">
-                Team & Amenities
-              </h3>
 
-              {/* Team Circles */}
-              <div className="grid grid-cols-3 gap-8 md:gap-12 max-w-xl">
-                {[
-                  { name: "Hair Stylist", img: "/assets/about/team-1.jpg" },
-                  { name: "Makeup Artist", img: "/assets/about/team-2.jpg" },
-                  {
-                    name: "Skilled Professionals",
-                    img: "/assets/about/team-3.jpg",
-                  },
-                ].map((member, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center text-center space-y-4"
-                  >
-                    <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-full border-[3px] border-[#D4AF37]/40 p-1">
-                      <div className="w-full h-full rounded-full overflow-hidden relative">
-                        <Image
-                          src={member.img}
-                          alt={member.name}
-                          fill
-                          className="object-cover"
-                          sizes="150px"
-                        />
-                      </div>
-                    </div>
-                    <span className="text-sm font-medium text-[#4A4A4A]">
-                      {member.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
 
-              {/* Amenities Icons */}
-              <div className="grid grid-cols-3 gap-8 md:gap-12 pt-4 max-w-xl">
-                {[
-                  {
-                    label: "Free WiFi",
-                    icon: <Wifi className="w-8 h-8 text-[#B8860B]" />,
-                  },
-                  {
-                    label: "Skin Professional",
-                    icon: <FlaskConical className="w-8 h-8 text-[#B8860B]" />,
-                  },
-                  {
-                    label: "Skin Clinic",
-                    icon: <Flower className="w-8 h-8 text-[#B8860B]" />,
-                  },
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center text-center space-y-3"
-                  >
-                    <span className="block text-[#B8860B]">{item.icon}</span>
-                    <span className="text-sm font-medium text-[#6B6B6B]">
-                      {item.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* RIGHT COLUMN (lg:span-5) - Gallery + Ratings */}
           <div className="lg:col-span-5 space-y-10 flex flex-col h-full pt-4">
-            {/* Gallery Grid */}
-            <div className="space-y-6">
-              {/* Top Row Images */}
-              <div className="grid grid-cols-2 gap-6">
-                <div className="fade-section relative aspect-4/3 rounded-3xl overflow-hidden shadow-md">
-                  <Image
-                    src="/assets/about/service-1.jpg"
-                    alt="Service 1"
-                    fill
-                    className="object-cover"
-                    sizes="25vw"
-                  />
+            {/* Founder Portrait Section */}
+            <div className="fade-section space-y-6">
+              <div className="relative aspect-[4/5] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-[#C5A367]/20 group">
+                <Image
+                  src="/assets/about/DSS_2581_Work.jpg.jpeg"
+                  alt="Founder of Body Mask Bridal Studio"
+
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  priority
+                />
+
+                {/* Elegant Overlay Detail */}
+                <div className="absolute inset-0 border-[12px] border-white/10 m-4 rounded-[1.5rem] pointer-events-none"></div>
+
+                {/* Name Badge - Redesigned for High Contrast */}
+                <div className="absolute bottom-8 left-8 right-8 bg-[#1a1a1a]/95 backdrop-blur-md border border-[#C5A367]/40 p-6 rounded-2xl shadow-2xl transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+                  <p className="text-[#C5A367] text-xs tracking-[0.2em] uppercase mb-1.5 font-bold">
+                    Lead Artist & Founder
+                  </p>
+                  <p className="text-white text-3xl font-serif italic">
+                    Mrs. Raadha
+
+
+                  </p>
                 </div>
-                <div className="fade-section relative aspect-4/3 rounded-3xl overflow-hidden shadow-md">
-                  <Image
-                    src="/assets/about/service-2.jpg"
-                    alt="Service 2"
-                    fill
-                    className="object-cover"
-                    sizes="25vw"
-                  />
-                </div>
+
               </div>
 
-              {/* Main Interior Image */}
-              <div className="fade-section relative aspect-square w-full rounded-3xl overflow-hidden shadow-xl">
-                <Image
-                  src="/assets/about/studio-interior.jpg"
-                  alt="Interior"
-                  fill
-                  className="object-cover"
-                  sizes="50vw"
-                />
-              </div>
+              {/* Subtle quote or detail below image */}
+              <p className="text-center text-gray-400 font-serif italic text-lg pt-4">
+                "Artistry meets Soul"
+              </p>
             </div>
+
 
             {/* Ratings Pill */}
             <div className="flex justify-end pt-8">
@@ -192,10 +126,8 @@ export default function AboutPageContent() {
         </div>
       </section>
 
-      {/* 5. EDITORIAL TESTIMONIALS */}
-      <EditorialTestimonial />
-
       {/* 6. LUXURY JOURNEY (Redesigned Timeline) */}
+
       <LuxuryJourney />
     </RevealWrapper>
   );

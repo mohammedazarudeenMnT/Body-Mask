@@ -21,7 +21,8 @@ import { Button } from "@/components/ui/button";
 import { ConfirmationModal } from "@/components/ui/confirmation-modal";
 import Link from "next/link";
 import { serviceApi } from "@/lib/service-api";
-import { cn } from "@/lib/utils";
+import { cn, stripHtml } from "@/lib/utils";
+
 import { Loader } from "@/components/ui/loader";
 
 interface ServicesListProps {
@@ -122,8 +123,9 @@ export function ServicesList({ onMessage }: ServicesListProps) {
                   {service.title}
                 </h3>
                 <p className="text-white/70 text-xs line-clamp-1 italic font-light">
-                  {service.description}
+                  {stripHtml(service.description)}
                 </p>
+
               </div>
             </div>
 

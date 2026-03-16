@@ -320,7 +320,8 @@ export default function ContactForm({
               <div className="pt-6 flex flex-col md:flex-row items-center gap-6 justify-center lg:justify-start">
                 <div className="text-center lg:text-left">
                   <span className="block font-serif text-xl text-[#C5A367] italic">
-                    Radha
+                    Raadha
+
                   </span>
                   <span className="text-xs uppercase tracking-widest text-gray-400">
                     Founder & Lead Artist

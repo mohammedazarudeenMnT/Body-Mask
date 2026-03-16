@@ -23,8 +23,9 @@ export default function TestimonialsPageContent({
           <div className="flex items-center justify-center gap-4 mb-4">
             <Quote className="w-8 h-8 text-[#C5A367]" />
             <h1 className="text-3xl md:text-5xl font-serif text-center">
-              Client Testimonials
+              Client Memoirs
             </h1>
+
           </div>
           <p className="text-center text-gray-300 max-w-2xl mx-auto">
             Hear from our beautiful brides and clients about their experience with Body Mask Bridal Studio
@@ -37,7 +38,8 @@ export default function TestimonialsPageContent({
         {testimonials.length === 0 ? (
           <div className="text-center py-20">
             <Quote className="w-16 h-16 text-[#C5A367] mx-auto mb-4 opacity-50" />
-            <h3 className="text-2xl font-serif text-gray-800 mb-2">No Testimonials Yet</h3>
+            <h3 className="text-2xl font-serif text-gray-800 mb-2">No Memoirs Yet</h3>
+
             <p className="text-gray-600 mb-6">Be the first to share your experience!</p>
             <Link
               href="/share-experience"

@@ -5,9 +5,10 @@ import TestimonialsPageContent from "@/components/TestimonialsPageContent";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Client Testimonials | Body Mask Bridal Studio",
-  description: "Read what our clients say about their experience with Body Mask Bridal Studio. Real reviews from real brides.",
+  title: "Client Memoirs | Body Mask Bridal Studio",
+  description: "Read our client memoirs and experiences with Body Mask Bridal Studio. Real stories from real brides.",
 };
+
 
 export default async function TestimonialsPage() {
   const testimonialsRes = await testimonialApi

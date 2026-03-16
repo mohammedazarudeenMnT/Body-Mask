@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { MultiImageUpload } from "@/components/ui/multi-image-upload";
 import Link from "next/link";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
+
 
 interface ServiceFormProps {
   initialData?: Service | null;
@@ -565,15 +567,14 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
               <label className="text-sm font-semibold text-gray-700">
                 Short Description (Cards)
               </label>
-              <textarea
+              <RichTextEditor
                 value={formData.description || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
+                onChange={(val) =>
+                  setFormData({ ...formData, description: val })
                 }
-                className="w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#c5a367]/20 outline-none min-h-[100px] transition-all"
                 placeholder="A brief catchy overview..."
-                required
               />
+
             </div>
 
             <div className="flex items-center gap-2 pt-2">
@@ -714,18 +715,17 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
               <label className="text-sm font-semibold text-gray-700">
                 Detailed Journey (Rich Text)
               </label>
-              <textarea
+              <RichTextEditor
                 value={formData.content?.fullDescription || ""}
-                onChange={(e) =>
+                onChange={(val) =>
                   setFormData({
                     ...formData,
                     content: {
-                      ...formData.content!,
-                      fullDescription: e.target.value,
+                      ...formData.content,
+                      fullDescription: val,
                     },
                   })
                 }
-                className="w-full px-4 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#c5a367]/20 outline-none min-h-[300px] transition-all font-light text-gray-600 leading-relaxed"
                 placeholder="Describe the full experience, step by step..."
               />
             </div>
@@ -947,18 +947,16 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
                   placeholder="Benefit Title"
                   className="w-full bg-white px-3 py-2 text-sm rounded-xl outline-none border border-gray-50 font-bold"
                 />
-                <textarea
+                <RichTextEditor
                   value={benefit.description}
-                  onChange={(e) => {
+                  onChange={(val) => {
                     const benefits = [...(formData.content?.benefits || [])];
-                    benefits[idx].description = e.target.value;
+                    benefits[idx].description = val;
                     setFormData({
                       ...formData,
                       content: { ...formData.content!, benefits },
                     });
                   }}
-                  placeholder="Description"
-                  className="w-full bg-white px-3 py-2 text-sm rounded-xl outline-none border border-gray-50 min-h-[60px]"
                 />
               </div>
             ))}

@@ -86,7 +86,7 @@ export function LuxuryJourney() {
     >
       <div className="max-w-[1600px] mx-auto">
         {/* Header */}
-        <div className="text-center mb-32 space-y-6">
+        <div className="text-center mb-16 md:mb-24 space-y-6">
           <div className="inline-flex items-center gap-4 text-[#B8860B] uppercase tracking-[0.3em] text-xs font-bold">
             <span className="h-px w-8 bg-[#B8860B]" />
             Your Experience
@@ -96,6 +96,31 @@ export function LuxuryJourney() {
             The Journey <span className="italic">to</span> Radiance
           </h2>
         </div>
+
+        {/* Mission & Vision - Integrated Flow */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-32 border-b border-[#B8860B]/10 pb-20">
+          <div className="space-y-6">
+            <h3 className="text-4xl font-serif text-[#1C1C1C] flex items-center gap-4">
+              <span className="w-12 h-px bg-[#B8860B]/30" />
+              Mission
+              <span className="w-12 h-px bg-[#B8860B]/30" />
+            </h3>
+            <p className="text-[#6B6B6B] leading-relaxed font-light text-xl italic max-w-xl mx-auto">
+              "Our mission at Body Mask Bridal Studio is to enhance every bride’s natural beauty with professional makeup and skincare services. We aim to provide high-quality bridal artistry, personalized beauty care, and a relaxing experience so every bride feels confident, radiant, and special on her big day."
+            </p>
+          </div>
+          <div className="space-y-6">
+            <h3 className="text-4xl font-serif text-[#1C1C1C] flex items-center gap-4">
+              <span className="w-12 h-px bg-[#B8860B]/30" />
+              Vision
+              <span className="w-12 h-px bg-[#B8860B]/30" />
+            </h3>
+            <p className="text-[#6B6B6B] leading-relaxed font-light text-xl italic max-w-xl mx-auto">
+              "Our vision is to become a trusted and leading bridal beauty studio known for creativity, quality, and customer satisfaction. We strive to make every bride look and feel her best while creating beautiful memories for their most important moments."
+            </p>
+          </div>
+        </div>
+
 
         {/* Timeline Content */}
         <div className="relative">

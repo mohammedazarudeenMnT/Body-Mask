@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { cn } from "@/lib/utils";
+import { cn, stripHtml } from "@/lib/utils";
+
 import { serviceApi } from "@/lib/service-api";
 import { Service } from "@/types/service";
 import Link from "next/link";
@@ -241,8 +242,9 @@ const Services = ({ initialServices = [] }: ServicesProps) => {
                       {service.title}
                     </h3>
                     <p className="text-white/60 text-xs md:text-sm leading-relaxed max-w-sm opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-500">
-                      {service.description}
+                      {stripHtml(service.description)}
                     </p>
+
                   </div>
                 </div>
               </Link>
