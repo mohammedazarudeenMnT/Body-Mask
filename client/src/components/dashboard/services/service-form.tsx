@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { MultiImageUpload } from "@/components/ui/multi-image-upload";
 import Link from "next/link";
-import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { TiptapWrapper as TiptapEditor } from "@/components/ui/tiptap-wrapper";
 
 
 interface ServiceFormProps {
@@ -567,14 +567,14 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
               <label className="text-sm font-semibold text-gray-700">
                 Short Description (Cards)
               </label>
-              <RichTextEditor
+              <TiptapEditor
+                key={`description-${initialData?._id || 'new'}`}
                 value={formData.description || ""}
                 onChange={(val) =>
                   setFormData({ ...formData, description: val })
                 }
                 placeholder="A brief catchy overview..."
               />
-
             </div>
 
             <div className="flex items-center gap-2 pt-2">
@@ -713,9 +713,10 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700">
-                Detailed Journey (Rich Text)
+                Detailed Journey (Full Description)
               </label>
-              <RichTextEditor
+              <TiptapEditor
+                key={`fullDescription-${initialData?._id || 'new'}`}
                 value={formData.content?.fullDescription || ""}
                 onChange={(val) =>
                   setFormData({
@@ -947,7 +948,8 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
                   placeholder="Benefit Title"
                   className="w-full bg-white px-3 py-2 text-sm rounded-xl outline-none border border-gray-50 font-bold"
                 />
-                <RichTextEditor
+                <TiptapEditor
+                  key={`benefit-${idx}-${initialData?._id || 'new'}`}
                   value={benefit.description}
                   onChange={(val) => {
                     const benefits = [...(formData.content?.benefits || [])];
@@ -957,6 +959,7 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
                       content: { ...formData.content!, benefits },
                     });
                   }}
+                  placeholder="Benefit description..."
                 />
               </div>
             ))}

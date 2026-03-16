@@ -19,7 +19,7 @@ import {
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { ImageUpload, CompactImageUpload } from "../ui/image-upload";
-import { RichTextEditor } from "../ui/rich-text-editor";
+import { TiptapWrapper as TiptapEditor } from "../ui/tiptap-wrapper";
 
 
 interface GeneralSettingsTabProps {
@@ -565,7 +565,7 @@ export function GeneralSettingsTab({ onMessage }: GeneralSettingsTabProps) {
               <label className="text-sm font-medium text-gray-700">
                 Terms & Conditions
               </label>
-              <RichTextEditor
+              <TiptapEditor
                 value={settings.termsAndConditions}
                 onChange={(val) =>
                   setSettings({
@@ -575,21 +575,19 @@ export function GeneralSettingsTab({ onMessage }: GeneralSettingsTabProps) {
                 }
                 placeholder="Enter your terms and conditions here..."
               />
-
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
                 Privacy Policy
               </label>
-              <RichTextEditor
+              <TiptapEditor
                 value={settings.privacyPolicy}
                 onChange={(val) =>
                   setSettings({ ...settings, privacyPolicy: val })
                 }
                 placeholder="Enter your privacy policy here..."
               />
-
             </div>
 
             <div className="space-y-2">
