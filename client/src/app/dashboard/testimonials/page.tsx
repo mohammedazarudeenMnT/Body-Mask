@@ -160,7 +160,7 @@ function TestimonialModal({
               </label>
               <select
                 className={inputCls}
-                value={form.service}
+                value={typeof form.service === "object" ? form.service._id : form.service || ""}
                 onChange={(e) => set("service", e.target.value)}
               >
                 <option value="">No specific service</option>

@@ -15,6 +15,7 @@ import {
   Images,
   Star,
   Youtube,
+  LogOut,
 } from "lucide-react";
 
 export default function DashboardLayout({
@@ -22,7 +23,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -115,13 +116,22 @@ export default function DashboardLayout({
         user={sidebarUser}
         onLinkClick={(href) => router.push(href)}
         footer={
-          <button
-            onClick={() => router.push("/")}
-            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all mb-2"
-          >
-            <Home className="w-5 h-5 text-[#c5a367]" />
-            <span className="font-medium">Visit Site</span>
-          </button>
+          <div className="space-y-2">
+            <button
+              onClick={() => router.push("/")}
+              className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all"
+            >
+              <Home className="w-5 h-5 text-[#c5a367]" />
+              <span className="font-medium">Visit Site</span>
+            </button>
+            <button
+              onClick={logout}
+              className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all"
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="font-medium">Logout</span>
+            </button>
+          </div>
         }
       />
       <main className="flex-1 overflow-auto p-8">{children}</main>
