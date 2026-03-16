@@ -44,10 +44,9 @@ function TestimonialModal({
   const isEdit = !!testimonial?._id;
   const [form, setForm] = useState({
     ...EMPTY_FORM,
-    ...testimonial,
-    ...testimonial,
+    ...(testimonial || {}),
     service:
-      typeof testimonial?.service === "object"
+      testimonial && typeof testimonial.service === "object"
         ? testimonial.service._id
         : testimonial?.service || "",
   });
@@ -64,8 +63,8 @@ function TestimonialModal({
     }
     setSaving(true);
     try {
-      if (isEdit) {
-        await testimonialApi.updateTestimonial(testimonial!._id!, form);
+      if (isEdit && testimonial?._id) {
+        await testimonialApi.updateTestimonial(testimonial._id, form);
         toast.success("Testimonial updated!");
       } else {
         await testimonialApi.createTestimonial({
