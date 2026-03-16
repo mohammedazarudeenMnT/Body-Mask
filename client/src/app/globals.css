@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
 
 @theme {
   --font-sans:
@@ -85,4 +87,11 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  .ql-editor {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
 }
+

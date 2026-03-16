@@ -19,6 +19,8 @@ import {
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
 import { ImageUpload, CompactImageUpload } from "../ui/image-upload";
+import { RichTextEditor } from "../ui/rich-text-editor";
+
 
 interface GeneralSettingsTabProps {
   onMessage?: (message: { type: "success" | "error"; text: string }) => void;
@@ -563,33 +565,31 @@ export function GeneralSettingsTab({ onMessage }: GeneralSettingsTabProps) {
               <label className="text-sm font-medium text-gray-700">
                 Terms & Conditions
               </label>
-              <textarea
-                rows={5}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c5a367]/20 focus:border-[#c5a367] transition-colors resize-none"
+              <RichTextEditor
                 value={settings.termsAndConditions}
-                onChange={(e) =>
+                onChange={(val) =>
                   setSettings({
                     ...settings,
-                    termsAndConditions: e.target.value,
+                    termsAndConditions: val,
                   })
                 }
                 placeholder="Enter your terms and conditions here..."
               />
+
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
                 Privacy Policy
               </label>
-              <textarea
-                rows={5}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#c5a367]/20 focus:border-[#c5a367] transition-colors resize-none"
+              <RichTextEditor
                 value={settings.privacyPolicy}
-                onChange={(e) =>
-                  setSettings({ ...settings, privacyPolicy: e.target.value })
+                onChange={(val) =>
+                  setSettings({ ...settings, privacyPolicy: val })
                 }
                 placeholder="Enter your privacy policy here..."
               />
+
             </div>
 
             <div className="space-y-2">

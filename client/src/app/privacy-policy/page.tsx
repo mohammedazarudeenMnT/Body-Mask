@@ -75,7 +75,9 @@ export default async function PrivacyPolicyPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white via-[#FFF8F0] to-white">
       {/* Header */}
-      <div className="bg-[#330000] text-white py-16 md:py-20">
+      <div className="bg-[#330000] text-white pt-32 md:pt-48 pb-20 md:pb-28">
+
+
         <div className="container mx-auto px-6 md:px-12 lg:px-20">
           <div className="flex items-center justify-center gap-4 mb-4">
             <Shield className="w-8 h-8 text-[#C5A367]" />
@@ -92,9 +94,11 @@ export default async function PrivacyPolicyPage() {
       {/* Content */}
       <div className="container mx-auto px-6 md:px-12 lg:px-20 py-16 md:py-20">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-lg shadow-lg p-8 md:p-12 border border-[#C5A367]/20">
+          <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-10 md:p-16 lg:p-20 border border-[#C5A367]/15 -mt-20 relative z-10 transition-all overflow-hidden mx-4 sm:mx-0">
             <div
-              className="prose prose-lg max-w-none
+              className="prose prose-lg max-w-none w-full break-words ql-editor !p-0
+
+
                 prose-headings:font-serif prose-headings:text-[#330000]
                 prose-h2:text-3xl prose-h2:mb-6 prose-h2:mt-8 prose-h2:border-b prose-h2:border-[#C5A367]/30 prose-h2:pb-3
                 prose-h3:text-xl prose-h3:mb-4 prose-h3:mt-6 prose-h3:text-[#C5A367]
