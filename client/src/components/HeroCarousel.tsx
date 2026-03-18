@@ -105,7 +105,7 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
 
   if (loading) {
     return (
-      <section className="relative w-full h-[350px] md:h-[500px] lg:h-[calc(100vh-130px)] mt-[100px] md:mt-[130px] overflow-hidden bg-white flex items-center justify-center">
+      <section className="relative w-full aspect-video mt-[100px] md:mt-[130px] overflow-hidden bg-white flex items-center justify-center">
         <div className="h-10 w-10 animate-spin border-2 border-[#c5a367] border-t-transparent rounded-full" />
       </section>
     );
@@ -117,7 +117,7 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[350px] md:h-[500px] lg:h-[calc(100vh-130px)] mt-[100px] md:mt-[130px] overflow-hidden bg-[#0a0a0a] group"
+      className="relative w-full aspect-video mt-[100px] md:mt-[130px] overflow-hidden bg-[#0a0a0a] group"
     >
       <Carousel
         setApi={setApi}
@@ -134,16 +134,15 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
         <CarouselContent className="h-full ml-0">
           {displayBanners.map((banner, index) => {
             const content = (
-              <div className="relative w-full h-[350px] md:h-[500px] lg:h-[calc(100vh-130px)] w-full">
+              <div className="relative w-full aspect-video">
                 <Image
                   src={banner.imageUrl || "/placeholder.svg"}
                   alt={banner.title || "Banner"}
                   fill
-                  className="object-cover object-center"
+                  className="object-contain object-center bg-[#0a0a0a]"
                   sizes="100vw"
                   priority={index === 0}
                   quality={100}
-                  unoptimized={true}
                 />
                 {/* Overlay with Text - Only shows if title or subtitle exists */}
                 {(banner.title || banner.subtitle) && (
@@ -166,7 +165,7 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
             return (
               <CarouselItem
                 key={banner._id}
-                className="pl-0 relative flex h-[350px] md:h-[500px] lg:h-[calc(100vh-130px)]"
+                className="pl-0 relative flex aspect-video"
               >
                 {banner.link ? (
                   <Link href={banner.link}>{content}</Link>

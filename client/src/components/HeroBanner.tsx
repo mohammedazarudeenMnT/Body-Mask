@@ -61,23 +61,9 @@ const HeroBanner = ({
       // Parallax requires the image to be intentionally larger than the container, 
       // otherwise it shears/crops the bottom or top depending on the scroll direction.
 
-      // Entry animations
-      const tl = gsap.timeline();
-
-      tl.from(".hero-title", {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: "power2.out",
-      }).from(
-        ".hero-subtitle",
-        {
-          opacity: 0,
-          duration: 1,
-          ease: "power2.out",
-        },
-        "-=0.4",
-      );
+      // Entry animations - Removed since no text overlay
+      // const tl = gsap.timeline();
+      // tl.from(".hero-title", { ... }).from(".hero-subtitle", { ... });
     },
     { dependencies: [banner], scope: containerRef },
   );
@@ -117,23 +103,7 @@ const HeroBanner = ({
         ) : null}
       </div>
 
-      {/* Dynamic Content Overlay */}
-      {(title || subtitle) && (
-        <div className="relative z-10 text-center px-6" ref={contentRef}>
-          <div className="hero-content">
-            {title && (
-              <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-4 drop-shadow-2xl tracking-tight">
-                {title}
-              </h1>
-            )}
-            {subtitle && (
-              <p className="hero-subtitle text-white/90 text-sm md:text-lg font-light tracking-[0.3em] uppercase drop-shadow-md">
-                {subtitle}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Dynamic Content Overlay - Removed for cleaner banner display */}
 
       {/* Decorative Border Line */}
       <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-[#C5A367]/50 to-transparent z-10" />

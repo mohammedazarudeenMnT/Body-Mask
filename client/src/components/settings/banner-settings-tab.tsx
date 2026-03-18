@@ -243,7 +243,8 @@ export function BannerSettingsTab({ onMessage }: BannerSettingsTabProps) {
                 onChange={(url: string | null) =>
                   setEditingBanner({ ...editingBanner, imageUrl: url || "" })
                 }
-                helperText="Optimal: 1920 × 1080px. Note: If your image already has text on it, leave the Title and Subtitle fields empty. Keep focus points (heads/text) away from the very top/bottom edges as they may be cropped to fit different screens."
+                aspectRatio="video"
+                helperText="Optimal: 1920 × 1080px (16:9 ratio). This image will be displayed as a full-width banner on the home page carousel. Keep important content (faces, text) centered as edges may be cropped on different screen sizes."
               />
             </div>
           </div>
