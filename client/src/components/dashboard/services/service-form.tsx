@@ -744,7 +744,7 @@ export function ServiceForm({ initialData, onMessage }: ServiceFormProps) {
                   })
                 }
                 aspectRatio="banner"
-                helperText="Optimal: 1920 × 800px. Tip: Keep text/logos away from the extreme top/bottom edges as they may be hidden by the parallax scroll effect."
+                helperText="Optimal: 1920 × 640px (3:1 ratio). This image will be displayed as a full-width banner on the service page. Avoid placing important content at the extreme edges as they may be cropped on different screen sizes."
               />
             </div>
           </section>

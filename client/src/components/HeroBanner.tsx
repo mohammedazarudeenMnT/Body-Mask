@@ -97,7 +97,7 @@ const HeroBanner = ({
   const altText = banner?.title || imageAlt || "Hero Banner";
   if (loading) {
     return (
-      <section className="relative w-full lg:h-screen overflow-hidden bg-white pt-24 md:pt-0 flex items-center justify-center">
+      <section className="relative w-full h-[250px] md:h-[300px] lg:h-auto lg:aspect-[1920/630] mt-24 md:mt-[130px] overflow-hidden bg-white flex items-center justify-center">
         <div className="h-10 w-10 animate-spin border-2 border-[#c5a367] border-t-transparent rounded-full" />
       </section>
     );
@@ -106,18 +106,18 @@ const HeroBanner = ({
   return (
     <section
       ref={containerRef}
-      className="gpu-accelerated smooth-antialiased relative w-full h-[400px] md:h-[60vh] lg:h-[80vh] overflow-hidden bg-[#0a0a0a] flex items-center justify-center"
+      className="gpu-accelerated smooth-antialiased relative w-full h-[250px] md:h-[300px] lg:h-auto lg:aspect-[1920/630] mt-24 md:mt-[130px] overflow-hidden bg-[#0a0a0a] flex items-center justify-center"
     >
       <div
         ref={imageRef}
-        className="absolute inset-0 w-full h-[110%] -top-[5%]"
+        className="absolute inset-0 w-full h-full"
       >
         {image ? (
           <Image
             src={image}
             alt={altText}
             fill
-            className="object-cover opacity-80 will-change-transform"
+            className="object-cover object-center opacity-80 will-change-transform"
             sizes="100vw"
             priority
           />

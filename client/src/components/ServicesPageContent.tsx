@@ -572,12 +572,12 @@ export default function ServicesPageContent({
                   }`}
                 >
                   {/* Image Part */}
-                  <div className="row-image relative w-full md:w-1/2 aspect-4/3 sm:aspect-video md:aspect-auto md:min-h-[400px] lg:min-h-[500px] overflow-hidden">
+                  <div className="row-image relative w-full md:w-1/2 min-h-[350px] md:min-h-[400px] lg:min-h-[500px] overflow-hidden flex items-center justify-center">
                     <Image
                       src={service.image || ""}
                       alt={service.title}
                       fill
-                      className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                      className="object-contain transition-transform duration-1000 group-hover:scale-105 p-4"
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>

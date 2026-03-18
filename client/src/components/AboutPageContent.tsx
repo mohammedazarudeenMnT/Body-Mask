@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Wifi, FlaskConical, Flower, Star } from "lucide-react";
-import { LuxuryBrandMarquee } from "@/components/ui/luxury-brand-marquee";
 
 import { LuxuryJourney } from "@/components/LuxuryJourney";
 import HeroBanner from "@/components/HeroBanner";
@@ -15,11 +14,6 @@ export default function AboutPageContent() {
         fallbackTitle="About Us"
         fallbackSubtitle="Luxury Bridal Studio & Professional Makeup"
       />
-
-      {/* 2. FEATURED IN MARQUEE */}
-      <div className="relative z-10 -mt-10 mb-10">
-        <LuxuryBrandMarquee />
-      </div>
 
       {/* 3. MAIN CONTENT GRID */}
       <section className="px-6 md:px-16 lg:px-28 py-10 max-w-[1600px] mx-auto">
