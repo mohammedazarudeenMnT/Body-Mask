@@ -105,7 +105,7 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
 
   if (loading) {
     return (
-      <section className="relative w-full lg:h-screen overflow-hidden bg-white pt-24 md:pt-0 flex items-center justify-center">
+      <section className="relative w-full h-[350px] md:h-[500px] lg:h-[calc(100vh-130px)] mt-[100px] md:mt-[130px] overflow-hidden bg-white flex items-center justify-center">
         <div className="h-10 w-10 animate-spin border-2 border-[#c5a367] border-t-transparent rounded-full" />
       </section>
     );
@@ -117,7 +117,7 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
   return (
     <section
       ref={containerRef}
-      className="relative w-full lg:h-screen overflow-hidden bg-white group pt-24 md:pt-0"
+      className="relative w-full h-[350px] md:h-[500px] lg:h-[calc(100vh-130px)] mt-[100px] md:mt-[130px] overflow-hidden bg-[#0a0a0a] group"
     >
       <Carousel
         setApi={setApi}
@@ -129,30 +129,32 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
         opts={{
           loop: true,
         }}
-        className="w-full lg:h-screen"
+        className="w-full h-full"
       >
         <CarouselContent className="h-full ml-0">
           {displayBanners.map((banner, index) => {
             const content = (
-              <div className="relative w-full h-[230px] sm:h-[400px] md:h-[510px] lg:h-screen">
+              <div className="relative w-full h-[350px] md:h-[500px] lg:h-[calc(100vh-130px)] w-full">
                 <Image
                   src={banner.imageUrl || "/placeholder.svg"}
                   alt={banner.title || "Banner"}
                   fill
-                  className="object-cover object-top"
+                  className="object-cover object-center"
                   sizes="100vw"
                   priority={index === 0}
+                  quality={100}
+                  unoptimized={true}
                 />
                 {/* Overlay with Text - Only shows if title or subtitle exists */}
                 {(banner.title || banner.subtitle) && (
-                  <div className="absolute inset-0 bg-black/20 flex flex-col items-center justify-center text-center px-6">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
                     {banner.title && (
-                      <h2 className="text-white text-3xl md:text-5xl lg:text-7xl font-serif mb-4 drop-shadow-lg opacity-0">
+                      <h2 className="text-white text-3xl md:text-5xl lg:text-7xl font-serif mb-4 tracking-tight drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
                         {banner.title}
                       </h2>
                     )}
                     {banner.subtitle && (
-                      <p className="text-white/90 text-sm md:text-lg lg:text-xl font-light tracking-widest uppercase mb-8 opacity-0">
+                      <p className="text-white text-sm md:text-lg lg:text-xl font-medium tracking-widest uppercase mb-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                         {banner.subtitle}
                       </p>
                     )}
@@ -164,7 +166,7 @@ const HeroCarousel = ({ initialBanners = [] }: HeroCarouselProps) => {
             return (
               <CarouselItem
                 key={banner._id}
-                className="pl-0 relative h-[230px] sm:h-[400px] md:h-[510px] lg:h-screen"
+                className="pl-0 relative flex h-[350px] md:h-[500px] lg:h-[calc(100vh-130px)]"
               >
                 {banner.link ? (
                   <Link href={banner.link}>{content}</Link>

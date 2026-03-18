@@ -57,18 +57,9 @@ const HeroBanner = ({
     () => {
       if (!imageRef.current) return;
 
-      gsap.to(imageRef.current, {
-        yPercent: 10,
-        ease: "none",
-        force3D: true,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
-      });
+      // Removed GSAP parallax because the container uses strict aspect ratio natively. 
+      // Parallax requires the image to be intentionally larger than the container, 
+      // otherwise it shears/crops the bottom or top depending on the scroll direction.
 
       // Entry animations
       const tl = gsap.timeline();
@@ -92,8 +83,8 @@ const HeroBanner = ({
   );
 
   const image = banner?.imageUrl || imageSrc || fallbackImage || "";
-  const title = banner?.title || fallbackTitle;
-  const subtitle = banner?.subtitle || fallbackSubtitle;
+  const title = banner !== null ? banner.title : fallbackTitle;
+  const subtitle = banner !== null ? banner.subtitle : fallbackSubtitle;
   const altText = banner?.title || imageAlt || "Hero Banner";
   if (loading) {
     return (
@@ -106,7 +97,7 @@ const HeroBanner = ({
   return (
     <section
       ref={containerRef}
-      className="gpu-accelerated smooth-antialiased relative w-full h-[250px] md:h-[300px] lg:h-auto lg:aspect-[1920/630] mt-24 md:mt-[130px] overflow-hidden bg-[#0a0a0a] flex items-center justify-center"
+      className="relative w-full h-[250px] md:h-[300px] lg:h-auto lg:aspect-[1920/630] mt-24 md:mt-[130px] overflow-hidden bg-[#0a0a0a] flex items-center justify-center"
     >
       <div
         ref={imageRef}
@@ -117,13 +108,13 @@ const HeroBanner = ({
             src={image}
             alt={altText}
             fill
-            className="object-cover object-center opacity-80 will-change-transform"
+            className="object-cover object-center"
             sizes="100vw"
             priority
+            quality={100}
+            unoptimized={true}
           />
         ) : null}
-        {/* Luxury Vignette & Gradient */}
-        <div className="absolute inset-0 bg-linear-to-b from-black/60 via-transparent to-transparent" />
       </div>
 
       {/* Dynamic Content Overlay */}
@@ -131,12 +122,12 @@ const HeroBanner = ({
         <div className="relative z-10 text-center px-6" ref={contentRef}>
           <div className="hero-content">
             {title && (
-              <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-4 drop-shadow-2xl tracking-tight opacity-0">
+              <h1 className="hero-title text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-4 drop-shadow-2xl tracking-tight">
                 {title}
               </h1>
             )}
             {subtitle && (
-              <p className="hero-subtitle text-white/90 text-sm md:text-lg font-light tracking-[0.3em] uppercase drop-shadow-md opacity-0">
+              <p className="hero-subtitle text-white/90 text-sm md:text-lg font-light tracking-[0.3em] uppercase drop-shadow-md">
                 {subtitle}
               </p>
             )}

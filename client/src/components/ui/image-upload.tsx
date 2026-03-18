@@ -56,7 +56,7 @@ export function ImageUpload({
   const aspectRatioClasses = {
     square: "aspect-square",
     video: "aspect-video",
-    banner: "aspect-[3/1]",
+    banner: "aspect-[1920/630]",
     portrait: "aspect-[4/5]",
     auto: "aspect-auto min-h-[200px]",
   };

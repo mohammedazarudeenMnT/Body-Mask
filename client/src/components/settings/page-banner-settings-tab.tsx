@@ -177,8 +177,8 @@ export function PageBannerSettingsTab({
                           imageUrl: url || "",
                         })
                       }
-                      aspectRatio="video"
-                      helperText="Optimal: 1920 × 800px. Used as the majestic background for the top of this page."
+                      aspectRatio="banner"
+                      helperText="Optimal: 1920 × 630px. Used as the majestic background for the top of this page."
                     />
                   </div>
                   <div className="space-y-2">
@@ -259,7 +259,7 @@ export function PageBannerSettingsTab({
                   </div>
                 </div>
               ) : banner ? (
-                <div className="relative aspect-video">
+                <div className="relative aspect-[1920/630]">
                   <img
                     src={banner.imageUrl}
                     alt={banner.title || page.label}
@@ -272,14 +272,20 @@ export function PageBannerSettingsTab({
                       </span>
                     </div>
                   )}
-                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-linear-to-t from-black/80 to-transparent">
-                    <h3 className="text-white text-sm font-semibold truncate">
-                      {banner.title || "No Title"}
-                    </h3>
-                    <p className="text-white/70 text-[10px] truncate">
-                      {banner.subtitle || "No Subtitle"}
-                    </p>
-                  </div>
+                  {(banner.title || banner.subtitle) && (
+                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-linear-to-t from-black/80 to-transparent">
+                      {banner.title && (
+                        <h3 className="text-white text-sm font-semibold truncate">
+                          {banner.title}
+                        </h3>
+                      )}
+                      {banner.subtitle && (
+                        <p className="text-white/70 text-[10px] truncate">
+                          {banner.subtitle}
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="p-8 text-center flex flex-col items-center justify-center gap-3">
